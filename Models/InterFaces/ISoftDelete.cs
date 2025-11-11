@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Models.InterFaces
 {
-    internal class ISoftDelete
+    public interface ISoftDelete
     {
+        public bool IsDeleted { get; set; }
     }
 }
