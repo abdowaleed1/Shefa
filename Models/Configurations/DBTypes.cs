@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models.Entities;
-using Models.InterFaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,34 +28,6 @@ namespace Models.Configurations
         public const string nvarchar500 = "nvarchar(500)";
         public const string nvarchar1000 = "nvarchar(1000)";
         public const string nvarcharMax = "nvarchar(max)";
-    }
-
-    public static class EntityTypeBuilderExtensions
-    {
-        public static void ConfigureCoreProperties<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : BaseEntity
-        {
-            builder.HasKey(e => e.Id);
-            builder.Property(e => e.Id)
-                   .HasColumnName("id")
-                   .HasColumnType(DBTypes.Int)
-                   .ValueGeneratedOnAdd();
-
-            builder.Property(e => e.CreatedAt)
-                   .HasColumnName("created_at")
-                   .HasColumnType(DBTypes.DateTime2)
-                   .HasDefaultValueSql("GETUTCDATE()")
-                   .IsRequired();
-        }
-
-        public static void ConfigureSoftDelete<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class, ISoftDelete
-        {
-            // IsDeleted (Soft Delete Field)
-            builder.Property(e => e.IsDeleted)
-                   .HasColumnName("is_deleted")
-                   .HasColumnType(DBTypes.Bit)
-                   .HasDefaultValue(false)
-                   .IsRequired();
-        }
     }
 
 
@@ -132,7 +103,7 @@ namespace Models.Configurations
             // Relationships
             // FK to User
             builder.HasOne(d => d.User)
-                   .WithOne(u => u.DoctorProfile)
+                   .WithOne(u => u.Doctor)
                    .HasForeignKey<Doctor>(d => d.UserId)
                    .OnDelete(DeleteBehavior.Restrict)
                    .IsRequired();
@@ -160,14 +131,14 @@ namespace Models.Configurations
             builder.Property(p => p.Gender).HasColumnName("gender").HasColumnType(DBTypes.nvarchar20).HasMaxLength(20);
             builder.Property(p => p.Country).HasColumnName("country").HasColumnType(DBTypes.nvarchar50).HasMaxLength(50);
             builder.Property(p => p.City).HasColumnName("city").HasColumnType(DBTypes.nvarchar50).HasMaxLength(50);
-            builder.Property(p => p.Address).HasColumnName("address").HasColumnType(DBTypes.nvarchar250).HasMaxLength(250);
+            builder.Property(p => p.Street).HasColumnName("address").HasColumnType(DBTypes.nvarchar250).HasMaxLength(250);
             builder.Property(p => p.InsuranceProvider).HasColumnName("insurance_provider").HasColumnType(DBTypes.nvarchar100).HasMaxLength(100);
             builder.Property(p => p.InsurancePolicyNumber).HasColumnName("insurance_policy_number").HasColumnType(DBTypes.nvarchar50).HasMaxLength(50);
 
             // Relationships
             // FK to User
             builder.HasOne(p => p.User)
-                   .WithOne(u => u.PatientProfile)
+                   .WithOne(u => u.Patient)
                    .HasForeignKey<Patient>(p => p.UserId)
                    .OnDelete(DeleteBehavior.Restrict)
                    .IsRequired();
