@@ -11,11 +11,11 @@ namespace Models.Entities
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string PasswordHash { get; set; }
+        public DateTime UpatedAt { get; set; }
         public UserRole Role { get; set; }
 
-        public Doctor DoctorProfile { get; set; }
-        public Patient PatientProfile { get; set; }
-        public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
+        public Doctor Doctor { get; set; }
+        public Patient Patient { get; set; }
         public ICollection<Clinic> Clinics { get; set; } = new HashSet<Clinic>();
     }
 
