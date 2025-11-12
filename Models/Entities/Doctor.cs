@@ -3,7 +3,6 @@
     public class Doctor : BaseEntity
     {
         public string Specialty { get; set; }
-        public string Qualification { get; set; }
         public decimal ConsultationPrice { get; set; }
         public int ConsultationTime { get; set; } 
         public double AverageReviewRate { get; set; }

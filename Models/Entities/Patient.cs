@@ -1,10 +1,12 @@
-﻿namespace Models.Entities
+﻿using Models.Enums;
+
+namespace Models.Entities
 {
     public class Patient : BaseEntity
     {
 
         public DateTime DateOfBirth { get; set; }
-        public string Gender { get; set; }
+        public Gender Gender { get; set; }
         public string Street { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
