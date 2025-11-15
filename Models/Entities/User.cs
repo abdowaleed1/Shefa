@@ -11,7 +11,7 @@ namespace Models.Entities
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string PasswordHash { get; set; }
-        public DateTime UpatedAt { get; set; }
+        public DateTime? UpatedAt { get; set; }
         public UserRole Role { get; set; }
 
         public Doctor Doctor { get; set; }

@@ -9,7 +9,7 @@
         public bool IsVerified { get; set; }
         public string Biography { get; set; }
         public string Education { get; set; } 
-        public int ExperienceYears { get; set; } 
+        public int? ExperienceYears { get; set; } 
         public int UserId { get; set; }
         public int? ClinicId { get; set; }
         public User User { get; set; }
