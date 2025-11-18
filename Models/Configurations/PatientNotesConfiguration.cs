@@ -14,12 +14,12 @@ namespace Models.Configurations
 
             builder.Property(n => n.NoteType)
                    .HasColumnName("note_type")
-                   .HasColumnType(DBTypes.nvarchar50)
+                   .HasColumnType(DBTypes.NvarChar)
                    .HasMaxLength(50)
                    .HasConversion<string>()
                    .IsRequired();
 
-            builder.Property(n => n.NoteContent).HasColumnName("note_content").HasColumnType(DBTypes.nvarcharMax).IsRequired();
+            builder.Property(n => n.NoteContent).HasColumnName("note_content").HasColumnType(DBTypes.NvarCharMax).IsRequired();
 
             builder.HasOne(n => n.Patient)
                    .WithMany(p => p.PatientNotes)

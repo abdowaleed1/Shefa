@@ -14,6 +14,7 @@ namespace Models.Entities
         public PaymentStatus PaymentStatus { get; set; }
         public Patient Patient { get; set; }
         public Doctor Doctor { get; set; }
+        public Transaction Transaction { get; set; }
 
         public ICollection<PatientNotes> PatientNotes { get; set; } = new HashSet<PatientNotes>();
     }

@@ -14,11 +14,11 @@ namespace Models.Configurations
             builder.Property(ns => ns.NextRunDate).HasColumnName("next_run_date").HasColumnType(DBTypes.DateTime2).IsRequired();
             builder.Property(ns => ns.IsActive).HasColumnName("is_active").HasColumnType(DBTypes.Bit).HasDefaultValue(true).IsRequired();
             builder.Property(ns => ns.IsDelivered).HasColumnName("is_delivered").HasColumnType(DBTypes.Bit).HasDefaultValue(false).IsRequired();
-            builder.Property(n => n.MedicationName).HasColumnName("medication_name").HasColumnType(DBTypes.nvarchar500).HasMaxLength(500).IsRequired();
+            builder.Property(n => n.MedicationName).HasColumnName("medication_name").HasColumnType(DBTypes.NvarChar).HasMaxLength(500).IsRequired();
 
             builder.Property(ns => ns.RecurrenceType)
                    .HasColumnName("recurrence_type")
-                   .HasColumnType(DBTypes.nvarchar50)
+                   .HasColumnType(DBTypes.NvarChar)
                    .HasMaxLength(50)
                    .HasConversion<string>()
                    .IsRequired();

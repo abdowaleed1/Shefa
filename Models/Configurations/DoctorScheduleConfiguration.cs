@@ -12,7 +12,7 @@ namespace Models.Configurations
             builder.ConfigureCoreProperties(); 
             builder.ConfigureSoftDelete();     
 
-            builder.Property(ds => ds.DayOfWeek).HasColumnName("day_of_week").HasColumnType(DBTypes.nvarchar20).HasMaxLength(20).IsRequired();
+            builder.Property(ds => ds.DayOfWeek).HasColumnName("day_of_week").HasColumnType(DBTypes.NvarChar).HasMaxLength(20).IsRequired();
             builder.Property(ds => ds.StartTime).HasColumnName("start_time").HasColumnType(DBTypes.DateTime).IsRequired();
             builder.Property(ds => ds.EndTime).HasColumnName("end_time").HasColumnType(DBTypes.DateTime).IsRequired();
 

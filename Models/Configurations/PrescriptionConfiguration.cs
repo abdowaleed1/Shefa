@@ -13,7 +13,7 @@ namespace Models.Configurations
             
             builder.Property(d => d.PrescriptionImageURL)
                .HasColumnName("prescription_image_url")
-               .HasColumnType(DBTypes.nvarcharMax)
+               .HasColumnType(DBTypes.NvarCharMax)
                .IsRequired();
 
 

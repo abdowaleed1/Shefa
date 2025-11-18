@@ -12,9 +12,9 @@ namespace Models.Configurations
             builder.ConfigureCoreProperties(); 
 
             builder.Property(t => t.Amount).HasColumnName("amount").HasColumnType(DBTypes.Money).IsRequired();
-            builder.Property(t => t.Type).HasColumnName("type").HasColumnType(DBTypes.nvarchar50).HasMaxLength(50).IsRequired();
-            builder.Property(t => t.Status).HasColumnName("status").HasColumnType(DBTypes.nvarchar50).HasMaxLength(50).IsRequired();
-            builder.Property(t => t.TransactionReference).HasColumnName("transaction_reference").HasColumnType(DBTypes.nvarchar100).HasMaxLength(100).IsRequired();
+            builder.Property(t => t.Type).HasColumnName("type").HasColumnType(DBTypes.NvarChar).HasMaxLength(50).IsRequired();
+            builder.Property(t => t.Status).HasColumnName("status").HasColumnType(DBTypes.NvarChar).HasMaxLength(50).IsRequired();
+            builder.Property(t => t.TransactionReference).HasColumnName("transaction_reference").HasColumnType(DBTypes.NvarChar).HasMaxLength(100).IsRequired();
 
             
             builder.HasOne(t => t.Patient)
