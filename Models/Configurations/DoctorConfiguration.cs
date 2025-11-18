@@ -9,7 +9,6 @@ namespace Models.Configurations
         public void Configure(EntityTypeBuilder<Doctor> builder)
         {
             builder.ToTable("Doctor");
-            builder.ConfigureCoreProperties(); 
 
             builder.Property(d => d.Specialty)
                 .HasColumnName("specialty")
@@ -67,7 +66,7 @@ namespace Models.Configurations
                    .WithMany(c => c.Doctors)
                    .HasForeignKey(d => d.ClinicId)
                    .IsRequired()
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 

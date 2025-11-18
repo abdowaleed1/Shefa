@@ -19,19 +19,31 @@ namespace Models.Configurations
                    .HasConversion<string>()
                    .IsRequired();
 
-            builder.Property(n => n.NoteContent).HasColumnName("note_content").HasColumnType(DBTypes.NvarCharMax).IsRequired();
+            builder.Property(n => n.NoteContent)
+                .HasColumnName("note_content")
+                .HasColumnType(DBTypes.NvarChar)
+                .HasMaxLength(2000)
+                .IsRequired();
+
+            builder.Property(c => c.PatientId)
+               .HasColumnName("patient_id")
+               .HasColumnType(DBTypes.Int);
+
+            builder.Property(c => c.AppointmentId)
+               .HasColumnName("appointment_id")
+               .HasColumnType(DBTypes.Int);
 
             builder.HasOne(n => n.Patient)
                    .WithMany(p => p.PatientNotes)
                    .HasForeignKey(n => n.PatientId)
-                   .OnDelete(DeleteBehavior.Restrict)
+                   .OnDelete(DeleteBehavior.Cascade)
                    .IsRequired();
 
 
             builder.HasOne(n => n.Appointment)
                    .WithMany(a => a.PatientNotes)
                    .HasForeignKey(n => n.AppointmentId)
-                   .OnDelete(DeleteBehavior.Restrict)
+                   .OnDelete(DeleteBehavior.NoAction)
                    .IsRequired();
         }
     }

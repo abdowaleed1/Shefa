@@ -45,78 +45,71 @@ namespace Models.Migrations
                     street = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     phone_number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    manager_id = table.Column<int>(type: "int", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Clinic", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Clinic_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Clinic_Users_manager_id",
+                        column: x => x.manager_id,
                         principalTable: "Users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Patient",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<int>(type: "int", nullable: false),
                     date_of_birth = table.Column<DateTime>(type: "date", nullable: false),
                     gender = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     address = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    city = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    city = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Patient", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Patient_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Patient_Users_id",
+                        column: x => x.id,
                         principalTable: "Users",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Doctor",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<int>(type: "int", nullable: false),
                     specialty = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     consultation_price = table.Column<decimal>(type: "money", nullable: false),
                     consultation_time = table.Column<int>(type: "int", nullable: false),
                     average_review_rate = table.Column<double>(type: "float", nullable: false, defaultValue: 0.0),
+                    Count_of_reviews = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     is_verified = table.Column<bool>(type: "bit", nullable: false),
-                    biography = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    biography = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     education = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     experience_years = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    ClinicId = table.Column<int>(type: "int", nullable: true),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    clinic_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Doctor", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Doctor_Clinic_ClinicId",
-                        column: x => x.ClinicId,
+                        name: "FK_Doctor_Clinic_clinic_id",
+                        column: x => x.clinic_id,
                         principalTable: "Clinic",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_Doctor_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Doctor_Users_id",
+                        column: x => x.id,
                         principalTable: "Users",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -129,21 +122,21 @@ namespace Models.Migrations
                     frequency = table.Column<int>(type: "int", nullable: false),
                     medication_name = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     next_run_date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    end_date = table.Column<DateOnly>(type: "date", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     is_delivered = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    PatientId = table.Column<int>(type: "int", nullable: false),
+                    patient_id = table.Column<int>(type: "int", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_NotificationSchedule", x => x.id);
                     table.ForeignKey(
-                        name: "FK_NotificationSchedule_Patient_PatientId",
-                        column: x => x.PatientId,
+                        name: "FK_NotificationSchedule_Patient_patient_id",
+                        column: x => x.patient_id,
                         principalTable: "Patient",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -152,8 +145,8 @@ namespace Models.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PatientId = table.Column<int>(type: "int", nullable: false),
-                    DoctorId = table.Column<int>(type: "int", nullable: false),
+                    patient_id = table.Column<int>(type: "int", nullable: false),
+                    doctor_id = table.Column<int>(type: "int", nullable: false),
                     appointment_date = table.Column<DateTime>(type: "date", nullable: false),
                     confirmation_code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -165,17 +158,15 @@ namespace Models.Migrations
                 {
                     table.PrimaryKey("PK_Appointment", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Appointment_Doctor_DoctorId",
-                        column: x => x.DoctorId,
+                        name: "FK_Appointment_Doctor_doctor_id",
+                        column: x => x.doctor_id,
                         principalTable: "Doctor",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_Appointment_Patient_PatientId",
-                        column: x => x.PatientId,
+                        name: "FK_Appointment_Patient_patient_id",
+                        column: x => x.patient_id,
                         principalTable: "Patient",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -186,25 +177,23 @@ namespace Models.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     report_type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     report_url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DoctorId = table.Column<int>(type: "int", nullable: false),
-                    PatientId = table.Column<int>(type: "int", nullable: false),
+                    doctor_id = table.Column<int>(type: "int", nullable: false),
+                    patient_id = table.Column<int>(type: "int", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DiagnosisReport", x => x.id);
                     table.ForeignKey(
-                        name: "FK_DiagnosisReport_Doctor_DoctorId",
-                        column: x => x.DoctorId,
+                        name: "FK_DiagnosisReport_Doctor_doctor_id",
+                        column: x => x.doctor_id,
                         principalTable: "Doctor",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_DiagnosisReport_Patient_PatientId",
-                        column: x => x.PatientId,
+                        name: "FK_DiagnosisReport_Patient_patient_id",
+                        column: x => x.patient_id,
                         principalTable: "Patient",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -214,8 +203,8 @@ namespace Models.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DoctorId = table.Column<int>(type: "int", nullable: false),
-                    ClinicId = table.Column<int>(type: "int", nullable: false),
+                    doctor_id = table.Column<int>(type: "int", nullable: false),
+                    clinic_id = table.Column<int>(type: "int", nullable: false),
                     start_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     end_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     day_of_week = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
@@ -225,14 +214,14 @@ namespace Models.Migrations
                 {
                     table.PrimaryKey("PK_DoctorSchedule", x => x.id);
                     table.ForeignKey(
-                        name: "FK_DoctorSchedule_Clinic_ClinicId",
-                        column: x => x.ClinicId,
+                        name: "FK_DoctorSchedule_Clinic_clinic_id",
+                        column: x => x.clinic_id,
                         principalTable: "Clinic",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DoctorSchedule_Doctor_DoctorId",
-                        column: x => x.DoctorId,
+                        name: "FK_DoctorSchedule_Doctor_doctor_id",
+                        column: x => x.doctor_id,
                         principalTable: "Doctor",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -245,25 +234,24 @@ namespace Models.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     prescription_image_url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DoctorId = table.Column<int>(type: "int", nullable: false),
-                    PatientId = table.Column<int>(type: "int", nullable: false),
+                    doctor_id = table.Column<int>(type: "int", nullable: false),
+                    patient_id = table.Column<int>(type: "int", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Prescription", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Prescription_Doctor_DoctorId",
-                        column: x => x.DoctorId,
+                        name: "FK_Prescription_Doctor_doctor_id",
+                        column: x => x.doctor_id,
                         principalTable: "Doctor",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_Prescription_Patient_PatientId",
-                        column: x => x.PatientId,
+                        name: "FK_Prescription_Patient_patient_id",
+                        column: x => x.patient_id,
                         principalTable: "Patient",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -272,8 +260,8 @@ namespace Models.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    doctor_comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    clinic_comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    doctor_comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    clinic_comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     doctor_rating = table.Column<int>(type: "int", nullable: false),
                     clinic_rating = table.Column<int>(type: "int", nullable: false),
                     PatientId = table.Column<int>(type: "int", nullable: false),
@@ -289,7 +277,7 @@ namespace Models.Migrations
                         column: x => x.ClinicId,
                         principalTable: "Clinic",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Review_Doctor_DoctorId",
                         column: x => x.DoctorId,
@@ -310,9 +298,9 @@ namespace Models.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PatientId = table.Column<int>(type: "int", nullable: false),
-                    AppointmentId = table.Column<int>(type: "int", nullable: false),
-                    note_content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    patient_id = table.Column<int>(type: "int", nullable: false),
+                    appointment_id = table.Column<int>(type: "int", nullable: false),
+                    note_content = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
                     note_type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
@@ -320,17 +308,16 @@ namespace Models.Migrations
                 {
                     table.PrimaryKey("PK_PatientNotes", x => x.id);
                     table.ForeignKey(
-                        name: "FK_PatientNotes_Appointment_AppointmentId",
-                        column: x => x.AppointmentId,
+                        name: "FK_PatientNotes_Appointment_appointment_id",
+                        column: x => x.appointment_id,
                         principalTable: "Appointment",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_PatientNotes_Patient_PatientId",
-                        column: x => x.PatientId,
+                        name: "FK_PatientNotes_Patient_patient_id",
+                        column: x => x.patient_id,
                         principalTable: "Patient",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -343,104 +330,97 @@ namespace Models.Migrations
                     type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     transaction_reference = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PatientId = table.Column<int>(type: "int", nullable: false),
-                    AppointmentId = table.Column<int>(type: "int", nullable: false),
+                    patient_id = table.Column<int>(type: "int", nullable: false),
+                    appointment_id = table.Column<int>(type: "int", nullable: false),
+                    AppointmentId1 = table.Column<int>(type: "int", nullable: true),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transaction", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Transaction_Appointment_AppointmentId",
-                        column: x => x.AppointmentId,
+                        name: "FK_Transaction_Appointment_AppointmentId1",
+                        column: x => x.AppointmentId1,
                         principalTable: "Appointment",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_Transaction_Patient_PatientId",
-                        column: x => x.PatientId,
+                        name: "FK_Transaction_Appointment_appointment_id",
+                        column: x => x.appointment_id,
+                        principalTable: "Appointment",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_Transaction_Patient_patient_id",
+                        column: x => x.patient_id,
                         principalTable: "Patient",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Appointment_DoctorId",
+                name: "IX_Appointment_doctor_id",
                 table: "Appointment",
-                column: "DoctorId");
+                column: "doctor_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Appointment_PatientId",
+                name: "IX_Appointment_patient_id",
                 table: "Appointment",
-                column: "PatientId");
+                column: "patient_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clinic_UserId",
+                name: "IX_Clinic_manager_id",
                 table: "Clinic",
-                column: "UserId");
+                column: "manager_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DiagnosisReport_DoctorId",
+                name: "IX_DiagnosisReport_doctor_id",
                 table: "DiagnosisReport",
-                column: "DoctorId");
+                column: "doctor_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DiagnosisReport_PatientId",
+                name: "IX_DiagnosisReport_patient_id",
                 table: "DiagnosisReport",
-                column: "PatientId");
+                column: "patient_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Doctor_ClinicId",
+                name: "IX_Doctor_clinic_id",
                 table: "Doctor",
-                column: "ClinicId");
+                column: "clinic_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Doctor_UserId",
-                table: "Doctor",
-                column: "UserId",
+                name: "IX_DoctorSchedule_clinic_id",
+                table: "DoctorSchedule",
+                column: "clinic_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoctorSchedule_doctor_id_day_of_week_start_time_clinic_id",
+                table: "DoctorSchedule",
+                columns: new[] { "doctor_id", "day_of_week", "start_time", "clinic_id" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_DoctorSchedule_ClinicId",
-                table: "DoctorSchedule",
-                column: "ClinicId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DoctorSchedule_DoctorId_day_of_week_start_time_ClinicId",
-                table: "DoctorSchedule",
-                columns: new[] { "DoctorId", "day_of_week", "start_time", "ClinicId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NotificationSchedule_PatientId",
+                name: "IX_NotificationSchedule_patient_id",
                 table: "NotificationSchedule",
-                column: "PatientId");
+                column: "patient_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Patient_UserId",
-                table: "Patient",
-                column: "UserId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PatientNotes_AppointmentId",
+                name: "IX_PatientNotes_appointment_id",
                 table: "PatientNotes",
-                column: "AppointmentId");
+                column: "appointment_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PatientNotes_PatientId",
+                name: "IX_PatientNotes_patient_id",
                 table: "PatientNotes",
-                column: "PatientId");
+                column: "patient_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Prescription_DoctorId",
+                name: "IX_Prescription_doctor_id",
                 table: "Prescription",
-                column: "DoctorId");
+                column: "doctor_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Prescription_PatientId",
+                name: "IX_Prescription_patient_id",
                 table: "Prescription",
-                column: "PatientId");
+                column: "patient_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Review_ClinicId",
@@ -459,14 +439,21 @@ namespace Models.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transaction_AppointmentId",
+                name: "IX_Transaction_appointment_id",
                 table: "Transaction",
-                column: "AppointmentId");
+                column: "appointment_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transaction_PatientId",
+                name: "IX_Transaction_AppointmentId1",
                 table: "Transaction",
-                column: "PatientId");
+                column: "AppointmentId1",
+                unique: true,
+                filter: "[AppointmentId1] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transaction_patient_id",
+                table: "Transaction",
+                column: "patient_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_email",

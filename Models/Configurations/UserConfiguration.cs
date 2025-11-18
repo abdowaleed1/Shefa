@@ -9,24 +9,25 @@ namespace Models.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("Users");
-            
             builder.ConfigureCoreProperties(); 
+            builder.ConfigureSoftDelete();  
             
-            builder.ConfigureSoftDelete();     
             builder.Property(d => d.FirstName)
                 .HasColumnName("first_name")
                 .HasColumnType(DBTypes.NvarChar)
                 .HasMaxLength(100)
                 .IsRequired();
+
             builder.Property(d => d.LastName)
                 .HasColumnName("last_name")
                 .HasColumnType(DBTypes.NvarChar)
                 .HasMaxLength(100)
                 .IsRequired();
+            
             builder.Property(d => d.UpatedAt)
-            .HasColumnName("upated_at")
-            .HasColumnType(DBTypes.DateTime2)
-            .IsRequired(false);
+                .HasColumnName("upated_at")
+                .HasColumnType(DBTypes.DateTime2)
+                .IsRequired(false);
 
             builder.Property(u => u.Email)
                    .HasColumnName("email")
