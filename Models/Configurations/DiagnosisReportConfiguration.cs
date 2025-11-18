@@ -13,25 +13,33 @@ namespace Models.Configurations
 
             builder.Property(d => d.ReportType)
                .HasColumnName("report_type")
-               .HasColumnType(DBTypes.nvarchar100)
+               .HasColumnType(DBTypes.NvarChar)
                .HasMaxLength(100)
                .IsRequired();
+
             builder.Property(d => d.ReportURL)
                .HasColumnName("report_url")
-               .HasColumnType(DBTypes.nvarcharMax)
+               .HasColumnType(DBTypes.NvarCharMax)
                .IsRequired();
 
+            builder.Property(c => c.DoctorId)
+                   .HasColumnName("doctor_id")
+                   .HasColumnType(DBTypes.Int);
 
-            builder.HasOne(r => r.Doctor)
+            builder.Property(c => c.PatientId)
+                   .HasColumnName("patient_id")
+                   .HasColumnType(DBTypes.Int);
+
+            builder.HasOne(dr => dr.Doctor)
                    .WithMany(d => d.DiagnosisReports)
-                   .HasForeignKey(r => r.DoctorId)
-                   .OnDelete(DeleteBehavior.Restrict)
+                   .HasForeignKey(dr => dr.DoctorId)
+                   .OnDelete(DeleteBehavior.NoAction)
                    .IsRequired();
 
-            builder.HasOne(r => r.Patient)
+            builder.HasOne(dr => dr.Patient)
                    .WithMany(p => p.DiagnosisReports)
-                   .HasForeignKey(r => r.PatientId)
-                   .OnDelete(DeleteBehavior.Restrict)
+                   .HasForeignKey(dr => dr.PatientId)
+                   .OnDelete(DeleteBehavior.NoAction)
                    .IsRequired();
         }
     }

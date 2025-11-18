@@ -12,7 +12,7 @@ using Models.Contexts;
 namespace Models.Migrations
 {
     [DbContext(typeof(ShefaContext))]
-    [Migration("20251115121848_init")]
+    [Migration("20251118212910_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -41,13 +41,13 @@ namespace Models.Migrations
                     b.Property<string>("ConfirmationCode")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("confirmation_code");
 
                     b.Property<string>("ConsultationType")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("consultation_type");
 
                     b.Property<DateTime>("CreatedAt")
@@ -57,21 +57,23 @@ namespace Models.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("DoctorId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("doctor_id");
 
                     b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("patient_id");
 
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("payment_status");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("status");
 
                     b.HasKey("Id");
@@ -95,13 +97,13 @@ namespace Models.Migrations
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("city");
 
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("country");
 
                     b.Property<DateTime>("CreatedAt")
@@ -113,39 +115,40 @@ namespace Models.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("description");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("email");
+
+                    b.Property<int>("ManagerId")
+                        .HasColumnType("int")
+                        .HasColumnName("manager_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("name");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("phone_number");
 
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("street");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ManagerId");
 
                     b.ToTable("Clinic", (string)null);
                 });
@@ -166,15 +169,17 @@ namespace Models.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("DoctorId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("doctor_id");
 
                     b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("patient_id");
 
                     b.Property<string>("ReportType")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("report_type");
 
                     b.Property<string>("ReportURL")
@@ -191,74 +196,6 @@ namespace Models.Migrations
                     b.ToTable("DiagnosisReport", (string)null);
                 });
 
-            modelBuilder.Entity("Models.Entities.Doctor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("AverageReviewRate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValue(0.0)
-                        .HasColumnName("average_review_rate");
-
-                    b.Property<string>("Biography")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("biography");
-
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("ConsultationPrice")
-                        .HasColumnType("money")
-                        .HasColumnName("consultation_price");
-
-                    b.Property<int>("ConsultationTime")
-                        .HasColumnType("int")
-                        .HasColumnName("consultation_time");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("Education")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)")
-                        .HasColumnName("education");
-
-                    b.Property<int?>("ExperienceYears")
-                        .HasColumnType("int")
-                        .HasColumnName("experience_years");
-
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_verified");
-
-                    b.Property<string>("Specialty")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("specialty");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Doctor", (string)null);
-                });
-
             modelBuilder.Entity("Models.Entities.DoctorSchedule", b =>
                 {
                     b.Property<int>("Id")
@@ -269,7 +206,8 @@ namespace Models.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ClinicId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("clinic_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -280,11 +218,12 @@ namespace Models.Migrations
                     b.Property<string>("DayOfWeek")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("day_of_week");
 
                     b.Property<int>("DoctorId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("doctor_id");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime")
@@ -326,7 +265,8 @@ namespace Models.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<DateOnly>("EndDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("end_date");
 
                     b.Property<int>("Frequency")
                         .HasColumnType("int")
@@ -347,7 +287,7 @@ namespace Models.Migrations
                     b.Property<string>("MedicationName")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("medication_name");
 
                     b.Property<DateTime>("NextRunDate")
@@ -355,12 +295,13 @@ namespace Models.Migrations
                         .HasColumnName("next_run_date");
 
                     b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("patient_id");
 
                     b.Property<string>("RecurrenceType")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("recurrence_type");
 
                     b.HasKey("Id");
@@ -368,60 +309,6 @@ namespace Models.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("NotificationSchedule", (string)null);
-                });
-
-            modelBuilder.Entity("Models.Entities.Patient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("city");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("country");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("date")
-                        .HasColumnName("date_of_birth");
-
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasColumnName("gender");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)")
-                        .HasColumnName("address");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Patient", (string)null);
                 });
 
             modelBuilder.Entity("Models.Entities.PatientNotes", b =>
@@ -434,7 +321,8 @@ namespace Models.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AppointmentId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("appointment_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -444,17 +332,19 @@ namespace Models.Migrations
 
                     b.Property<string>("NoteContent")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("note_content");
 
                     b.Property<string>("NoteType")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("note_type");
 
                     b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("patient_id");
 
                     b.HasKey("Id");
 
@@ -481,10 +371,12 @@ namespace Models.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("DoctorId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("doctor_id");
 
                     b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("patient_id");
 
                     b.Property<string>("PrescriptionImageURL")
                         .IsRequired()
@@ -510,9 +402,8 @@ namespace Models.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClinicComment")
-                        .IsRequired()
                         .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("clinic_comment");
 
                     b.Property<int>("ClinicId")
@@ -529,9 +420,8 @@ namespace Models.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("DoctorComment")
-                        .IsRequired()
                         .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("doctor_comment");
 
                     b.Property<int>("DoctorId")
@@ -570,6 +460,10 @@ namespace Models.Migrations
                         .HasColumnName("amount");
 
                     b.Property<int>("AppointmentId")
+                        .HasColumnType("int")
+                        .HasColumnName("appointment_id");
+
+                    b.Property<int?>("AppointmentId1")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -579,29 +473,34 @@ namespace Models.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("patient_id");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("status");
 
                     b.Property<string>("TransactionReference")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("transaction_reference");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("type");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AppointmentId");
+
+                    b.HasIndex("AppointmentId1")
+                        .IsUnique()
+                        .HasFilter("[AppointmentId1] IS NOT NULL");
 
                     b.HasIndex("PatientId");
 
@@ -626,13 +525,13 @@ namespace Models.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("email");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("first_name");
 
                     b.Property<bool>("IsDeleted")
@@ -644,7 +543,7 @@ namespace Models.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("last_name");
 
                     b.Property<string>("PasswordHash")
@@ -655,13 +554,13 @@ namespace Models.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("phone_number");
 
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("nvarchar")
                         .HasColumnName("role");
 
                     b.Property<DateTime?>("UpatedAt")
@@ -674,6 +573,100 @@ namespace Models.Migrations
                         .IsUnique();
 
                     b.ToTable("Users", (string)null);
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("Models.Entities.Doctor", b =>
+                {
+                    b.HasBaseType("Models.Entities.User");
+
+                    b.Property<double>("AverageReviewRate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("float")
+                        .HasDefaultValue(0.0)
+                        .HasColumnName("average_review_rate");
+
+                    b.Property<string>("Biography")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("biography");
+
+                    b.Property<int>("ClinicId")
+                        .HasColumnType("int")
+                        .HasColumnName("clinic_id");
+
+                    b.Property<decimal>("ConsultationPrice")
+                        .HasColumnType("money")
+                        .HasColumnName("consultation_price");
+
+                    b.Property<int>("ConsultationTime")
+                        .HasColumnType("int")
+                        .HasColumnName("consultation_time");
+
+                    b.Property<int>("CountOfReviews")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("Count_of_reviews");
+
+                    b.Property<string>("Education")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("education");
+
+                    b.Property<int?>("ExperienceYears")
+                        .HasColumnType("int")
+                        .HasColumnName("experience_years");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_verified");
+
+                    b.Property<string>("Specialty")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("specialty");
+
+                    b.HasIndex("ClinicId");
+
+                    b.ToTable("Doctor", (string)null);
+                });
+
+            modelBuilder.Entity("Models.Entities.Patient", b =>
+                {
+                    b.HasBaseType("Models.Entities.User");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("city");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("country");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("date")
+                        .HasColumnName("date_of_birth");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("gender");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("address");
+
+                    b.ToTable("Patient", (string)null);
                 });
 
             modelBuilder.Entity("Models.Entities.Appointment", b =>
@@ -681,13 +674,13 @@ namespace Models.Migrations
                     b.HasOne("Models.Entities.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Models.Entities.Patient", "Patient")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Doctor");
@@ -697,13 +690,13 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Clinic", b =>
                 {
-                    b.HasOne("Models.Entities.User", "User")
+                    b.HasOne("Models.Entities.User", "Manager")
                         .WithMany("Clinics")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Manager");
                 });
 
             modelBuilder.Entity("Models.Entities.DiagnosisReport", b =>
@@ -711,36 +704,18 @@ namespace Models.Migrations
                     b.HasOne("Models.Entities.Doctor", "Doctor")
                         .WithMany("DiagnosisReports")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Models.Entities.Patient", "Patient")
                         .WithMany("DiagnosisReports")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("Models.Entities.Doctor", b =>
-                {
-                    b.HasOne("Models.Entities.Clinic", "Clinic")
-                        .WithMany("Doctors")
-                        .HasForeignKey("ClinicId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Models.Entities.User", "User")
-                        .WithOne("Doctor")
-                        .HasForeignKey("Models.Entities.Doctor", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Clinic");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.Entities.DoctorSchedule", b =>
@@ -767,21 +742,10 @@ namespace Models.Migrations
                     b.HasOne("Models.Entities.Patient", "Patient")
                         .WithMany("NotificationSchedules")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("Models.Entities.Patient", b =>
-                {
-                    b.HasOne("Models.Entities.User", "User")
-                        .WithOne("Patient")
-                        .HasForeignKey("Models.Entities.Patient", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.Entities.PatientNotes", b =>
@@ -789,13 +753,13 @@ namespace Models.Migrations
                     b.HasOne("Models.Entities.Appointment", "Appointment")
                         .WithMany("PatientNotes")
                         .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Models.Entities.Patient", "Patient")
                         .WithMany("PatientNotes")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Appointment");
@@ -808,13 +772,13 @@ namespace Models.Migrations
                     b.HasOne("Models.Entities.Doctor", "Doctor")
                         .WithMany("Prescriptions")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Models.Entities.Patient", "Patient")
                         .WithMany("Prescriptions")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Doctor");
@@ -827,7 +791,7 @@ namespace Models.Migrations
                     b.HasOne("Models.Entities.Clinic", "Clinic")
                         .WithMany("Reviews")
                         .HasForeignKey("ClinicId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Models.Entities.Doctor", "Doctor")
@@ -854,13 +818,17 @@ namespace Models.Migrations
                     b.HasOne("Models.Entities.Appointment", "Appointment")
                         .WithMany()
                         .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.HasOne("Models.Entities.Appointment", null)
+                        .WithOne("Transaction")
+                        .HasForeignKey("Models.Entities.Transaction", "AppointmentId1");
 
                     b.HasOne("Models.Entities.Patient", "Patient")
                         .WithMany("Transactions")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Appointment");
@@ -868,9 +836,38 @@ namespace Models.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("Models.Entities.Doctor", b =>
+                {
+                    b.HasOne("Models.Entities.Clinic", "Clinic")
+                        .WithMany("Doctors")
+                        .HasForeignKey("ClinicId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Models.Entities.User", null)
+                        .WithOne()
+                        .HasForeignKey("Models.Entities.Doctor", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Clinic");
+                });
+
+            modelBuilder.Entity("Models.Entities.Patient", b =>
+                {
+                    b.HasOne("Models.Entities.User", null)
+                        .WithOne()
+                        .HasForeignKey("Models.Entities.Patient", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Models.Entities.Appointment", b =>
                 {
                     b.Navigation("PatientNotes");
+
+                    b.Navigation("Transaction")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.Entities.Clinic", b =>
@@ -880,6 +877,11 @@ namespace Models.Migrations
                     b.Navigation("Doctors");
 
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("Models.Entities.User", b =>
+                {
+                    b.Navigation("Clinics");
                 });
 
             modelBuilder.Entity("Models.Entities.Doctor", b =>
@@ -910,17 +912,6 @@ namespace Models.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("Models.Entities.User", b =>
-                {
-                    b.Navigation("Clinics");
-
-                    b.Navigation("Doctor")
-                        .IsRequired();
-
-                    b.Navigation("Patient")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

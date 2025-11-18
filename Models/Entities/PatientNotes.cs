@@ -11,5 +11,4 @@ namespace Models.Entities
         public Patient Patient { get; set; }
         public Appointment Appointment { get; set; }
     }
-
 }

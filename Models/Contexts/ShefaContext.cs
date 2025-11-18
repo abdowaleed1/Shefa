@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Models.Contexts
 {
@@ -32,7 +33,7 @@ namespace Models.Contexts
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.;Database=ShefaDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Data Source =.; Initial Catalog = ShefaDB; Integrated Security = True; Encrypt = True; Trust Server Certificate = True");
         }
     }
 }

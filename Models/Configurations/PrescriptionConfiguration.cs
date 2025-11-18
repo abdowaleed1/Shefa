@@ -9,27 +9,31 @@ namespace Models.Configurations
         public void Configure(EntityTypeBuilder<Prescription> builder)
         {
             builder.ToTable("Prescription");
-            builder.ConfigureCoreProperties(); // Id, CreatedAt
+            builder.ConfigureCoreProperties(); 
             
             builder.Property(d => d.PrescriptionImageURL)
                .HasColumnName("prescription_image_url")
-               .HasColumnType(DBTypes.nvarcharMax)
+               .HasColumnType(DBTypes.NvarCharMax)
                .IsRequired();
 
+            builder.Property(c => c.DoctorId)
+               .HasColumnName("doctor_id")
+               .HasColumnType(DBTypes.Int);
 
+            builder.Property(c => c.PatientId)
+                   .HasColumnName("patient_id")
+                   .HasColumnType(DBTypes.Int);
 
-            // FK to Doctor (Doctor who issued the prescription)
             builder.HasOne(p => p.Doctor)
                    .WithMany(d => d.Prescriptions)
                    .HasForeignKey(p => p.DoctorId)
-                   .OnDelete(DeleteBehavior.Restrict)
+                   .OnDelete(DeleteBehavior.NoAction)
                    .IsRequired();
 
-            // FK to Patient
             builder.HasOne(p => p.Patient)
                    .WithMany(pt => pt.Prescriptions)
                    .HasForeignKey(p => p.PatientId)
-                   .OnDelete(DeleteBehavior.Restrict)
+                   .OnDelete(DeleteBehavior.Cascade)
                    .IsRequired();
         }
     }

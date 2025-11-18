@@ -2,8 +2,8 @@
 {
     public class Review : BaseEntity
     {
-        public string DoctorComment { get; set; }
-        public string ClinicComment { get; set; }
+        public string? DoctorComment { get; set; }
+        public string? ClinicComment { get; set; }
         public int DoctorRating { get; set; } 
         public int ClinicRating { get; set; } 
         public int PatientId { get; set; }
