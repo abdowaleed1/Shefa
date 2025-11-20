@@ -4,8 +4,8 @@ namespace Models.Entities
 {
     public class Appointment : BaseEntity
     {
-        public int PatientId { get; set; }
-        public int DoctorId { get; set; }
+        public Guid PatientId { get; set; }
+        public Guid DoctorId { get; set; }
 
         public DateTime AppointmentDate { get; set; }
         public string ConfirmationCode { get; set; }

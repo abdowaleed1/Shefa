@@ -9,9 +9,8 @@ namespace Models.Entities
         public string MedicationName { get; set; } 
         public DateTime NextRunDate { get; set; }
         public DateOnly EndDate { get; set; }
-        public bool IsActive { get; set; }
         public bool IsDelivered { get; set; }
-        public int PatientId { get; set; }
+        public Guid PatientId { get; set; }
         public Patient Patient { get; set; }
 
     }

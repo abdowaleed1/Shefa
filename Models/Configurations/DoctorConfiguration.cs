@@ -60,7 +60,7 @@ namespace Models.Configurations
 
             builder.Property(c => c.ClinicId)
                    .HasColumnName("clinic_id")
-                   .HasColumnType(DBTypes.Int);
+                   .HasColumnType(DBTypes.UniQueIdEntifier);
 
             builder.HasOne(d => d.Clinic)
                    .WithMany(c => c.Doctors)

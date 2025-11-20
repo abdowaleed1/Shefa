@@ -22,11 +22,11 @@ namespace Models.Configurations
                 .IsRequired();
             builder.Property(e => e.PatientId)
                    .HasColumnName("patient_id")
-                   .HasColumnType(DBTypes.Int);
+                   .HasColumnType(DBTypes.UniQueIdEntifier);
 
             builder.Property(e => e.DoctorId)
                    .HasColumnName("doctor_id")
-                   .HasColumnType(DBTypes.Int);
+                   .HasColumnType(DBTypes.UniQueIdEntifier);
 
             builder.Property(a => a.Status)
                    .HasColumnName("status")

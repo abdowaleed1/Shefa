@@ -10,12 +10,12 @@ namespace Models.Configurations
         {
             builder.ToTable("DoctorSchedule");
             builder.ConfigureCoreProperties(); 
-            builder.ConfigureSoftDelete();     
 
             builder.Property(ds => ds.DayOfWeek)
                     .HasColumnName("day_of_week")
                     .HasColumnType(DBTypes.NvarChar)
-                    .HasMaxLength(20)
+                    .HasMaxLength(200)
+                    .HasConversion<string>()
                     .IsRequired();
             builder.Property(ds => ds.StartTime)
                     .HasColumnName("start_time")
@@ -27,11 +27,11 @@ namespace Models.Configurations
                     .IsRequired();
             builder.Property(c => c.DoctorId)
                    .HasColumnName("doctor_id")
-                   .HasColumnType(DBTypes.Int);
+                   .HasColumnType(DBTypes.UniQueIdEntifier);
 
             builder.Property(c => c.ClinicId)
                    .HasColumnName("clinic_id")
-                   .HasColumnType(DBTypes.Int);
+                   .HasColumnType(DBTypes.UniQueIdEntifier);
 
 
             builder.HasIndex(ds => new { ds.DoctorId, ds.DayOfWeek, ds.StartTime, ds.ClinicId })

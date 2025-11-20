@@ -15,20 +15,35 @@ namespace Models.Configurations
                 .HasColumnName("doctor_rating")
                 .HasColumnType(DBTypes.Int)
                 .IsRequired();
+
             builder.Property(r => r.DoctorComment)
                 .HasColumnName("doctor_comment")
                 .HasColumnType(DBTypes.NvarChar)
                 .HasMaxLength(1000)
                 .IsRequired(false);
+
             builder.Property(r => r.ClinicRating)
                 .HasColumnName("clinic_rating")
                 .HasColumnType(DBTypes.Int)
                 .IsRequired();
+
             builder.Property(r => r.ClinicComment)
                 .HasColumnName("clinic_comment")
                 .HasColumnType(DBTypes.NvarChar)
                 .HasMaxLength(1000)
                 .IsRequired(false);
+
+            builder.Property(c => c.DoctorId)
+                   .HasColumnName("doctor_id")
+                   .HasColumnType(DBTypes.UniQueIdEntifier);
+
+            builder.Property(c => c.PatientId)
+                   .HasColumnName("patient_id")
+                   .HasColumnType(DBTypes.UniQueIdEntifier);
+
+            builder.Property(c => c.ClinicId)
+                   .HasColumnName("clinic_id")
+                   .HasColumnType(DBTypes.UniQueIdEntifier);
 
             builder.HasOne(r => r.Doctor)
                    .WithMany(d => d.Reviews)

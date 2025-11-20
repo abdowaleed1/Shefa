@@ -16,6 +16,7 @@ namespace Models.Configurations
         public const string date = "date";
         public const string Float = "float";
         public const string Money = "money";
+        public const string UniQueIdEntifier = "UNIQUEIDENTIFIER";
         public const string Decimal18_2 = "decimal(18,2)";
         public const string NvarChar = "nvarchar";
         public const string NvarCharMax = "nvarchar(max)";

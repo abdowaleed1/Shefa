@@ -49,7 +49,7 @@ namespace Models.Configurations
 
             builder.Property(c => c.ManagerId)
                    .HasColumnName("manager_id")
-                   .HasColumnType(DBTypes.Int);
+                   .HasColumnType(DBTypes.UniQueIdEntifier);
 
             builder.HasOne(c => c.Manager)
                    .WithMany(u => u.Clinics)

@@ -26,11 +26,6 @@ namespace Models.Configurations
                 .HasColumnType(DBTypes.Date)
                 .IsRequired();
 
-            builder.Property(ns => ns.IsActive)
-                .HasColumnName("is_active")
-                .HasColumnType(DBTypes.Bit)
-                .HasDefaultValue(true)
-                .IsRequired();
             
             builder.Property(ns => ns.IsDelivered)
                 .HasColumnName("is_delivered")
@@ -53,7 +48,7 @@ namespace Models.Configurations
 
             builder.Property(c => c.PatientId)
                    .HasColumnName("patient_id")
-                   .HasColumnType(DBTypes.Int);
+                   .HasColumnType(DBTypes.UniQueIdEntifier);
 
 
             builder.HasOne(ns => ns.Patient)
