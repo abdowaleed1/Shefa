@@ -24,12 +24,11 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Appointment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("date")
@@ -53,12 +52,24 @@ namespace Models.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("doctor_id");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int")
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("patient_id");
 
                     b.Property<string>("PaymentStatus")
@@ -73,6 +84,10 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("status");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DoctorId");
@@ -84,12 +99,11 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Clinic", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -121,8 +135,20 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("email");
 
-                    b.Property<int>("ManagerId")
-                        .HasColumnType("int")
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<Guid>("ManagerId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("manager_id");
 
                     b.Property<string>("Name")
@@ -143,6 +169,10 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("street");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ManagerId");
@@ -152,12 +182,11 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.DiagnosisReport", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -165,12 +194,24 @@ namespace Models.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("doctor_id");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int")
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("patient_id");
 
                     b.Property<string>("ReportType")
@@ -184,6 +225,10 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("report_url");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DoctorId");
@@ -195,15 +240,14 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.DoctorSchedule", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClinicId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("ClinicId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("clinic_id");
 
                     b.Property<DateTime>("CreatedAt")
@@ -214,17 +258,23 @@ namespace Models.Migrations
 
                     b.Property<string>("DayOfWeek")
                         .IsRequired()
-                        .HasMaxLength(20)
+                        .HasMaxLength(200)
                         .HasColumnType("nvarchar")
                         .HasColumnName("day_of_week");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("doctor_id");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime")
                         .HasColumnName("end_time");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -235,6 +285,10 @@ namespace Models.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime")
                         .HasColumnName("start_time");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -248,12 +302,11 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.NotificationSchedule", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -275,6 +328,12 @@ namespace Models.Migrations
                         .HasDefaultValue(true)
                         .HasColumnName("is_active");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
                     b.Property<bool>("IsDelivered")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -291,8 +350,8 @@ namespace Models.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("next_run_date");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("patient_id");
 
                     b.Property<string>("RecurrenceType")
@@ -300,6 +359,10 @@ namespace Models.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar")
                         .HasColumnName("recurrence_type");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -310,15 +373,14 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.PatientNotes", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AppointmentId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("AppointmentId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("appointment_id");
 
                     b.Property<DateTime>("CreatedAt")
@@ -326,6 +388,18 @@ namespace Models.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
 
                     b.Property<string>("NoteContent")
                         .IsRequired()
@@ -339,9 +413,13 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("note_type");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("patient_id");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -354,12 +432,11 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Prescription", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -367,18 +444,34 @@ namespace Models.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("doctor_id");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int")
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("patient_id");
 
                     b.Property<string>("PrescriptionImageURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("prescription_image_url");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -391,20 +484,20 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Review", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<string>("ClinicComment")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar")
                         .HasColumnName("clinic_comment");
 
-                    b.Property<int>("ClinicId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ClinicId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("clinic_id");
 
                     b.Property<int>("ClinicRating")
                         .HasColumnType("int")
@@ -421,15 +514,33 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("doctor_comment");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("doctor_id");
 
                     b.Property<int>("DoctorRating")
                         .HasColumnType("int")
                         .HasColumnName("doctor_rating");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("patient_id");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -445,23 +556,22 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Transaction", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("money")
                         .HasColumnName("amount");
 
-                    b.Property<int>("AppointmentId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("AppointmentId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("appointment_id");
 
-                    b.Property<int?>("AppointmentId1")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("AppointmentId1")
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -469,8 +579,20 @@ namespace Models.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int")
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("patient_id");
 
                     b.Property<string>("Status")
@@ -491,6 +613,10 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("type");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AppointmentId");
@@ -506,12 +632,11 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -530,6 +655,12 @@ namespace Models.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar")
                         .HasColumnName("first_name");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -560,9 +691,9 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("role");
 
-                    b.Property<DateTime?>("UpatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("upated_at");
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -589,8 +720,8 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("biography");
 
-                    b.Property<int>("ClinicId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("ClinicId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
                         .HasColumnName("clinic_id");
 
                     b.Property<decimal>("ConsultationPrice")

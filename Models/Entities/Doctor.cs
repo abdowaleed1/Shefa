@@ -11,7 +11,7 @@
         public string? Biography { get; set; }
         public string? Education { get; set; } 
         public int? ExperienceYears { get; set; } 
-        public int ClinicId { get; set; }
+        public Guid ClinicId { get; set; }
         public Clinic Clinic { get; set; }
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
         public ICollection<DoctorSchedule> DoctorSchedules { get; set; } = new HashSet<DoctorSchedule>();

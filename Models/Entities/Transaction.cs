@@ -8,8 +8,8 @@ namespace Models.Entities
         public TransactionType Type { get; set; } 
         public PaymentStatus Status { get; set; } 
         public string? TransactionReference { get; set; }
-        public int PatientId { get; set; }
-        public int AppointmentId { get; set; }
+        public Guid PatientId { get; set; }
+        public Guid AppointmentId { get; set; }
 
         public Patient Patient { get; set; }
         public Appointment Appointment { get; set; }

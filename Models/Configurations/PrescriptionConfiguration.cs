@@ -18,11 +18,11 @@ namespace Models.Configurations
 
             builder.Property(c => c.DoctorId)
                .HasColumnName("doctor_id")
-               .HasColumnType(DBTypes.Int);
+               .HasColumnType(DBTypes.UniQueIdEntifier);
 
             builder.Property(c => c.PatientId)
                    .HasColumnName("patient_id")
-                   .HasColumnType(DBTypes.Int);
+                   .HasColumnType(DBTypes.UniQueIdEntifier);
 
             builder.HasOne(p => p.Doctor)
                    .WithMany(d => d.Prescriptions)

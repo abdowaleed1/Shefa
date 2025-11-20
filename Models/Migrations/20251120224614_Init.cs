@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Models.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,17 +15,17 @@ namespace Models.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     first_name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     last_name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     phone_number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     password_hash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    upated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     role = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -36,8 +36,7 @@ namespace Models.Migrations
                 name: "Clinic",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -45,8 +44,11 @@ namespace Models.Migrations
                     street = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     phone_number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    manager_id = table.Column<int>(type: "int", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    manager_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -62,7 +64,7 @@ namespace Models.Migrations
                 name: "Patient",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false),
+                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     date_of_birth = table.Column<DateTime>(type: "date", nullable: false),
                     gender = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     address = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
@@ -84,7 +86,7 @@ namespace Models.Migrations
                 name: "Doctor",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false),
+                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     specialty = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     consultation_price = table.Column<decimal>(type: "money", nullable: false),
                     consultation_time = table.Column<int>(type: "int", nullable: false),
@@ -94,7 +96,7 @@ namespace Models.Migrations
                     biography = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     education = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     experience_years = table.Column<int>(type: "int", nullable: true),
-                    clinic_id = table.Column<int>(type: "int", nullable: false)
+                    clinic_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -116,17 +118,18 @@ namespace Models.Migrations
                 name: "NotificationSchedule",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     recurrence_type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     frequency = table.Column<int>(type: "int", nullable: false),
                     medication_name = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     next_run_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     end_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     is_delivered = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    patient_id = table.Column<int>(type: "int", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -143,16 +146,18 @@ namespace Models.Migrations
                 name: "Appointment",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    patient_id = table.Column<int>(type: "int", nullable: false),
-                    doctor_id = table.Column<int>(type: "int", nullable: false),
+                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    doctor_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     appointment_date = table.Column<DateTime>(type: "date", nullable: false),
                     confirmation_code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     consultation_type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     payment_status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -173,13 +178,15 @@ namespace Models.Migrations
                 name: "DiagnosisReport",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     report_type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     report_url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    doctor_id = table.Column<int>(type: "int", nullable: false),
-                    patient_id = table.Column<int>(type: "int", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    doctor_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -200,15 +207,16 @@ namespace Models.Migrations
                 name: "DoctorSchedule",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    doctor_id = table.Column<int>(type: "int", nullable: false),
-                    clinic_id = table.Column<int>(type: "int", nullable: false),
+                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    doctor_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    clinic_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     start_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     end_time = table.Column<DateTime>(type: "datetime", nullable: false),
-                    day_of_week = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    day_of_week = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -231,12 +239,14 @@ namespace Models.Migrations
                 name: "Prescription",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     prescription_image_url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    doctor_id = table.Column<int>(type: "int", nullable: false),
-                    patient_id = table.Column<int>(type: "int", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    doctor_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -258,35 +268,37 @@ namespace Models.Migrations
                 name: "Review",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     doctor_comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     clinic_comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     doctor_rating = table.Column<int>(type: "int", nullable: false),
                     clinic_rating = table.Column<int>(type: "int", nullable: false),
-                    PatientId = table.Column<int>(type: "int", nullable: false),
-                    DoctorId = table.Column<int>(type: "int", nullable: false),
-                    ClinicId = table.Column<int>(type: "int", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    doctor_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    clinic_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Review", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Review_Clinic_ClinicId",
-                        column: x => x.ClinicId,
+                        name: "FK_Review_Clinic_clinic_id",
+                        column: x => x.clinic_id,
                         principalTable: "Clinic",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Review_Doctor_DoctorId",
-                        column: x => x.DoctorId,
+                        name: "FK_Review_Doctor_doctor_id",
+                        column: x => x.doctor_id,
                         principalTable: "Doctor",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Review_Patient_PatientId",
-                        column: x => x.PatientId,
+                        name: "FK_Review_Patient_patient_id",
+                        column: x => x.patient_id,
                         principalTable: "Patient",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -296,13 +308,15 @@ namespace Models.Migrations
                 name: "PatientNotes",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    patient_id = table.Column<int>(type: "int", nullable: false),
-                    appointment_id = table.Column<int>(type: "int", nullable: false),
+                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    appointment_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
                     note_content = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
                     note_type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -324,16 +338,18 @@ namespace Models.Migrations
                 name: "Transaction",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     amount = table.Column<decimal>(type: "money", nullable: false),
                     type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     transaction_reference = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    patient_id = table.Column<int>(type: "int", nullable: false),
-                    appointment_id = table.Column<int>(type: "int", nullable: false),
-                    AppointmentId1 = table.Column<int>(type: "int", nullable: true),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    appointment_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    AppointmentId1 = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -423,19 +439,19 @@ namespace Models.Migrations
                 column: "patient_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Review_ClinicId",
+                name: "IX_Review_clinic_id",
                 table: "Review",
-                column: "ClinicId");
+                column: "clinic_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Review_DoctorId",
+                name: "IX_Review_doctor_id",
                 table: "Review",
-                column: "DoctorId");
+                column: "doctor_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Review_PatientId_DoctorId",
+                name: "IX_Review_patient_id_doctor_id",
                 table: "Review",
-                columns: new[] { "PatientId", "DoctorId" },
+                columns: new[] { "patient_id", "doctor_id" },
                 unique: true);
 
             migrationBuilder.CreateIndex(

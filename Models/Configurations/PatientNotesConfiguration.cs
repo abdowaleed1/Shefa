@@ -27,11 +27,11 @@ namespace Models.Configurations
 
             builder.Property(c => c.PatientId)
                .HasColumnName("patient_id")
-               .HasColumnType(DBTypes.Int);
+               .HasColumnType(DBTypes.UniQueIdEntifier);
 
             builder.Property(c => c.AppointmentId)
                .HasColumnName("appointment_id")
-               .HasColumnType(DBTypes.Int);
+               .HasColumnType(DBTypes.UniQueIdEntifier);
 
             builder.HasOne(n => n.Patient)
                    .WithMany(p => p.PatientNotes)

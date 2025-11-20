@@ -10,7 +10,6 @@ namespace Models.Configurations
         {
             builder.ToTable("Users");
             builder.ConfigureCoreProperties(); 
-            builder.ConfigureSoftDelete();  
             
             builder.Property(d => d.FirstName)
                 .HasColumnName("first_name")
@@ -24,10 +23,6 @@ namespace Models.Configurations
                 .HasMaxLength(100)
                 .IsRequired();
             
-            builder.Property(d => d.UpatedAt)
-                .HasColumnName("upated_at")
-                .HasColumnType(DBTypes.DateTime2)
-                .IsRequired(false);
 
             builder.Property(u => u.Email)
                    .HasColumnName("email")
