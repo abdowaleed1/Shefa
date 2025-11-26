@@ -17,12 +17,10 @@ namespace Models.Configurations
                .IsRequired();
 
             builder.Property(c => c.DoctorId)
-               .HasColumnName("doctor_id")
-               .HasColumnType(DBTypes.UniQueIdEntifier);
+               .HasColumnName("doctor_id");
 
             builder.Property(c => c.PatientId)
-                   .HasColumnName("patient_id")
-                   .HasColumnType(DBTypes.UniQueIdEntifier);
+                   .HasColumnName("patient_id");
 
             builder.HasOne(p => p.Doctor)
                    .WithMany(d => d.Prescriptions)

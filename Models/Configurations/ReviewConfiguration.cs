@@ -34,16 +34,13 @@ namespace Models.Configurations
                 .IsRequired(false);
 
             builder.Property(c => c.DoctorId)
-                   .HasColumnName("doctor_id")
-                   .HasColumnType(DBTypes.UniQueIdEntifier);
+                   .HasColumnName("doctor_id");
 
             builder.Property(c => c.PatientId)
-                   .HasColumnName("patient_id")
-                   .HasColumnType(DBTypes.UniQueIdEntifier);
+                   .HasColumnName("patient_id");
 
             builder.Property(c => c.ClinicId)
-                   .HasColumnName("clinic_id")
-                   .HasColumnType(DBTypes.UniQueIdEntifier);
+                   .HasColumnName("clinic_id");
 
             builder.HasOne(r => r.Doctor)
                    .WithMany(d => d.Reviews)

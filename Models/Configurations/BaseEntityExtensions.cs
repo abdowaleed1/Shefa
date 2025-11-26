@@ -12,10 +12,7 @@ namespace Models.Configurations
         {
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Id)
-                   .HasColumnName("id")
-                   .HasColumnType(DBTypes.UniQueIdEntifier)
-                   .ValueGeneratedOnAdd()
-                   .HasDefaultValueSql("NEWSEQUENTIALID()");
+                   .HasColumnName("id");
 
             builder.Property(e => e.CreatedAt)
                    .HasColumnName("created_at")

@@ -11,7 +11,7 @@
         public string Email { get; set; }
 
 
-        public Guid ManagerId { get; set; }
+        public string ManagerId { get; set; }
         public User Manager { get; set; }
 
         public ICollection<Doctor> Doctors { get; set; } = new HashSet<Doctor>();

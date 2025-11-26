@@ -22,17 +22,154 @@ namespace Models.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Models.Entities.AppRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
             modelBuilder.Entity("Models.Entities.Appointment", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("date")
                         .HasColumnName("appointment_date");
+
+                    b.Property<string>("AppointmentStatus")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("status");
 
                     b.Property<string>("ConfirmationCode")
                         .IsRequired()
@@ -52,8 +189,9 @@ namespace Models.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("DoctorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("doctor_id");
 
                     b.Property<bool>("IsActive")
@@ -68,8 +206,9 @@ namespace Models.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("is_deleted");
 
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("patient_id");
 
                     b.Property<string>("PaymentStatus")
@@ -77,12 +216,6 @@ namespace Models.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar")
                         .HasColumnName("payment_status");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("status");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2")
@@ -99,11 +232,9 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Clinic", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -147,8 +278,9 @@ namespace Models.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("is_deleted");
 
-                    b.Property<Guid>("ManagerId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("ManagerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("manager_id");
 
                     b.Property<string>("Name")
@@ -182,11 +314,9 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.DiagnosisReport", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -194,8 +324,9 @@ namespace Models.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("DoctorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("doctor_id");
 
                     b.Property<bool>("IsActive")
@@ -210,8 +341,9 @@ namespace Models.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("is_deleted");
 
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("patient_id");
 
                     b.Property<string>("ReportType")
@@ -238,16 +370,107 @@ namespace Models.Migrations
                     b.ToTable("DiagnosisReport", (string)null);
                 });
 
+            modelBuilder.Entity("Models.Entities.Doctor", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
+
+                    b.Property<decimal>("AverageReviewRate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m)
+                        .HasColumnName("average_review_rate");
+
+                    b.Property<string>("Biography")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("biography");
+
+                    b.Property<string>("ClinicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("clinic_id");
+
+                    b.Property<decimal>("ConsultationPrice")
+                        .HasColumnType("money")
+                        .HasColumnName("consultation_price");
+
+                    b.Property<int>("ConsultationTime")
+                        .HasColumnType("int")
+                        .HasColumnName("consultation_time");
+
+                    b.Property<int>("CountOfReviews")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("Count_of_reviews");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Education")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("education");
+
+                    b.Property<int?>("ExperienceYears")
+                        .HasColumnType("int")
+                        .HasColumnName("experience_years");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_verified");
+
+                    b.Property<string>("Specialty")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("specialty");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClinicId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Doctor", (string)null);
+                });
+
             modelBuilder.Entity("Models.Entities.DoctorSchedule", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
 
-                    b.Property<Guid>("ClinicId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("ClinicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("clinic_id");
 
                     b.Property<DateTime>("CreatedAt")
@@ -258,12 +481,13 @@ namespace Models.Migrations
 
                     b.Property<string>("DayOfWeek")
                         .IsRequired()
-                        .HasMaxLength(200)
+                        .HasMaxLength(300)
                         .HasColumnType("nvarchar")
                         .HasColumnName("day_of_week");
 
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("DoctorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("doctor_id");
 
                     b.Property<DateTime>("EndTime")
@@ -302,11 +526,9 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.NotificationSchedule", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -350,15 +572,16 @@ namespace Models.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("next_run_date");
 
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnName("patient_id");
-
-                    b.Property<string>("RecurrenceType")
+                    b.Property<string>("NotificationRecurrenceType")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar")
                         .HasColumnName("recurrence_type");
+
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("patient_id");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2")
@@ -371,16 +594,84 @@ namespace Models.Migrations
                     b.ToTable("NotificationSchedule", (string)null);
                 });
 
+            modelBuilder.Entity("Models.Entities.Patient", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("city");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("country");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("date")
+                        .HasColumnName("date_of_birth");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("gender");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("address");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Patient", (string)null);
+                });
+
             modelBuilder.Entity("Models.Entities.PatientNotes", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
 
-                    b.Property<Guid>("AppointmentId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("AppointmentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("appointment_id");
 
                     b.Property<DateTime>("CreatedAt")
@@ -413,8 +704,9 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("note_type");
 
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("patient_id");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -432,11 +724,9 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Prescription", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -444,8 +734,9 @@ namespace Models.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("DoctorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("doctor_id");
 
                     b.Property<bool>("IsActive")
@@ -460,8 +751,9 @@ namespace Models.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("is_deleted");
 
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("patient_id");
 
                     b.Property<string>("PrescriptionImageURL")
@@ -484,19 +776,18 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Review", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
 
                     b.Property<string>("ClinicComment")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar")
                         .HasColumnName("clinic_comment");
 
-                    b.Property<Guid>("ClinicId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("ClinicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("clinic_id");
 
                     b.Property<int>("ClinicRating")
@@ -514,8 +805,9 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("doctor_comment");
 
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("DoctorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("doctor_id");
 
                     b.Property<int>("DoctorRating")
@@ -534,8 +826,9 @@ namespace Models.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("is_deleted");
 
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("patient_id");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -556,22 +849,21 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Transaction", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("money")
                         .HasColumnName("amount");
 
-                    b.Property<Guid>("AppointmentId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("AppointmentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("appointment_id");
 
-                    b.Property<Guid?>("AppointmentId1")
-                        .HasColumnType("UNIQUEIDENTIFIER");
+                    b.Property<string>("AppointmentId1")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -591,8 +883,9 @@ namespace Models.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("is_deleted");
 
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("patient_id");
 
                     b.Property<string>("Status")
@@ -632,23 +925,22 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.User", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("email");
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -656,145 +948,111 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("first_name");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true)
-                        .HasColumnName("is_active");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_deleted");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar")
                         .HasColumnName("last_name");
 
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("password_hash");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("phone_number");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("role");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("updated_at");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
 
-                    b.ToTable("Users", (string)null);
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
 
-                    b.UseTptMappingStrategy();
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Models.Entities.Doctor", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasBaseType("Models.Entities.User");
-
-                    b.Property<double>("AverageReviewRate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValue(0.0)
-                        .HasColumnName("average_review_rate");
-
-                    b.Property<string>("Biography")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("biography");
-
-                    b.Property<Guid>("ClinicId")
-                        .HasColumnType("UNIQUEIDENTIFIER")
-                        .HasColumnName("clinic_id");
-
-                    b.Property<decimal>("ConsultationPrice")
-                        .HasColumnType("money")
-                        .HasColumnName("consultation_price");
-
-                    b.Property<int>("ConsultationTime")
-                        .HasColumnType("int")
-                        .HasColumnName("consultation_time");
-
-                    b.Property<int>("CountOfReviews")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0)
-                        .HasColumnName("Count_of_reviews");
-
-                    b.Property<string>("Education")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("education");
-
-                    b.Property<int?>("ExperienceYears")
-                        .HasColumnType("int")
-                        .HasColumnName("experience_years");
-
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_verified");
-
-                    b.Property<string>("Specialty")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("specialty");
-
-                    b.HasIndex("ClinicId");
-
-                    b.ToTable("Doctor", (string)null);
+                    b.HasOne("Models.Entities.AppRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Models.Entities.Patient", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasBaseType("Models.Entities.User");
+                    b.HasOne("Models.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("city");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("Models.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("country");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Models.Entities.AppRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("date")
-                        .HasColumnName("date_of_birth");
+                    b.HasOne("Models.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("gender");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("address");
-
-                    b.ToTable("Patient", (string)null);
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("Models.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.Entities.Appointment", b =>
@@ -846,6 +1104,25 @@ namespace Models.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("Models.Entities.Doctor", b =>
+                {
+                    b.HasOne("Models.Entities.Clinic", "Clinic")
+                        .WithMany("Doctors")
+                        .HasForeignKey("ClinicId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Models.Entities.User", "User")
+                        .WithOne("Doctor")
+                        .HasForeignKey("Models.Entities.Doctor", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Clinic");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Models.Entities.DoctorSchedule", b =>
                 {
                     b.HasOne("Models.Entities.Clinic", "Clinic")
@@ -874,6 +1151,17 @@ namespace Models.Migrations
                         .IsRequired();
 
                     b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("Models.Entities.Patient", b =>
+                {
+                    b.HasOne("Models.Entities.User", "User")
+                        .WithOne("Patient")
+                        .HasForeignKey("Models.Entities.Patient", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.Entities.PatientNotes", b =>
@@ -964,32 +1252,6 @@ namespace Models.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("Models.Entities.Doctor", b =>
-                {
-                    b.HasOne("Models.Entities.Clinic", "Clinic")
-                        .WithMany("Doctors")
-                        .HasForeignKey("ClinicId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Models.Entities.User", null)
-                        .WithOne()
-                        .HasForeignKey("Models.Entities.Doctor", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Clinic");
-                });
-
-            modelBuilder.Entity("Models.Entities.Patient", b =>
-                {
-                    b.HasOne("Models.Entities.User", null)
-                        .WithOne()
-                        .HasForeignKey("Models.Entities.Patient", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Models.Entities.Appointment", b =>
                 {
                     b.Navigation("PatientNotes");
@@ -1005,11 +1267,6 @@ namespace Models.Migrations
                     b.Navigation("Doctors");
 
                     b.Navigation("Reviews");
-                });
-
-            modelBuilder.Entity("Models.Entities.User", b =>
-                {
-                    b.Navigation("Clinics");
                 });
 
             modelBuilder.Entity("Models.Entities.Doctor", b =>
@@ -1040,6 +1297,17 @@ namespace Models.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("Models.Entities.User", b =>
+                {
+                    b.Navigation("Clinics");
+
+                    b.Navigation("Doctor")
+                        .IsRequired();
+
+                    b.Navigation("Patient")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

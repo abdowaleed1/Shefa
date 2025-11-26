@@ -14,7 +14,6 @@ namespace Models.Configurations
         public const string DateTime = "datetime";
         public const string DateTime2 = "datetime2";
         public const string date = "date";
-        public const string Float = "float";
         public const string Money = "money";
         public const string UniQueIdEntifier = "UNIQUEIDENTIFIER";
         public const string Decimal18_2 = "decimal(18,2)";

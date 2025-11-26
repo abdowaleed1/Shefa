@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models.Entities;
+using Models.Enums;
 
 namespace Models.Configurations
 {
@@ -16,7 +18,7 @@ namespace Models.Configurations
                    .HasColumnName("note_type")
                    .HasColumnType(DBTypes.NvarChar)
                    .HasMaxLength(50)
-                   .HasConversion<string>()
+                   .HasConversion(new EnumToStringConverter<PatientNoteType>())
                    .IsRequired();
 
             builder.Property(n => n.NoteContent)
@@ -26,12 +28,10 @@ namespace Models.Configurations
                 .IsRequired();
 
             builder.Property(c => c.PatientId)
-               .HasColumnName("patient_id")
-               .HasColumnType(DBTypes.UniQueIdEntifier);
+               .HasColumnName("patient_id");
 
             builder.Property(c => c.AppointmentId)
-               .HasColumnName("appointment_id")
-               .HasColumnType(DBTypes.UniQueIdEntifier);
+               .HasColumnName("appointment_id");
 
             builder.HasOne(n => n.Patient)
                    .WithMany(p => p.PatientNotes)

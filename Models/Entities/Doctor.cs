@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-    public class Doctor : User
+    public class Doctor : BaseEntity
     {
         public string Specialty { get; set; }
         public decimal ConsultationPrice { get; set; }
@@ -11,7 +11,9 @@
         public string? Biography { get; set; }
         public string? Education { get; set; } 
         public int? ExperienceYears { get; set; } 
-        public Guid ClinicId { get; set; }
+        public string ClinicId { get; set; }
+        public string UserId { get; set; }
+        public User User { get; set; }
         public Clinic Clinic { get; set; }
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
         public ICollection<DoctorSchedule> DoctorSchedules { get; set; } = new HashSet<DoctorSchedule>();

@@ -48,8 +48,7 @@ namespace Models.Configurations
                 .HasMaxLength(100);
 
             builder.Property(c => c.ManagerId)
-                   .HasColumnName("manager_id")
-                   .HasColumnType(DBTypes.UniQueIdEntifier);
+                   .HasColumnName("manager_id");
 
             builder.HasOne(c => c.Manager)
                    .WithMany(u => u.Clinics)

@@ -6,37 +6,163 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Models.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class initDataBase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "AspNetRoles",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    first_name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    last_name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    phone_number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    password_hash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    role = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.id);
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    first_name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    last_name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Clinic",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -44,7 +170,7 @@ namespace Models.Migrations
                     street = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     phone_number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    manager_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    manager_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -54,31 +180,36 @@ namespace Models.Migrations
                 {
                     table.PrimaryKey("PK_Clinic", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Clinic_Users_manager_id",
+                        name: "FK_Clinic_AspNetUsers_manager_id",
                         column: x => x.manager_id,
-                        principalTable: "Users",
-                        principalColumn: "id");
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Patient",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     date_of_birth = table.Column<DateTime>(type: "date", nullable: false),
                     gender = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     address = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    city = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    city = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    user_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Patient", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Patient_Users_id",
-                        column: x => x.id,
-                        principalTable: "Users",
-                        principalColumn: "id",
+                        name: "FK_Patient_AspNetUsers_user_id",
+                        column: x => x.user_id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -86,46 +217,51 @@ namespace Models.Migrations
                 name: "Doctor",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     specialty = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     consultation_price = table.Column<decimal>(type: "money", nullable: false),
                     consultation_time = table.Column<int>(type: "int", nullable: false),
-                    average_review_rate = table.Column<double>(type: "float", nullable: false, defaultValue: 0.0),
+                    average_review_rate = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
                     Count_of_reviews = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     is_verified = table.Column<bool>(type: "bit", nullable: false),
                     biography = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     education = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     experience_years = table.Column<int>(type: "int", nullable: true),
-                    clinic_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false)
+                    clinic_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    user_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Doctor", x => x.id);
                     table.ForeignKey(
+                        name: "FK_Doctor_AspNetUsers_user_id",
+                        column: x => x.user_id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Doctor_Clinic_clinic_id",
                         column: x => x.clinic_id,
                         principalTable: "Clinic",
                         principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_Doctor_Users_id",
-                        column: x => x.id,
-                        principalTable: "Users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "NotificationSchedule",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     recurrence_type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     frequency = table.Column<int>(type: "int", nullable: false),
                     medication_name = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     next_run_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     end_date = table.Column<DateOnly>(type: "date", nullable: false),
                     is_delivered = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    patient_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -146,9 +282,9 @@ namespace Models.Migrations
                 name: "Appointment",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    doctor_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    patient_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    doctor_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     appointment_date = table.Column<DateTime>(type: "date", nullable: false),
                     confirmation_code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -178,11 +314,11 @@ namespace Models.Migrations
                 name: "DiagnosisReport",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     report_type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     report_url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    doctor_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    doctor_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    patient_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -207,12 +343,12 @@ namespace Models.Migrations
                 name: "DoctorSchedule",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    doctor_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    clinic_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    doctor_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    clinic_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     start_time = table.Column<DateTime>(type: "datetime", nullable: false),
                     end_time = table.Column<DateTime>(type: "datetime", nullable: false),
-                    day_of_week = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    day_of_week = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -239,10 +375,10 @@ namespace Models.Migrations
                 name: "Prescription",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     prescription_image_url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    doctor_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    doctor_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    patient_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -268,14 +404,14 @@ namespace Models.Migrations
                 name: "Review",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     doctor_comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     clinic_comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     doctor_rating = table.Column<int>(type: "int", nullable: false),
                     clinic_rating = table.Column<int>(type: "int", nullable: false),
-                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    doctor_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    clinic_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    patient_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    doctor_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    clinic_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -308,9 +444,9 @@ namespace Models.Migrations
                 name: "PatientNotes",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    appointment_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    patient_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    appointment_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     note_content = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
                     note_type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
@@ -338,14 +474,14 @@ namespace Models.Migrations
                 name: "Transaction",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     amount = table.Column<decimal>(type: "money", nullable: false),
                     type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     transaction_reference = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    patient_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    appointment_id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
-                    AppointmentId1 = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: true),
+                    patient_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    appointment_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AppointmentId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -383,6 +519,52 @@ namespace Models.Migrations
                 column: "patient_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_Email",
+                table: "AspNetUsers",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Clinic_manager_id",
                 table: "Clinic",
                 column: "manager_id");
@@ -403,6 +585,12 @@ namespace Models.Migrations
                 column: "clinic_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Doctor_user_id",
+                table: "Doctor",
+                column: "user_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DoctorSchedule_clinic_id",
                 table: "DoctorSchedule",
                 column: "clinic_id");
@@ -417,6 +605,12 @@ namespace Models.Migrations
                 name: "IX_NotificationSchedule_patient_id",
                 table: "NotificationSchedule",
                 column: "patient_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patient_user_id",
+                table: "Patient",
+                column: "user_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PatientNotes_appointment_id",
@@ -470,17 +664,26 @@ namespace Models.Migrations
                 name: "IX_Transaction_patient_id",
                 table: "Transaction",
                 column: "patient_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_email",
-                table: "Users",
-                column: "email",
-                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AspNetRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserTokens");
+
             migrationBuilder.DropTable(
                 name: "DiagnosisReport");
 
@@ -503,6 +706,9 @@ namespace Models.Migrations
                 name: "Transaction");
 
             migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
                 name: "Appointment");
 
             migrationBuilder.DropTable(
@@ -515,7 +721,7 @@ namespace Models.Migrations
                 name: "Clinic");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "AspNetUsers");
         }
     }
 }
