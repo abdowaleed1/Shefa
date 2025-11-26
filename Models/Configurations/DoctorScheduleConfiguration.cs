@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models.Entities;
+using Models.Enums;
 
 namespace Models.Configurations
 {
@@ -14,8 +16,8 @@ namespace Models.Configurations
             builder.Property(ds => ds.DayOfWeek)
                     .HasColumnName("day_of_week")
                     .HasColumnType(DBTypes.NvarChar)
-                    .HasMaxLength(200)
-                    .HasConversion<string>()
+                    .HasMaxLength(300)
+                    .HasConversion(new EnumToStringConverter<DayOfWeek>())
                     .IsRequired();
             builder.Property(ds => ds.StartTime)
                     .HasColumnName("start_time")
@@ -26,12 +28,10 @@ namespace Models.Configurations
                     .HasColumnType(DBTypes.DateTime)
                     .IsRequired();
             builder.Property(c => c.DoctorId)
-                   .HasColumnName("doctor_id")
-                   .HasColumnType(DBTypes.UniQueIdEntifier);
+                   .HasColumnName("doctor_id");
 
             builder.Property(c => c.ClinicId)
-                   .HasColumnName("clinic_id")
-                   .HasColumnType(DBTypes.UniQueIdEntifier);
+                   .HasColumnName("clinic_id");
 
 
             builder.HasIndex(ds => new { ds.DoctorId, ds.DayOfWeek, ds.StartTime, ds.ClinicId })

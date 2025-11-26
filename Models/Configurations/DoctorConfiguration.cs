@@ -9,6 +9,7 @@ namespace Models.Configurations
         public void Configure(EntityTypeBuilder<Doctor> builder)
         {
             builder.ToTable("Doctor");
+            builder.ConfigureCoreProperties();
 
             builder.Property(d => d.Specialty)
                 .HasColumnName("specialty")
@@ -45,7 +46,7 @@ namespace Models.Configurations
             
             builder.Property(d => d.AverageReviewRate)
                 .HasColumnName("average_review_rate")
-                .HasColumnType(DBTypes.Float)
+                .HasColumnType(DBTypes.Decimal18_2)
                 .HasDefaultValue(0);
             
             builder.Property(d => d.CountOfReviews)
@@ -59,14 +60,23 @@ namespace Models.Configurations
                 .IsRequired();
 
             builder.Property(c => c.ClinicId)
-                   .HasColumnName("clinic_id")
-                   .HasColumnType(DBTypes.UniQueIdEntifier);
+                   .HasColumnName("clinic_id");
 
             builder.HasOne(d => d.Clinic)
                    .WithMany(c => c.Doctors)
                    .HasForeignKey(d => d.ClinicId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Property(c => c.UserId)
+               .HasColumnName("user_id");
+
+            builder.HasOne(D => D.User)
+              .WithOne(u=> u.Doctor)
+              .HasForeignKey<Doctor>(n => n.UserId)
+              .OnDelete(DeleteBehavior.Cascade)
+              .IsRequired();
+
         }
     }
 

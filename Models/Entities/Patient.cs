@@ -2,7 +2,7 @@
 
 namespace Models.Entities
 {
-    public class Patient : User
+    public class Patient : BaseEntity
     {
 
         public DateTime DateOfBirth { get; set; }
@@ -10,6 +10,8 @@ namespace Models.Entities
         public string Street { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
+        public string UserId { get; set; }
+        public User User { get; set; }
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
         public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
         public ICollection<Prescription> Prescriptions { get; set; } = new HashSet<Prescription>();

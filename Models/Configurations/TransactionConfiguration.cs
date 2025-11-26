@@ -35,12 +35,10 @@ namespace Models.Configurations
                 .IsRequired();
 
             builder.Property(c => c.PatientId)
-               .HasColumnName("patient_id")
-               .HasColumnType(DBTypes.UniQueIdEntifier);
+               .HasColumnName("patient_id");
 
             builder.Property(c => c.AppointmentId)
-                   .HasColumnName("appointment_id")
-                   .HasColumnType(DBTypes.UniQueIdEntifier);
+                   .HasColumnName("appointment_id");
 
 
             builder.HasOne(t => t.Patient)

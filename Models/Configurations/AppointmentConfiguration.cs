@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models.Entities;
+using Models.Enums;
 
 namespace Models.Configurations
 {
@@ -21,32 +23,30 @@ namespace Models.Configurations
                 .HasMaxLength(20)
                 .IsRequired();
             builder.Property(e => e.PatientId)
-                   .HasColumnName("patient_id")
-                   .HasColumnType(DBTypes.UniQueIdEntifier);
+                   .HasColumnName("patient_id");
 
             builder.Property(e => e.DoctorId)
-                   .HasColumnName("doctor_id")
-                   .HasColumnType(DBTypes.UniQueIdEntifier);
+                   .HasColumnName("doctor_id");
 
-            builder.Property(a => a.Status)
+            builder.Property(a => a.AppointmentStatus)
                    .HasColumnName("status")
                    .HasColumnType(DBTypes.NvarChar)
                    .HasMaxLength(50)
-                   .HasConversion<string>()
+                   .HasConversion(new EnumToStringConverter<AppointmentStatus>())
                    .IsRequired();
 
             builder.Property(a => a.ConsultationType)
                    .HasColumnName("consultation_type")
                    .HasColumnType(DBTypes.NvarChar)
                    .HasMaxLength(50)
-                   .HasConversion<string>()
+                   .HasConversion(new EnumToStringConverter<ConsultationType>())
                    .IsRequired();
 
             builder.Property(a => a.PaymentStatus)
                    .HasColumnName("payment_status")
                    .HasColumnType(DBTypes.NvarChar)
                    .HasMaxLength(50)
-                   .HasConversion<string>()
+                   .HasConversion(new EnumToStringConverter<PaymentStatus>())
                    .IsRequired();
 
             builder.HasOne(a => a.Patient)
