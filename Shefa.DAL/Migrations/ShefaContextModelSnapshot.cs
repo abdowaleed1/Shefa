@@ -155,6 +155,87 @@ namespace Models.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
+            modelBuilder.Entity("Models.Entities.AppUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("first_name");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("last_name");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
             modelBuilder.Entity("Models.Entities.Appointment", b =>
                 {
                     b.Property<string>("Id")
@@ -189,11 +270,6 @@ namespace Models.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<string>("DoctorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("doctor_id");
-
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -217,15 +293,20 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("payment_status");
 
+                    b.Property<string>("SlotId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DoctorId");
-
                     b.HasIndex("PatientId");
+
+                    b.HasIndex("SlotId")
+                        .IsUnique()
+                        .HasFilter("[SlotId] IS NOT NULL");
 
                     b.ToTable("Appointment", (string)null);
                 });
@@ -468,6 +549,12 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("id");
 
+                    b.Property<string>("AvailableDays")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("day_of_week");
+
                     b.Property<string>("ClinicId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)")
@@ -479,19 +566,13 @@ namespace Models.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<string>("DayOfWeek")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("day_of_week");
-
                     b.Property<string>("DoctorId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("doctor_id");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime")
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time")
                         .HasColumnName("end_time");
 
                     b.Property<bool>("IsActive")
@@ -506,8 +587,12 @@ namespace Models.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("is_deleted");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime")
+                    b.Property<int>("SlotDurationMinutes")
+                        .HasColumnType("int")
+                        .HasColumnName("slot_duration_minutes");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time")
                         .HasColumnName("start_time");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -518,7 +603,7 @@ namespace Models.Migrations
 
                     b.HasIndex("ClinicId");
 
-                    b.HasIndex("DoctorId", "DayOfWeek", "StartTime", "ClinicId")
+                    b.HasIndex("DoctorId", "AvailableDays", "StartTime", "ClinicId")
                         .IsUnique();
 
                     b.ToTable("DoctorSchedule", (string)null);
@@ -847,6 +932,76 @@ namespace Models.Migrations
                     b.ToTable("Review", (string)null);
                 });
 
+            modelBuilder.Entity("Models.Entities.Slot", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ClinicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date")
+                        .HasColumnName("date");
+
+                    b.Property<string>("DoctorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time")
+                        .HasColumnName("end_time");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsBlocked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_blocked");
+
+                    b.Property<bool>("IsBooked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_booked");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time")
+                        .HasColumnName("start_time");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClinicId");
+
+                    b.HasIndex("DoctorId", "Date", "StartTime")
+                        .IsUnique();
+
+                    b.ToTable("Slots", (string)null);
+                });
+
             modelBuilder.Entity("Models.Entities.Transaction", b =>
                 {
                     b.Property<string>("Id")
@@ -923,87 +1078,6 @@ namespace Models.Migrations
                     b.ToTable("Transaction", (string)null);
                 });
 
-            modelBuilder.Entity("Models.Entities.User", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("first_name");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("last_name");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Models.Entities.AppRole", null)
@@ -1015,7 +1089,7 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Models.Entities.User", null)
+                    b.HasOne("Models.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1024,7 +1098,7 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Models.Entities.User", null)
+                    b.HasOne("Models.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1039,7 +1113,7 @@ namespace Models.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.Entities.User", null)
+                    b.HasOne("Models.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1048,7 +1122,7 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Models.Entities.User", null)
+                    b.HasOne("Models.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1057,26 +1131,25 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Appointment", b =>
                 {
-                    b.HasOne("Models.Entities.Doctor", "Doctor")
-                        .WithMany("Appointments")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("Models.Entities.Patient", "Patient")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Doctor");
+                    b.HasOne("Models.Entities.Slot", "Slot")
+                        .WithOne("Appointment")
+                        .HasForeignKey("Models.Entities.Appointment", "SlotId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Patient");
+
+                    b.Navigation("Slot");
                 });
 
             modelBuilder.Entity("Models.Entities.Clinic", b =>
                 {
-                    b.HasOne("Models.Entities.User", "Manager")
+                    b.HasOne("Models.Entities.AppUser", "Manager")
                         .WithMany("Clinics")
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1112,7 +1185,7 @@ namespace Models.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Models.Entities.User", "User")
+                    b.HasOne("Models.Entities.AppUser", "User")
                         .WithOne("Doctor")
                         .HasForeignKey("Models.Entities.Doctor", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1155,7 +1228,7 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Patient", b =>
                 {
-                    b.HasOne("Models.Entities.User", "User")
+                    b.HasOne("Models.Entities.AppUser", "User")
                         .WithOne("Patient")
                         .HasForeignKey("Models.Entities.Patient", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1229,6 +1302,25 @@ namespace Models.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("Models.Entities.Slot", b =>
+                {
+                    b.HasOne("Models.Entities.Clinic", "Clinic")
+                        .WithMany("Slots")
+                        .HasForeignKey("ClinicId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Models.Entities.Doctor", "Doctor")
+                        .WithMany("Slots")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Clinic");
+
+                    b.Navigation("Doctor");
+                });
+
             modelBuilder.Entity("Models.Entities.Transaction", b =>
                 {
                     b.HasOne("Models.Entities.Appointment", "Appointment")
@@ -1252,6 +1344,17 @@ namespace Models.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("Models.Entities.AppUser", b =>
+                {
+                    b.Navigation("Clinics");
+
+                    b.Navigation("Doctor")
+                        .IsRequired();
+
+                    b.Navigation("Patient")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Models.Entities.Appointment", b =>
                 {
                     b.Navigation("PatientNotes");
@@ -1267,12 +1370,12 @@ namespace Models.Migrations
                     b.Navigation("Doctors");
 
                     b.Navigation("Reviews");
+
+                    b.Navigation("Slots");
                 });
 
             modelBuilder.Entity("Models.Entities.Doctor", b =>
                 {
-                    b.Navigation("Appointments");
-
                     b.Navigation("DiagnosisReports");
 
                     b.Navigation("DoctorSchedules");
@@ -1280,6 +1383,8 @@ namespace Models.Migrations
                     b.Navigation("Prescriptions");
 
                     b.Navigation("Reviews");
+
+                    b.Navigation("Slots");
                 });
 
             modelBuilder.Entity("Models.Entities.Patient", b =>
@@ -1299,14 +1404,9 @@ namespace Models.Migrations
                     b.Navigation("Transactions");
                 });
 
-            modelBuilder.Entity("Models.Entities.User", b =>
+            modelBuilder.Entity("Models.Entities.Slot", b =>
                 {
-                    b.Navigation("Clinics");
-
-                    b.Navigation("Doctor")
-                        .IsRequired();
-
-                    b.Navigation("Patient")
+                    b.Navigation("Appointment")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

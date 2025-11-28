@@ -11,6 +11,7 @@ namespace Models.Configurations
         public const string Int = "int";
         public const string Bit = "bit";
         public const string Date = "date";
+        public const string Time = "time";
         public const string DateTime = "datetime";
         public const string DateTime2 = "datetime2";
         public const string date = "date";

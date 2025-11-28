@@ -2,20 +2,14 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 namespace Models.Contexts
 {
-    public class ShefaContext: IdentityDbContext<User, AppRole, string>
+    public class ShefaContext: IdentityDbContext<AppUser, AppRole, string>
     {
+        public ShefaContext(DbContextOptions<ShefaContext> options) : base(options) { }
         public DbSet<AppRole> AppRoles { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Clinic> Clinics { get; set; }
@@ -28,17 +22,13 @@ namespace Models.Contexts
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<PatientNotes> PatientNotes { get; set; }
         public DbSet<NotificationSchedule> NotificationSchedules { get; set; }
+        public DbSet<Slot> Slots { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Data Source =.; Initial Catalog = ShefaDB; Integrated Security = True; Encrypt = True; Trust Server Certificate = True");
-
         }
     }
 }

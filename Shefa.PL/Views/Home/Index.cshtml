@@ -2,7 +2,123 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<main role="main">
+
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <h1 class="hero-title">The <span class="text-primary-custom">Unified Platform</span> for Modern Healthcare.</h1>
+                    <p class="hero-subtitle">
+                        Shefa connects medical facilities, professionals, and patients with integrated tools for booking, diagnostics, and management.
+                    </p>
+                    <div class="mt-4 d-flex gap-3">
+                        <a href="#patient" class="btn btn-outline-dark rounded-pill px-4 fw-bold">Explore Features</a>
+                    </div>
+                </div>
+                <div class="col-lg-5 text-center d-none d-lg-block">
+
+
+                    [Image of a doctor and patient connecting digitally]
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="patient" class="platform-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    [Patient portal screen showing appointment and history]
+                </div>
+                <div class="col-lg-7 ps-lg-5">
+                    <div class="platform-icon-box bg-success">
+                        <i class="fas fa-user-injured"></i>
+                    </div>
+                    <h2 class="platform-title">Patient Portal: Simplified Care</h2>
+                    <p class="text-muted lead">Take control of your health journey with easy access to all your medical information.</p>
+                    <ul class="list-unstyled platform-list mt-4">
+                        <li><i class="fas fa-check-circle"></i> Instant Online Appointment Booking.</li>
+                        <li><i class="fas fa-check-circle"></i> Complete Medical History (Full History View).</li>
+                        <li><i class="fas fa-check-circle"></i> Securely Access Prescriptions & Lab Results.</li>
+                        <li><i class="fas fa-check-circle"></i> Manage and Edit Profile Details.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="doctor" class="platform-section bg-light-custom">
+        <div class="container">
+            <div class="row align-items-center flex-row-reverse">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    [Doctor portal screen showing schedule and patient charts]
+                </div>
+                <div class="col-lg-7 pe-lg-5">
+                    <div class="platform-icon-box bg-primary-custom">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h2 class="platform-title">Doctor Portal: Enhanced Efficiency</h2>
+                    <p class="text-muted lead">Streamline your daily practice with tools designed to give you more time with your patients.</p>
+                    <ul class="list-unstyled platform-list mt-4">
+                        <li><i class="fas fa-check-circle"></i> Quick Access to Patient Records & History.</li>
+                        <li><i class="fas fa-check-circle"></i> Digital Prescription and Note Management.</li>
+                        <li><i class="fas fa-check-circle"></i> Real-time Schedule and Appointment Overviews.</li>
+                        <li><i class="fas fa-check-circle"></i> Dedicated Profile Editing for Credentials.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="manager" class="platform-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    [Clinic manager dashboard showing stats and doctor list]
+                </div>
+                <div class="col-lg-7 ps-lg-5">
+                    <div class="platform-icon-box bg-warning">
+                        <i class="fas fa-hospital-alt"></i>
+                    </div>
+                    <h2 class="platform-title">Clinic Manager: Operational Control</h2>
+                    <p class="text-muted lead">Gain deep insights into performance, revenue, and staff management from a single view.</p>
+                    <ul class="list-unstyled platform-list mt-4">
+                        <li><i class="fas fa-check-circle"></i> Real-time Financial and Appointment Snapshots.</li>
+                        <li><i class="fas fa-check-circle"></i> Doctor Association and Performance Oversight.</li>
+                        <li><i class="fas fa-check-circle"></i> Simplified HR Tasks (Move/Remove Doctors).</li>
+                        <li><i class="fas fa-check-circle"></i> Data-driven Decisions without Clutter (No Full Report).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-primary-custom py-5">
+        <div class="container text-center text-white">
+            <div class="row mb-5">
+                <div class="col-md-4">
+                    <h2 class="fw-bold mb-0">120+</h2>
+                    <p class="small text-white-50">Active Doctors</p>
+                </div>
+                <div class="col-md-4">
+                    <h2 class="fw-bold mb-0">98%</h2>
+                    <p class="small text-white-50">Patient Satisfaction</p>
+                </div>
+                <div class="col-md-4">
+                    <h2 class="fw-bold mb-0">5K+</h2>
+                    <p class="small text-white-50">Appointments Booked</p>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-top border-white-50">
+                <h3 class="fw-bold mb-3">Ready to See Shefa in Action?</h3>
+                <p class="text-white-50 mb-4">Click below to enter the unified health platform and explore our specialized portals.</p>
+                <a href="Auth.html" class="btn btn-light rounded-pill px-5 fw-bold text-primary-custom btn-lg">Explore All Portals</a>
+            </div>
+        </div>
+    </section>
+
+</main>

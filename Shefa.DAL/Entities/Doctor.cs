@@ -13,9 +13,10 @@
         public int? ExperienceYears { get; set; } 
         public string ClinicId { get; set; }
         public string UserId { get; set; }
-        public User User { get; set; }
+        public AppUser User { get; set; }
         public Clinic Clinic { get; set; }
-        public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
+        public ICollection<Slot> Slots { get; set; } = new HashSet<Slot>();
+       
         public ICollection<DoctorSchedule> DoctorSchedules { get; set; } = new HashSet<DoctorSchedule>();
         public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
         public ICollection<Prescription> Prescriptions { get; set; } = new HashSet<Prescription>();

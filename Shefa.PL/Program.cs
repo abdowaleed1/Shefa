@@ -1,3 +1,9 @@
+
+using DAL;
+using Microsoft.EntityFrameworkCore;
+using Models.Contexts;
+using Shefa.BLL.Interfaces;
+
 namespace Shefa.PL
 {
     public class Program
@@ -8,6 +14,10 @@ namespace Shefa.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<ShefaContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("ShefaConnectionString")));
+            builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();
 

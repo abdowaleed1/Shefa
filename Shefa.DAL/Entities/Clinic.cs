@@ -12,10 +12,11 @@
 
 
         public string ManagerId { get; set; }
-        public User Manager { get; set; }
+        public AppUser Manager { get; set; }
 
         public ICollection<Doctor> Doctors { get; set; } = new HashSet<Doctor>();
         public ICollection<DoctorSchedule> DoctorSchedules { get; set; } = new HashSet<DoctorSchedule>();
+        public ICollection<Slot> Slots { get; set; } = new HashSet<Slot>();
         public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
     }
 
