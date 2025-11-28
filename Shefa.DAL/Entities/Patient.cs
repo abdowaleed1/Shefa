@@ -11,7 +11,7 @@ namespace Models.Entities
         public string Country { get; set; }
         public string City { get; set; }
         public string UserId { get; set; }
-        public User User { get; set; }
+        public AppUser User { get; set; }
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
         public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
         public ICollection<Prescription> Prescriptions { get; set; } = new HashSet<Prescription>();

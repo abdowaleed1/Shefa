@@ -4,7 +4,7 @@ using Models.InterFaces;
 
 namespace Models.Entities
 {
-    public class User : IdentityUser<string>
+    public class AppUser : IdentityUser<string>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

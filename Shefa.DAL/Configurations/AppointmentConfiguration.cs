@@ -11,7 +11,7 @@ namespace Models.Configurations
         public void Configure(EntityTypeBuilder<Appointment> builder)
         {
             builder.ToTable("Appointment");
-            builder.ConfigureCoreProperties(); 
+            builder.ConfigureCoreProperties();
 
             builder.Property(a => a.AppointmentDate)
                 .HasColumnName("appointment_date")
@@ -25,8 +25,6 @@ namespace Models.Configurations
             builder.Property(e => e.PatientId)
                    .HasColumnName("patient_id");
 
-            builder.Property(e => e.DoctorId)
-                   .HasColumnName("doctor_id");
 
             builder.Property(a => a.AppointmentStatus)
                    .HasColumnName("status")
@@ -55,13 +53,11 @@ namespace Models.Configurations
                    .OnDelete(DeleteBehavior.NoAction)
                    .IsRequired();
 
-            builder.HasOne(a => a.Doctor)
-                   .WithMany(d => d.Appointments)
-                   .HasForeignKey(a => a.DoctorId)
-                   .OnDelete(DeleteBehavior.NoAction)
-                   .IsRequired();
-
+            builder.HasOne(x => x.Slot)
+                .WithOne(a => a.Appointment)
+                .HasForeignKey<Appointment>(a => a.SlotId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
-
 }

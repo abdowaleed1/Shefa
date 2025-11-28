@@ -13,20 +13,28 @@ namespace Models.Configurations
             builder.ToTable("DoctorSchedule");
             builder.ConfigureCoreProperties(); 
 
-            builder.Property(ds => ds.DayOfWeek)
+            builder.Property(ds => ds.AvailableDays)
                     .HasColumnName("day_of_week")
                     .HasColumnType(DBTypes.NvarChar)
                     .HasMaxLength(300)
                     .HasConversion(new EnumToStringConverter<DayOfWeek>())
                     .IsRequired();
+
             builder.Property(ds => ds.StartTime)
                     .HasColumnName("start_time")
-                    .HasColumnType(DBTypes.DateTime)
+                    .HasColumnType(DBTypes.Time)
                     .IsRequired();
+
             builder.Property(ds => ds.EndTime)
                     .HasColumnName("end_time")
-                    .HasColumnType(DBTypes.DateTime)
+                    .HasColumnType(DBTypes.Time)
                     .IsRequired();
+
+            builder.Property(ds => ds.SlotDurationMinutes)
+                    .HasColumnName("slot_duration_minutes")
+                    .HasColumnType(DBTypes.Int)
+                    .IsRequired();
+
             builder.Property(c => c.DoctorId)
                    .HasColumnName("doctor_id");
 
@@ -34,7 +42,7 @@ namespace Models.Configurations
                    .HasColumnName("clinic_id");
 
 
-            builder.HasIndex(ds => new { ds.DoctorId, ds.DayOfWeek, ds.StartTime, ds.ClinicId })
+            builder.HasIndex(ds => new { ds.DoctorId, ds.AvailableDays, ds.StartTime, ds.ClinicId })
                 .IsUnique();
 
 
