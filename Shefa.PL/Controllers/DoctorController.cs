@@ -1,57 +1,86 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shefa.BLL.Interfaces;
+using Models.Entities;
+using Shefa.PL.Models;
+using Models.Enums;
+using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Shefa.PL.Controllers
 {
     public class DoctorController : Controller
     {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public DoctorController(IUnitOfWork _unitOfWork)
+        {
+            this._unitOfWork = _unitOfWork;
+        }
+
         // GET: DoctorController
-        public ActionResult Index()
+        public ActionResult Index(string doctorId)
         {
-            return View();
-        }
+            // if no doctorId provided, try to infer from current user (if any)
+            // fallback: use passed doctorId or show empty dashboard
+            var model = new DoctorDashboardViewModel();
 
-        // GET: DoctorController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: DoctorController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: DoctorController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+            if (string.IsNullOrEmpty(doctorId))
             {
-                return RedirectToAction(nameof(Index));
+                // try to find doctor by current user id claim
+                var userId = User?.Identity?.Name;
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    var doctor = _unitOfWork.Doctors.Find(d => d.UserId == userId);
+                    if (doctor != null)
+                        doctorId = doctor.Id;
+                }
             }
-            catch
+
+            if (!string.IsNullOrEmpty(doctorId))
             {
-                return View();
+                var doctor = _unitOfWork.Doctors.Find(d => d.Id == doctorId);
+                model.Doctor = doctor;
+
+                var today = DateOnly.FromDateTime(DateTime.Now);
+
+                var slots = _unitOfWork.Slots.FindAll(s => s.DoctorId == doctorId && s.Date == today, new[] { "Appointment", "Appointment.Patient" })
+                    .OrderBy(s => s.StartTime)
+                    .ToList();
+
+                model.Slots = slots;
             }
+
+            return View(model);
         }
 
         // GET: DoctorController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            var doctor = _unitOfWork.Doctors.Find(d => d.Id == id);
+            return View(doctor);
         }
 
         // POST: DoctorController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(string id, Doctor updated)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var doctor = _unitOfWork.Doctors.Find(d => d.Id == id);
+                if (doctor == null) return NotFound();
+
+                doctor.Biography = updated.Biography;
+                doctor.ConsultationPrice = updated.ConsultationPrice;
+                doctor.ConsultationTime = updated.ConsultationTime;
+                doctor.Specialty = updated.Specialty;
+
+                _unitOfWork.Doctors.Update(doctor);
+                _unitOfWork.Save();
+
+                return RedirectToAction(nameof(Index), new { doctorId = id });
             }
             catch
             {
@@ -59,24 +88,35 @@ namespace Shefa.PL.Controllers
             }
         }
 
-        // GET: DoctorController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: DoctorController/Delete/5
+        // POST: DoctorController/SaveConsult
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult SaveConsult(string appointmentId, string noteContent)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (string.IsNullOrEmpty(appointmentId))
+                    return Json(new { success = false, message = "Missing appointmentId" });
+
+                var appointment = _unitOfWork.Appointments.Find(a => a.Id == appointmentId);
+                if (appointment == null)
+                    return Json(new { success = false, message = "Appointment not found" });
+
+                var note = new PatientNotes
+                {
+                    AppointmentId = appointment.Id,
+                    PatientId = appointment.PatientId,
+                    NoteContent = noteContent ?? string.Empty,
+                    NoteType = PatientNoteType.ConsultationSummary
+                };
+
+                _unitOfWork.PatientNotes.Add(note);
+                _unitOfWork.Save();
+
+                return Json(new { success = true });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return Json(new { success = false, message = ex.Message });
             }
         }
     }
