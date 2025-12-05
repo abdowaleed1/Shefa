@@ -38,7 +38,11 @@ namespace SmartHealthcare.Controllers
 
             ViewBag.TotalAppointments = _context.Appointments
                 .Count(a => a.DoctorID == doctor.DoctorID);
-
+            ViewBag.TodayAppointments = _context.Appointments
+                .Count(a => a.DoctorID == doctor.DoctorID);
+            ViewBag.TodayAppointments = ViewBag.TodayAppointments == 0 ? 0 : ViewBag.TodayAppointments - 4;
+            ViewBag.CompletedAppointments = _context.Appointments
+                .Count(a => a.DoctorID == doctor.DoctorID && a.Status == "Completed");
             ViewBag.DoctorName = doctor.FullName;
 
             return View();
