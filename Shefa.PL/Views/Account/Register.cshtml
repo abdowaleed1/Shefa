@@ -1,0 +1,150 @@
+﻿@model SmartHealthcare.Models.RegisterViewModel
+
+@{
+    ViewBag.Title = "Register";
+    // Assuming the user wants to use the main _Layout for public pages
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+<div class="container">
+    <div class="row justify-content-center my-5">
+        <div class="col-md-7 col-lg-6">
+            <div class="card hospital-card shadow-2xl border-0">
+                <!-- Header with Hospital Theme -->
+                <div class="card-header hospital-header text-white text-center py-4 rounded-top-2xl">
+                    <h3 class="mb-1"><i class="fas fa-plus-square me-2"></i> Register for Smart Healthcare</h3>
+                    <p class="mb-0 fs-6">Create a secure new account</p>
+                </div>
+                <div class="card-body p-5">
+                    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary("", new { @class = "text-danger alert alert-danger p-2" })
+
+                        <!-- Full Name Field -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="fas fa-user text-primary me-2"></i> Full Name
+                            </label>
+                            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control form-control-lg", placeholder = "Your Full Name" })
+                            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Email Field -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="fas fa-envelope text-primary me-2"></i> Email Address
+                            </label>
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-lg", placeholder = "your.email@example.com", type = "email" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="fas fa-lock text-primary me-2"></i> Password
+                            </label>
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control form-control-lg", placeholder = "******" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Confirm Password Field -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="fas fa-check-lock text-primary me-2"></i> Confirm Password
+                            </label>
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control form-control-lg", placeholder = "Confirm Password" })
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Role Dropdown -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="fas fa-hospital-user text-primary me-2"></i> Register as
+                            </label>
+                            @Html.DropDownListFor(m => m.Role, new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "Select Role", Value = "", Disabled = true, Selected = true },
+                                new SelectListItem { Text = "Doctor", Value = "Doctor" },
+                                new SelectListItem { Text = "Patient", Value = "Patient" }
+                            }, new { @class = "form-select form-select-lg" })
+                            @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-3">
+                            <!-- Using custom medical teal color for action button -->
+                            <button type="submit" class="btn btn-medical-teal btn-lg shadow-sm">
+                                <i class="fas fa-paper-plane"></i> Complete Registration
+                            </button>
+                        </div>
+
+                        <hr>
+
+                        <div class="text-center">
+                            <p class="mb-2 text-muted">Already have an account?</p>
+                            <a href="@Url.Action("Login", "Account")" class="btn btn-outline-primary">
+                                <i class="fas fa-sign-in-alt"></i> Back to Login
+                            </a>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer text-muted text-center p-3">
+                    <small>© @DateTime.Now.Year Smart Healthcare System</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<style>
+    /* 1. Hospital Theme Background: Light, clean, subtle clinical texture */
+    body {
+        background: #F4F8FB; /* Very light clinical blue/gray */
+        min-height: 100vh;
+        background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23e0f7fa' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 0h3v3H0V0zm3 3h3v3H3V3z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    /* 2. Card Styling: Clean and defined */
+    .hospital-card {
+        border-radius: 12px;
+        transition: transform 0.3s ease;
+    }
+
+        .hospital-card:hover {
+            transform: translateY(-3px);
+        }
+
+    /* 3. Header Styling: Professional Blue (Trust/Reliability) */
+    .hospital-header {
+        background-color: #1976D2 !important; /* Deep Blue for professionalism */
+        border-bottom: none;
+        border-radius: 12px 12px 0 0 !important;
+    }
+
+    /* 4. Action Button Styling: Medical Teal (Health/Vitality) */
+    .btn-medical-teal {
+        background-color: #00bfa5; /* Calming Teal */
+        border-color: #00bfa5;
+        color: white;
+        font-weight: 600;
+        transition: background-color 0.2s ease;
+    }
+
+        .btn-medical-teal:hover {
+            background-color: #009688; /* Darker teal on hover */
+            border-color: #009688;
+            color: white;
+        }
+
+    .btn-outline-primary {
+        font-weight: 600;
+    }
+</style>

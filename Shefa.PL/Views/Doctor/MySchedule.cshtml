@@ -1,0 +1,45 @@
+﻿@model IEnumerable<SmartHealthcare.Models.Schedule>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "MySchedule";
+}
+
+<div class="container mt-4 schedule-table-container">
+    <h4 class="mb-3">Weekly Schedule</h4>
+
+    <table class="table table-hover shadow-sm bg-white">
+        <thead class="table-dark">
+            <tr>
+                <th>Day</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.DayOfWeek</td>
+                        <!-- Convert TimeSpan to DateTime to use hh:mm tt -->
+                        <td>@DateTime.Today.Add(item.StartTime).ToString("hh:mm tt")</td>
+                        <td>@DateTime.Today.Add(item.EndTime).ToString("hh:mm tt")</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", "Schedules", new { id = item.ScheduleID }, new { @class = "btn btn-sm btn-primary" })
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="5" class="text-center text-muted">No schedules found.</td></tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-end mt-3">
+        @Html.ActionLink("Add New Schedule", "Create", "Schedules", null, new { @class = "btn btn-success" })
+    </div>
+</div>

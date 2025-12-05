@@ -1,0 +1,23 @@
+﻿@model SmartHealthcare.Models.Bill
+@{
+    ViewBag.Title = "Delete Bill";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete Bill</h2>
+
+<div class="alert alert-danger">
+    Are you sure you want to delete this bill?
+</div>
+
+<div>
+    <p><strong>Bill ID:</strong> @Model.BillID</p>
+    <p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C")</p>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Cancel</a>
+}

@@ -1,0 +1,218 @@
+﻿@{
+    ViewBag.Title = "Patient Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Welcome Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-primary">
+                <i class="fas fa-user-circle"></i> Welcome, @ViewBag.PatientName
+            </h2>
+            <p class="text-muted">Manage your healthcare appointments and records</p>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <i class="fas fa-check-circle"></i> @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <i class="fas fa-info-circle"></i> @TempData["Info"]
+        </div>
+    }
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card bg-primary text-white h-100 stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Total Appointments</h6>
+                            <h2 class="mt-2 mb-0">@ViewBag.TotalAppointments</h2>
+                        </div>
+                        <div>
+                            <i class="fas fa-calendar-check fa-3x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card bg-success text-white h-100 stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Upcoming</h6>
+                            <h2 class="mt-2 mb-0">@ViewBag.UpcomingAppointments</h2>
+                        </div>
+                        <div>
+                            <i class="fas fa-clock fa-3x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card bg-info text-white h-100 stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Completed</h6>
+                            <h2 class="mt-2 mb-0">@ViewBag.CompletedAppointments</h2>
+                        </div>
+                        <div>
+                            <i class="fas fa-check-circle fa-3x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-bolt text-warning"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <a href="@Url.Action("Create", "Appointments")" class="btn btn-primary btn-block btn-lg">
+                                <i class="fas fa-calendar-plus"></i><br>Book Appointment
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <a href="@Url.Action("MyAppointments", "Patient")" class="btn btn-success btn-block btn-lg">
+                                <i class="fas fa-list"></i><br>My Appointments
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <a href="@Url.Action("MyReports", "Patient")" class="btn btn-info btn-block btn-lg">
+                                <i class="fas fa-notes-medical"></i><br>Medical Reports
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Appointments -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-history"></i> Recent Appointments</h5>
+                    <a href="@Url.Action("MyAppointments", "Patient")" class="btn btn-sm btn-outline-primary">
+                        View All <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.RecentAppointments != null && ((System.Collections.Generic.List<SmartHealthcare.Models.Appointment>)ViewBag.RecentAppointments).Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th><i class="far fa-calendar"></i> Date & Time</th>
+                                        <th><i class="fas fa-user-md"></i> Doctor</th>
+                                        <th><i class="fas fa-notes-medical"></i> Reason</th>
+                                        <th><i class="fas fa-info-circle"></i> Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var appointment in (System.Collections.Generic.List<SmartHealthcare.Models.Appointment>)ViewBag.RecentAppointments)
+                                    {
+                                        <tr>
+                                            <td>@appointment.AppointmentTime.ToString("MMM dd, yyyy hh:mm tt")</td>
+                                            <td>@(appointment.Doctor?.FullName ?? "N/A")</td>
+                                            <td>@appointment.Reason</td>
+                                            <td>
+                                                @if (appointment.Status == "Scheduled")
+                                                {
+                                                    <span class="badge text-success">@appointment.Status</span>
+                                                }
+                                                else if (appointment.Status == "Completed")
+                                                {
+                                                    <span class="badge text-primary">@appointment.Status</span>
+                                                }
+                                                else if (appointment.Status == "Cancelled")
+                                                {
+                                                    <span class="badge text-danger">@appointment.Status</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge text-secondary">@appointment.Status</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("Details", "Appointments", new { id = appointment.AppointmentID })"
+                                                   class="btn btn-sm btn-info">
+                                                    <i class="fas fa-eye"></i> View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                            <h5 class="text-muted">No appointments yet</h5>
+                            <p class="text-muted">Book your first appointment to get started!</p>
+                            <a href="@Url.Action("Create", "Appointments")" class="btn btn-primary btn-lg">
+                                <i class="fas fa-plus"></i> Book Now
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .opacity-50 {
+        opacity: 0.5;
+    }
+
+    .stat-card {
+        border-radius: 10px;
+        transition: transform 0.3s;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .btn-block {
+        padding: 20px;
+        font-weight: 600;
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
+    }
+</style>

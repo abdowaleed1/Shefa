@@ -1,0 +1,101 @@
+﻿@model IEnumerable<SmartHealthcare.Models.Prescription>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Prescriptions";
+}
+
+<div class="container-fluid mt-4">
+
+    <!-- Header -->
+    <div class="alert alert-primary shadow-sm" style="border-left: 5px solid #00bfa6;">
+        <h5 class="mb-0">💊 Manage Prescriptions</h5>
+        <small class="text-muted">Create and view prescriptions for your patients.</small>
+    </div>
+
+    <!-- Create Prescription Form -->
+    <div class="card shadow-sm mt-4 border-0">
+        <div class="card-header bg-white border-0">
+            <h5 class="fw-bold mb-0 text-dark">📝 New Prescription</h5>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm("Create", "Prescriptions", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Select Appointment</label>
+                        @Html.DropDownList("AppointmentID", ViewBag.Appointments as SelectList, "-- Select Appointment --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.FirstOrDefault().AppointmentID, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold">Prescription Details</label>
+                        @Html.TextAreaFor(m => m.FirstOrDefault().Details, new { @class = "form-control", rows = 4, placeholder = "Write medicines, dosage, or advice" })
+                        @Html.ValidationMessageFor(m => m.FirstOrDefault().Details, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-12 text-end mt-2">
+                        <button type="submit" class="btn btn-success px-4">💾 Save Prescription</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- List of Prescriptions -->
+    <div class="card mt-5 shadow-sm border-0">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold text-dark mb-0">📚 Your Prescriptions</h5>
+        </div>
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Patient</th>
+                                <th>Date</th>
+                                <th>Details</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var p in Model)
+                            {
+                                <tr>
+                                    <td>@p.Patient.PatientName</td>
+                                    <td>@p.DateIssued.ToString("dd MMM yyyy")</td>
+                                    <td>@p.Details</td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "Prescriptions", new { id = p.PrescriptionID })" class="btn btn-sm btn-outline-primary">✏️ Edit</a>
+                                        <a href="@Url.Action("Delete", "Prescriptions", new { id = p.PrescriptionID })" class="btn btn-sm btn-outline-danger">🗑️ Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No prescriptions found for you yet.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: all 0.2s ease-in-out;
+    }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+    .btn-outline-primary:hover, .btn-outline-danger:hover {
+        color: #fff !important;
+    }
+</style>

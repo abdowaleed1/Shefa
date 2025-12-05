@@ -1,0 +1,106 @@
+﻿@model SmartHealthcare.Models.Bill
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Create Bill";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-3 mx-auto" style="max-width: 700px;">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">📝 Create New Bill</h4>
+        </div>
+        <div class="card-body p-4">
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger text-center">@TempData["Error"]</div>
+            }
+
+            @using (Html.BeginForm("CreateBill", "Doctor", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+                <div class="row g-3">
+                    <!-- Appointment Dropdown -->
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold">Select Completed Appointment *</label>
+                        @Html.DropDownListFor(model => model.AppointmentID, ViewBag.AppointmentID as SelectList, "-- Select Appointment --", new { @class = "form-control form-select", id = "appointmentDropdown" })
+                        @Html.ValidationMessageFor(model => model.AppointmentID, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Doctor Fee -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Doctor Fee (₹) *</label>
+                        @Html.TextBoxFor(model => model.DoctorFee, new { @class = "form-control", type = "number", step = "0.01", min = "0", id = "doctorFeeInput" })
+                        @Html.ValidationMessageFor(model => model.DoctorFee, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Report Fee -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Report Fee (₹)</label>
+                        @Html.TextBoxFor(model => model.ReportFee, new { @class = "form-control", type = "number", step = "0.01", min = "0", id = "reportFeeInput" })
+                        @Html.ValidationMessageFor(model => model.ReportFee, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Tax Rate -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Tax Rate (%) *</label>
+                        @Html.TextBoxFor(model => model.TaxRate, new { @class = "form-control", type = "number", step = "0.01", min = "0" })
+                        @Html.ValidationMessageFor(model => model.TaxRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Details -->
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold">Details/Notes</label>
+                        @Html.TextAreaFor(model => model.Details, new { @class = "form-control", rows = 3 })
+                        @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="col-12 mt-4 d-flex justify-content-end">
+                        <a href="@Url.Action("Bills", "Doctor")" class="btn btn-secondary me-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Generate Bill
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Auto-fill fees when an appointment is selected
+            $('#appointmentDropdown').change(function () {
+                var appointmentId = $(this).val();
+
+                if (appointmentId && appointmentId !== "") {
+                    $.ajax({
+                        url: '@Url.Action("GetAppointmentFees", "Doctor")',
+                        type: 'GET',
+                        data: { appointmentId: appointmentId },
+                        success: function (response) {
+                            if (response.success) {
+                                $('#doctorFeeInput').val(response.doctorFee);
+                                $('#reportFeeInput').val(response.reportFee);
+                            } else {
+                                alert('Unable to fetch appointment fees.');
+                            }
+                        },
+                        error: function () {
+                            alert('Error fetching appointment fees.');
+                        }
+                    });
+                } else {
+                    $('#doctorFeeInput').val('0');
+                    $('#reportFeeInput').val('0');
+                }
+            });
+        });
+    </script>
+}

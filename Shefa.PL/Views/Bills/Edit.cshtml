@@ -1,0 +1,43 @@
+﻿@model SmartHealthcare.Models.Bill
+@{
+    ViewBag.Title = "Edit Bill";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Bill</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.BillID)
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(m => m.AppointmentID)
+            @Html.TextBoxFor(m => m.AppointmentID, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.DoctorFee)
+            @Html.TextBoxFor(m => m.DoctorFee, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.ReportFee)
+            @Html.TextBoxFor(m => m.ReportFee, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.TaxRate)
+            @Html.TextBoxFor(m => m.TaxRate, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.PaymentStatus)
+            @Html.TextBoxFor(m => m.PaymentStatus, new { @class = "form-control" })
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a href="@Url.Action("Index")" class="btn btn-secondary">Cancel</a>
+    </div>
+}

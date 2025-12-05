@@ -1,0 +1,176 @@
+﻿@model SmartHealthcare.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container login-container">
+    <!-- Centering wrapper: removed mt-5 and added d-flex, align-items-center -->
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3><i class="fas fa-hospital"></i> Shefa</h3>
+                    <p class="mb-0">Login to your account</p>
+                </div>
+                <div class="card-body p-4">
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="form-group mb-3">
+                            <label class="control-label">
+                                <i class="fas fa-envelope"></i> Email Address
+                            </label>
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter your email", type = "email", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="control-label">
+                                <i class="fas fa-lock"></i> Password
+                            </label>
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter your password", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt"></i> Log in
+                            </button>
+                        </div>
+
+                        <hr>
+
+                        <div class="text-center">
+                            <p>Don't have an account?</p>
+                            <a href="@Url.Action("Register", "Account")" class="btn btn-outline-success">
+                                <i class="fas fa-user-plus"></i> Register Now
+                            </a>
+                        </div>
+                    }
+                </div>
+                <!-- ❌ Card Footer Removed as requested -->
+            </div>
+
+           
+
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<style>
+    /* Add 'fa' classes for icons if not already included */
+    @@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+    @@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    body {
+        /* Soft, professional background gradient (Light Blue/Cyan) */
+       
+
+    {
+        background: #F4F8FB; /* Very light clinical blue/gray */
+        min-height: 100vh;
+        background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23e0f7fa' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 0h3v3H0V0zm3 3h3v3H3V3z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    }
+
+    /* Keep centering styles */
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center; /* Center content vertically */
+        justify-content: center;
+        padding: 20px 0;
+    }
+
+    .row.h-100 {
+        min-height: 100%;
+        width: 100%;
+    }
+
+    .card {
+        border-radius: 18px; /* Slightly larger radius */
+        background-color: #ffffff;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* Softer, deeper shadow */
+        border: none;
+        overflow: hidden; /* Ensures header radius looks correct */
+    }
+
+    .card-header {
+        /* New Professional Teal/Cyan color: DarkCyan */
+        background-color: #008b8b !important;
+        color: #fff;
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+        border-bottom: 0;
+        padding: 30px 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+        .card-header h3 {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 12px 15px;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:focus {
+            border-color: #008b8b;
+            box-shadow: 0 0 0 0.25rem rgba(0, 139, 139, 0.25);
+        }
+
+    .btn-primary {
+        background-color: #008b8b;
+        border-color: #008b8b;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 10px 0;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #006b6b;
+            border-color: #006b6b;
+            transform: translateY(-2px); /* Subtle lift effect */
+            box-shadow: 0 4px 10px rgba(0, 139, 139, 0.4);
+        }
+
+    .btn-outline-success {
+        color: #008b8b;
+        border-color: #008b8b;
+        font-weight: 600;
+        border-radius: 10px;
+    }
+
+        .btn-outline-success:hover {
+            background-color: #008b8b;
+            color: white;
+        }
+
+    /* Quick Login Info Box */
+    .alert-info {
+        background-color: #e0f7fa;
+        color: #008b8b;
+        border: 1px solid #008b8b55;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+        .alert-info strong {
+            font-weight: 700;
+        }
+</style>

@@ -1,0 +1,180 @@
+﻿@model IEnumerable<SmartHealthcare.Models.Bill>
+
+@{
+    ViewBag.Title = "All Bills";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h2><i class="fas fa-file-invoice-dollar"></i> All Bills</h2>
+        </div>
+        <div class="col-md-6 text-end">
+            @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
+            {
+                <a href="@Url.Action("Create", "Bills")" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create New Bill
+                </a>
+            }
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        var totalRevenue = Model.Where(b => b.PaymentStatus == "Paid").Sum(b => b.TotalAmount);
+        var pendingAmount = Model.Where(b => b.PaymentStatus == "Pending").Sum(b => b.TotalAmount);
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-success">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Total Revenue (Paid)</h6>
+                        <h3 class="text-success mb-0">₹@totalRevenue.ToString("N2")</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm border-warning">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Pending Amount</h6>
+                        <h3 class="text-warning mb-0">₹@pendingAmount.ToString("N2")</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Bill ID</th>
+                            <th>Patient Name</th>
+                            <th>Doctor Name</th>
+                            <th>Date Issued</th>
+                            <th>Doctor Fee</th>
+                            <th>Report Fee</th>
+                            <th>Total Amount</th>
+                            <th>Payment Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var bill in Model)
+                            {
+                                var statusColor = bill.PaymentStatus == "Paid" ? "success" :
+                                                  bill.PaymentStatus == "Pending" ? "warning" : "danger";
+
+                                <tr>
+                                    <td><strong>#@bill.BillID</strong></td>
+                                    <td>@bill.Appointment?.Patient?.FullName</td>
+                                    <td>@bill.Appointment?.Doctor?.FullName</td>
+                                    <td>@bill.DateIssued.ToString("dd MMM yyyy")</td>
+                                    <td>₹@bill.DoctorFee.ToString("N2")</td>
+                                    <td>₹@bill.ReportFee.ToString("N2")</td>
+                                    <td><strong class="text-primary">₹@bill.TotalAmount.ToString("N2")</strong></td>
+                                    <td>
+                                        <span class="badge bg-@statusColor">@bill.PaymentStatus</span>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Details", "Bills", new { id = bill.BillID })"
+                                           class="btn btn-sm btn-info" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a href="@Url.Action("Edit", "Bills", new { id = bill.BillID })"
+                                               class="btn btn-sm btn-warning" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+
+                                            if (bill.PaymentStatus != "Paid")
+                                            {
+                                                <button type="button" class="btn btn-sm btn-success"
+                                                        onclick="updatePaymentStatus(@bill.BillID, 'Paid')"
+                                                        title="Mark as Paid">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            }
+
+                                            <a href="@Url.Action("Delete", "Bills", new { id = bill.BillID })"
+                                               class="btn btn-sm btn-danger" title="Delete"
+                                               onclick="return confirm('Are you sure you want to delete this bill?');">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center text-muted">
+                                    <i class="fas fa-info-circle"></i> No bills found.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function updatePaymentStatus(billId, status) {
+            if (confirm('Are you sure you want to mark this bill as ' + status + '?')) {
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '@Url.Action("UpdatePaymentStatus", "Bills")';
+
+                var idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'id';
+                idInput.value = billId;
+                form.appendChild(idInput);
+
+                var statusInput = document.createElement('input');
+                statusInput.type = 'hidden';
+                statusInput.name = 'status';
+                statusInput.value = status;
+                form.appendChild(statusInput);
+
+                var tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                form.appendChild(tokenInput);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+}
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .btn-sm {
+        margin: 0 2px;
+    }
+</style>

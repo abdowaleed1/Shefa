@@ -1,181 +1,291 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+@{
+    // FIX 1: Use standard ASP.NET Identity role check for Admin instead of Session
+    var isAdmin = User.IsInRole("Admin");
+    // Simplify isAuthenticatedUser check, as Request.IsAuthenticated covers all Identity roles
+    var isAuthenticatedUser = Request.IsAuthenticated;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Shefa</title>
+    <title>@ViewBag.Title - Shefa</title>
 
- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+
     <style>
+        /* UI/UX Theme Overhaul - Mint/Teal Professional */
         :root {
-            --primary-color: #0070cd;
-            --text-dark: #2d2d2d;
-            --bg-light: #f4f6f8;
-            --text-muted: #6c757d;
+            --primary-color: #00a896; /* Mint/Teal */
+            --primary-dark: #008f80;
+            --secondary-color: #43b5e4; /* Light Blue Accent */
+            --background-color: #f5f8fb;
+            --text-dark: #2c3e50;
         }
 
         body {
+            background-color: var(--background-color);
             font-family: 'Poppins', sans-serif;
             color: var(--text-dark);
-            background-color: white;
+            margin: 0;
+            padding-top: 70px; /* Space for fixed top navbar */
         }
 
-        /* Utility Styles */
-        .text-primary-custom {
-            color: var(--primary-color) !important;
-        }
-
-        .bg-primary-custom {
-            background-color: var(--primary-color) !important;
-        }
-
-        .bg-light-custom {
-            background-color: var(--bg-light) !important;
-        }
-
-        .section-padding {
-            padding: 90px 0;
-        }
-
-        /* Navbar */
-        .navbar-custom {
-            background-color: white;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            padding: 15px 0;
-        }
-
-        .navbar-brand {
-            font-weight: 800;
-            color: var(--primary-color) !important;
-            font-size: 1.8rem;
-            letter-spacing: -1px;
-        }
-
-        /* Buttons */
-        .btn-primary-custom {
-            background-color: var(--primary-color);
-            border: none;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 50rem;
+        /* Typography Reset */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
             font-weight: 600;
-            transition: all 0.3s;
+            color: var(--text-dark);
         }
 
-            .btn-primary-custom:hover {
-                background-color: #0056b3;
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(0,112,205,0.3);
+        /* Primary Navbar Style */
+        .primary-navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
+            transition: background-color 0.3s;
+        }
+
+            .primary-navbar .navbar-brand,
+            .primary-navbar .nav-link {
+                color: #fff !important;
+                font-weight: 400;
+                transition: all 0.2s ease-in-out;
+                padding: 10px 15px;
+                border-radius: 8px;
             }
 
-        /* Hero Section */
-        .hero-section {
-            background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%);
-            padding: 140px 0 100px;
+            .primary-navbar .navbar-brand {
+                font-weight: 700;
+                font-size: 1.5rem;
+            }
+
+            .primary-navbar .nav-link:hover,
+            .primary-navbar .nav-link.active {
+                color: #fff !important;
+                background-color: var(--primary-dark);
+            }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: all 0.3s;
+            font-weight: 600;
+            border-radius: 8px;
         }
 
-        .hero-title {
-            font-size: 3.2rem;
-            font-weight: 800;
-            line-height: 1.2;
+            .btn-primary:hover {
+                background-color: var(--primary-dark);
+                border-color: var(--primary-dark);
+                transform: translateY(-1px);
+            }
+
+        .btn-outline-light {
+            color: #fff;
+            border-color: #fff;
+            font-weight: 600;
+            border-radius: 8px;
         }
 
-        .hero-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            margin-top: 20px;
+            .btn-outline-light:hover {
+                background-color: #fff;
+                color: var(--primary-color);
+            }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+            border-radius: 8px;
         }
 
-        /* Feature Sections (New Design) */
-        .platform-section {
-            padding: 60px 0;
-            border-bottom: 1px solid #eee;
+            .btn-danger:hover {
+                background-color: #c0392b;
+                border-color: #c0392b;
+            }
+
+
+        /* Dropdown Menu styling */
+        .dropdown-menu {
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border: none;
+            overflow: hidden;
         }
 
-        .platform-title {
-            font-size: 2rem;
+        .dropdown-item {
+            transition: background-color 0.1s;
+        }
+
+            .dropdown-item:hover {
+                background-color: var(--background-color);
+                color: var(--primary-dark);
+            }
+
+        .dropdown-header {
+            color: var(--primary-color);
             font-weight: 700;
         }
 
-        .platform-icon-box {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            font-size: 2.5rem;
-            display: inline-block;
-            margin-bottom: 20px;
+        .dropdown-item:active {
+            color: var(--primary-color);
+            background-color: var(--background-color);
         }
 
-        .platform-list li {
-            margin-bottom: 10px;
-            color: var(--text-muted);
+
+        /* Main Content Area */
+        .body-content {
+            padding: 30px 15px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .platform-list i {
-            color: #198754;
-            margin-right: 10px;
+        /* Footer */
+        .footer-main {
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6c757d;
+            background-color: #fff;
+        }
+
+        /* Responsive Adjustments */
+        @@media (max-width: 991px) {
+            .primary-navbar .nav-link {
+                padding: 8px 15px;
+            }
+
+            .primary-navbar {
+                background-color: var(--primary-color) !important; /* Ensure solid color on mobile menu open */
+            }
+
+            .navbar-collapse {
+                background-color: var(--primary-dark);
+                padding: 15px;
+                border-radius: 0 0 10px 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
         }
     </style>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
-            <div class="container">
-                <a class="navbar-brand d-flex align-items-center" href="#">
-                    <i class="fas fa-heartbeat me-2"></i> Shefa
-                </a>
+    <nav class="navbar navbar-expand-lg primary-navbar">
+        <div class="container-fluid">
+            @Html.ActionLink("🏥 Shefa", "Index", "Home", null, new { @class = "navbar-brand" })
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="background-image: url(&quot;data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E&quot;);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">@Html.ActionLink("🏠 Home", "Index", "Home", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("ℹ️ About", "About", "Home", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("📞 Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>
+                    @*<li class="nav-item">@Html.ActionLink("⭐ Reviews", "Reviews", "Home", null, new { @class = "nav-link" })</li>*@
+                    <li class="nav-item">@Html.ActionLink("❓ Help / FAQ", "Help", "Home", null, new { @class = "nav-link" })</li>
+                </ul>
 
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <ul class="navbar-nav ms-auto d-flex align-items-lg-center">
+                    @if (isAuthenticatedUser)
+                    {
+                        // Dropdown for authenticated users (Admin, Doctor, Patient)
+                        <li class="nav-item dropdown me-lg-3">
+                            <a class="nav-link dropdown-toggle" href="#" id="userPanelDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i> Panel Menu
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userPanelDropdown">
+                                @if (isAdmin)
+                                {
+                                    // ADMIN PANEL
+                                    <li><h6 class="dropdown-header">⚙️ Admin Panel</h6></li>
+                                    <li>@Html.ActionLink("📊 Dashboard", "Dashboard", "Admin", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("👨‍⚕️ Manage Doctors", "Doctors", "Admin", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("🧑‍🤝‍🧑 Manage Patients", "Patients", "Admin", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("📅 Appointments", "Appointments", "Admin", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("💊 Prescriptions", "Prescriptions", "Admin", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("🕒 Doctor Schedules", "Schedules", "Admin", null, new { @class = "dropdown-item" })</li>
+                                    @*<li>@Html.ActionLink("💰 Billing", "Bills", "Admin", null, new { @class = "dropdown-item" })</li>*@
+                                    <li>@Html.ActionLink("📋 MedicalReports", "MedicalReports", "Admin", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("⭐ Feedback / Reviews", "Feedbacks", "Admin", null, new { @class = "dropdown-item" })</li>
 
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto align-items-center">
-                        <li class="nav-item"><a class="nav-link fw-bold text-dark mx-2" asp-action="Index" asp-controller="Patient">Patient</a></li>
-                        <li class="nav-item"><a class="nav-link fw-bold text-dark mx-2" asp-action="Index" asp-controller="Doctor">Doctor</a></li>
-                        <li class="nav-item"><a class="nav-link fw-bold text-dark mx-2" asp-action="Index" asp-controller="Clinic">Clinic</a></li>
-                        <li class="nav-item"><a class="nav-link fw-bold text-dark mx-2" asp-action="Index" asp-controller="Admin">Admin</a></li>
-                        <li class="nav-item ms-3">
-                            <a class="btn btn-outline-primary rounded-pill px-4 fw-bold btn-sm" href="#">Login</a>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    @* SECURE LOGOUT FIX: Use a link to trigger the hidden POST form *@
+                                    <li><a href="javascript:document.getElementById('logoutForm').submit()" class="dropdown-item text-danger fw-bold"><i class="fas fa-door-open"></i> Logout</a></li>
+                                }
+                                else if (User.IsInRole("Doctor"))
+                                {
+                                    // DOCTOR PANEL
+                                    <li><h6 class="dropdown-header">🩺 Doctor Panel</h6></li>
+                                    <li>@Html.ActionLink("🏥 Dashboard", "Dashboard", "Doctor", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("👨‍👩‍👧‍👦 My Patients", "MyPatients", "Doctor", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("📅 Appointments", "MyAppointments", "Doctor", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("🕒 Schedule", "MySchedule", "Doctor", null, new { @class = "dropdown-item" })</li>
+                                    @*<li>@Html.ActionLink("💊 Prescriptions", "Prescriptions", "Doctor", null, new { @class = "dropdown-item" })</li>*@
+                                    @*<li>@Html.ActionLink("💰 Bills", "Bills", "Doctor", null, new { @class = "dropdown-item" })</li>*@
+                                    @*<li>@Html.ActionLink("🧾 Reports", "MyReports", "Doctor", null, new { @class = "dropdown-item" })</li>*@
+                                    <li>@Html.ActionLink("👤 Profile", "MyProfile", "Doctor", null, new { @class = "dropdown-item" })</li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    @* SECURE LOGOUT FIX: Use a link to trigger the hidden POST form *@
+                                    <li><a href="javascript:document.getElementById('logoutForm').submit()" class="dropdown-item text-danger fw-bold"><i class="fas fa-door-open"></i> Logout</a></li>
+                                }
+                                else if (User.IsInRole("Patient"))
+                                {
+                                    // PATIENT PANEL
+                                    <li><h6 class="dropdown-header">🧍 Patient Panel</h6></li>
+                                    <li>@Html.ActionLink("📊 Dashboard", "Dashboard", "Patient", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("📅 MyAppointments", "Index", "MyAppointments", null, new { @class = "dropdown-item" })</li>
+                                    @*<li>@Html.ActionLink("🧾 Reports", "Index", "MedicalReports", null, new { @class = "dropdown-item" })</li>*@
+                                    @*<li>@Html.ActionLink("💳 Bills", "Index", "Bills", null, new { @class = "dropdown-item" })</li>*@
+                                    <li>@Html.ActionLink("👤 Profile", "MyProfile", "Patient", null, new { @class = "dropdown-item" })</li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    @* SECURE LOGOUT FIX: Use a link to trigger the hidden POST form *@
+                                    <li><a href="javascript:document.getElementById('logoutForm').submit()" class="dropdown-item text-danger fw-bold"><i class="fas fa-door-open"></i> Logout</a></li>
+                                }
+                            </ul>
                         </li>
-                        <li class="nav-item ms-2">
-                            <a class="btn btn-primary-custom fw-bold btn-sm" href="#">Sign Up</a>
+
+                        <li class="nav-item d-flex align-items-center">
+                            <span class="navbar-text me-2 d-none d-lg-block" style="color:#e0f7fa;">👋 Hello, <strong>@User.Identity.GetUserName()</strong></span>
+
+                            @* SECURE LOGOUT FIX: Replace Html.ActionLink with a button that submits the hidden form *@
+                            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "d-inline" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger btn-sm">Logoff</button>
+                            }
                         </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div>
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-    <footer class="bg-primary-custom py-5">
-        <div class="container">
-            <div class="row text-white">
-                <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold text-white mb-3"><i class="fas fa-heartbeat me-2"></i> Shefa</h5>
-                    <p class="small">The unified platform for modern clinics and informed patients.</p>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <h6 class="text-white fw-bold">Contact Us</h6>
-                    <p class="small mb-1"><i class="fas fa-envelope me-2"></i> support@shefa.com</p>
-                    <p class="small"><i class="fas fa-phone me-2"></i> +12 345 6789</p>
-                </div>
-            </div>
-            <div class="text-center pt-4 border-top border-secondary">
-                <p class="mb-0 text-white">&copy; @DateTime.Now.Year <strong class="text-primary-custom">Shefa</strong>. All rights reserved.</p>
+                    }
+                    else
+                    {
+                        <li class="nav-item me-2">@Html.ActionLink("Login", "Login", "Account", null, new { @class = "btn btn-light btn-sm" })</li>
+                        <li class="nav-item">@Html.ActionLink("Register", "Register", "Account", null, new { @class = "btn btn-outline-light btn-sm" })</li>
+                    }
+                </ul>
             </div>
         </div>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    <footer class="footer-main bg-white">
+        &copy; @DateTime.Now.Year - Shefa
     </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,282 @@
+﻿@{
+    ViewBag.Title = "About Us";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Custom Styles for a modern, clean look (using Bootstrap 5 utilities) -->
+<style>
+    /* 🎨 Color Palette based on the sidebar (Teal/Blue) */
+    .bg-primary-light {
+        background-color: #e0f7fa; /* Light Teal/Cyan for subtle contrast */
+    }
+
+    .text-brand-primary {
+        color: #00796b !important; /* Main brand color (Deep Teal from Patient Layout) */
+    }
+
+    .icon-box {
+        background-color: #00796b;
+        color: white;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
+        margin: 0 auto 15px;
+        transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover .icon-box {
+        transform: scale(1.1);
+    }
+
+    .feature-card {
+        border: none;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 15px;
+        padding: 20px;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+    /* Mission & Vision Styling */
+    .mission-vision-card {
+        border-left: 5px solid;
+        border-radius: 10px;
+        transition: box-shadow 0.3s;
+    }
+
+    .mission-card {
+        border-left-color: #00796b !important;
+    }
+
+    .vision-card {
+        border-left-color: #00bfa6 !important;
+    }
+
+    .mission-vision-card:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+</style>
+
+<div class="container py-5">
+    <!-- 🌟 SECTION 1: HERO HEADER -->
+    <div class="text-center mb-5 p-4 bg-primary-light rounded-3 shadow-sm">
+        <h1 class="display-4 fw-bold text-brand-primary">
+            <i class="fas fa-heartbeat me-2"></i> Pioneering the Future of Healthcare
+        </h1>
+        <p class="lead text-muted mt-3">
+            At Shefa, we combine cutting-edge technology with compassionate care to create a seamless, patient-centric medical experience for everyone.
+        </p>
+    </div>
+
+    <!-- 🌐 SECTION 2: MISSION & VISION -->
+    <div class="row mb-5 g-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100 mission-vision-card mission-card">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-brand-primary mb-3">
+                        <i class="fas fa-bullseye me-2"></i> Our Mission
+                    </h3>
+                    <p class="card-text fs-5">
+                        Empowerment through Integration: To revolutionize healthcare access and delivery by providing an integrated, secure, and user-friendly platform that seamlessly connects patients, expert doctors, and administrators. We are committed to improving clinical outcomes and overall system efficiency.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100 mission-vision-card vision-card">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-success mb-3">
+                        <i class="fas fa-eye me-2"></i> Our Vision
+                    </h3>
+                    <p class="card-text fs-5">
+                        A Healthier Tomorrow: To be the global leader in digital health management, enabling a future where quality, patient-centered care is universally accessible, efficient, and predictive, turning data into actionable health insights.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔑 SECTION 3: CORE VALUES (NEW CONTENT) -->
+    <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+            <h2 class="fw-bold"><i class="fas fa-hand-holding-heart me-2"></i> Our Core Values</h2>
+            <p class="text-muted">The principles that guide our technology and our service.</p>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card shadow-sm text-center h-100 feature-card bg-light">
+                <div class="card-body">
+                    <div class="icon-box" style="background-color: #e67e22;"><i class="fas fa-shield-alt fa-2x"></i></div>
+                    <h5 class="card-title fw-bold">Trust & Security</h5>
+                    <p class="card-text">Upholding the highest standards of data security and patient privacy (HIPAA compliant).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card shadow-sm text-center h-100 feature-card bg-light">
+                <div class="card-body">
+                    <div class="icon-box" style="background-color: #3498db;"><i class="fas fa-lightbulb fa-2x"></i></div>
+                    <h5 class="card-title fw-bold">Innovation</h5>
+                    <p class="card-text">Continuously developing smart tools to stay ahead in medical technology and services.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card shadow-sm text-center h-100 feature-card bg-light">
+                <div class="card-body">
+                    <div class="icon-box" style="background-color: #2ecc71;"><i class="fas fa-comments fa-2x"></i></div>
+                    <h5 class="card-title fw-bold">Transparency</h5>
+                    <p class="card-text">Clear communication, understandable costs, and honest dealings in all interactions.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card shadow-sm text-center h-100 feature-card bg-light">
+                <div class="card-body">
+                    <div class="icon-box" style="background-color: #9b59b6;"><i class="fas fa-users fa-2x"></i></div>
+                    <h5 class="card-title fw-bold">Collaboration</h5>
+                    <p class="card-text">Fostering strong partnerships between patients, providers, and medical facilities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🏥 SECTION 4: KEY FEATURES (Enhanced Layout) -->
+    <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+            <h2 class="fw-bold"><i class="fas fa-cogs me-2"></i> Platform Highlights</h2>
+        </div>
+
+        <!-- Feature 1: Easy Appointment Booking -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow feature-card text-center h-100">
+                <div class="card-body">
+                    <div class="icon-box bg-brand-primary"><i class="fas fa-calendar-alt fa-2x"></i></div>
+                    <h5 class="card-title text-brand-primary fw-bold">Smart Scheduling</h5>
+                    <p class="card-text text-start">
+                        Book, reschedule, or cancel appointments in seconds. Our system uses real-time provider availability to ensure you find the perfect time, minimizing wait times and phone tag.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 2: Digital Medical Records -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow feature-card text-center h-100">
+                <div class="card-body">
+                    <div class="icon-box bg-success"><i class="fas fa-file-medical-alt fa-2x"></i></div>
+                    <h5 class="card-title text-success fw-bold">Secure EHR Access</h5>
+                    <p class="card-text text-start">
+                        Access your Electronic Health Records (EHR), lab results, imaging reports, and prescriptions securely 24/7. Share critical medical data instantly with any authorized provider.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 3: Expert Medical Staff -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow feature-card text-center h-100">
+                <div class="card-body">
+                    <div class="icon-box bg-info"><i class="fas fa-user-md fa-2x"></i></div>
+                    <h5 class="card-title text-info fw-bold">Qualified Provider Network</h5>
+                    <p class="card-text text-start">
+                        Find and connect with verified, top-rated specialists across hundreds of medical disciplines. View detailed profiles, patient reviews, and credentials before booking.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 4: Transparent Billing -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow feature-card text-center h-100">
+                <div class="card-body">
+                    <div class="icon-box bg-warning"><i class="fas fa-receipt fa-2x"></i></div>
+                    <h5 class="card-title text-warning fw-bold">Integrated Billing</h5>
+                    <p class="card-text text-start">
+                        Receive clear, itemized invoices instantly. Manage insurance claims and make payments directly through the platform with multiple secure payment gateways.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 5: Security & Privacy -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow feature-card text-center h-100">
+                <div class="card-body">
+                    <div class="icon-box bg-danger"><i class="fas fa-lock fa-2x"></i></div>
+                    <h5 class="card-title text-danger fw-bold">Data Privacy Guarantee</h5>
+                    <p class="card-text text-start">
+                        We prioritize your privacy above all else. Our infrastructure is built with advanced encryption and regulatory compliance to safeguard sensitive health information.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 6: 24/7 Access -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow feature-card text-center h-100">
+                <div class="card-body">
+                    <div class="icon-box bg-secondary"><i class="fas fa-mobile-alt fa-2x"></i></div>
+                    <h5 class="card-title text-secondary fw-bold">Mobile First & Accessible</h5>
+                    <p class="card-text text-start">
+                        Manage your entire healthcare journey from your phone or tablet. Our platform is fully responsive and designed for accessibility for users of all abilities.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 👥 SECTION 5: WHO WE SERVE -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-5 bg-light">
+                    <h3 class="text-center mb-4 fw-bold">
+                        <i class="fas fa-users me-2 text-brand-primary"></i> Our Community
+                    </h3>
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4">
+                            <i class="fas fa-user-injured fa-4x text-brand-primary mb-3"></i>
+                            <h5 class="fw-bold">Patients</h5>
+                            <p>We provide personalized health dashboards, seamless appointment management, and full control over your medical records.</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <i class="fas fa-stethoscope fa-4x text-success mb-3"></i>
+                            <h5 class="fw-bold">Doctors & Providers</h5>
+                            <p>Empowering clinicians with smart tools for patient monitoring, efficient charting, and schedule optimization, reducing administrative burden.</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <i class="fas fa-building fa-4x text-info mb-3"></i>
+                            <h5 class="fw-bold">Hospitals & Clinics</h5>
+                            <p>Offering comprehensive administrative dashboards for resource allocation, billing, compliance reporting, and facility-wide management.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🚀 SECTION 6: FINAL CALL TO ACTION -->
+    <div class="text-center p-5 rounded-3 bg-brand-primary text-white shadow-lg">
+        <h3 class="mb-4 fw-bold">Ready to Experience Smarter Healthcare?</h3>
+        <p class="lead mb-4">Join thousands of users and providers who are transforming their health journey with technology.</p>
+        <a href="@Url.Action("Register", "Account")" class="btn btn-warning btn-lg me-3 fw-bold">
+            <i class="fas fa-user-plus me-2"></i> Get Started Today
+        </a>
+        <a href="@Url.Action("Contact", "Home")" class="btn btn-primary btn-lg fw-bold">
+            <i class="fas fa-envelope me-2"></i> Contact Us
+        </a>
+    </div>
+</div>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>

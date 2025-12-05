@@ -1,0 +1,92 @@
+﻿.dashboard-container {
+    text-align: center;
+    margin: 50px auto;
+    max-width: 900px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+    .dashboard-container h2 {
+        font-size: 28px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .dashboard-container p {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 40px;
+    }
+
+.stats-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.stat-card {
+    width: 250px;
+    padding: 30px;
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+}
+
+    .stat-card:hover {
+        transform: scale(1.05);
+    }
+
+    /* Unique gradient colors */
+    .stat-card.patients {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+    }
+
+    .stat-card.appointments {
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+    }
+
+    .stat-card.reports {
+        background: linear-gradient(135deg, #ff512f, #dd2476);
+    }
+
+    .stat-card h3 {
+        font-size: 38px;
+        margin: 0;
+    }
+
+    .stat-card p {
+        font-size: 16px;
+        opacity: 0.9;
+    }
+
+.quick-actions {
+    margin-top: 40px;
+}
+
+.btn-primary, .btn-secondary, .btn-tertiary {
+    display: inline-block;
+    margin: 10px;
+    padding: 12px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background: #007bff;
+}
+
+.btn-secondary {
+    background: #28a745;
+}
+
+.btn-tertiary {
+    background: #ff6f61;
+}
+
+    .btn-primary:hover, .btn-secondary:hover, .btn-tertiary:hover {
+        opacity: 0.85;
+    }

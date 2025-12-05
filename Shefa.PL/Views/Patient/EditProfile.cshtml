@@ -1,0 +1,132 @@
+﻿@model SmartHealthcare.Models.Patient
+@* NOTE: Replace 'YourNamespace.Models.Patient' with the actual namespace
+    where your Patient model class is defined (e.g., HospitalApp.Models.Patient).
+*@
+
+@{
+    ViewBag.Title = "Edit Patient Profile";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2 class="text-primary mb-4">
+            <span class="d-none d-sm-inline">✏️</span> Edit Patient Profile
+        </h2>
+        <p class="text-muted">Update your personal, contact, and medical details below.</p>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-5">
+    <div class="card-body p-4 p-md-5">
+
+        @using (Html.BeginForm("EditProfile", "Patient", FormMethod.Post, new { @class = "row g-3" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @* --- System Fields (Must be hidden) --- *@
+            @Html.HiddenFor(model => model.PatientID)
+            @Html.HiddenFor(model => model.UserId)
+            @Html.HiddenFor(model => model.RegistrationDate)
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger col-12" })
+
+            @* --- Personal Information Section --- *@
+            <div class="col-12">
+                <h5 class="text-info border-bottom pb-2 mb-3">Personal Information</h5>
+            </div>
+
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.FirstName, new { @class = "form-label" })
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.LastName, new { @class = "form-label" })
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Gender, new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.Gender,
+                    new SelectList(new List<string> { "Male", "Female", "Other" }),
+                    "Select Gender",
+                    new { @class = "form-select" })
+                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.DateOfBirth, new { @class = "form-label" })
+                @* Use the HTML5 date type for better mobile support and date picker *@
+                @Html.EditorFor(model => model.DateOfBirth, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.BloodGroup, new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.BloodGroup,
+                    new SelectList(new List<string> { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Unknown" }),
+                    "Select Blood Group",
+                    new { @class = "form-select" })
+                @Html.ValidationMessageFor(model => model.BloodGroup, "", new { @class = "text-danger" })
+            </div>
+
+            @* --- Contact Information Section --- *@
+            <div class="col-12 mt-4">
+                <h5 class="text-info border-bottom pb-2 mb-3">Contact Information</h5>
+            </div>
+
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Email, new { @class = "form-label" })
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @type = "email" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.ContactNumber, new { @class = "form-label" })
+                @Html.EditorFor(model => model.ContactNumber, new { htmlAttributes = new { @class = "form-control", @type = "tel" } })
+                @Html.ValidationMessageFor(model => model.ContactNumber, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-12">
+                @Html.LabelFor(model => model.Address, new { @class = "form-label" })
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-12">
+                @Html.LabelFor(model => model.EmergencyContact, new { @class = "form-label" })
+                @Html.EditorFor(model => model.EmergencyContact, new { htmlAttributes = new { @class = "form-control", @type = "tel" } })
+                @Html.ValidationMessageFor(model => model.EmergencyContact, "", new { @class = "text-danger" })
+            </div>
+
+            @* --- Medical History Section --- *@
+            <div class="col-12 mt-4">
+                <h5 class="text-info border-bottom pb-2 mb-3">Medical History</h5>
+            </div>
+
+            <div class="col-12">
+                @Html.LabelFor(model => model.Allergies, new { @class = "form-label" })
+                @Html.TextAreaFor(model => model.Allergies, 3, 20, new { @class = "form-control", @placeholder = "List any known allergies (e.g., Penicillin, Peanuts)" })
+                @Html.ValidationMessageFor(model => model.Allergies, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-12">
+                @Html.LabelFor(model => model.MedicalHistory, new { @class = "form-label" })
+                @Html.TextAreaFor(model => model.MedicalHistory, 5, 20, new { @class = "form-control", @placeholder = "Provide a summary of major past illnesses, surgeries, or chronic conditions." })
+                @Html.ValidationMessageFor(model => model.MedicalHistory, "", new { @class = "text-danger" })
+            </div>
+
+            @* --- Submit Button --- *@
+            <div class="col-12 mt-4 text-center">
+                <button type="submit" class="btn btn-lg btn-success me-3">
+                    <i class="fas fa-save me-2"></i> Save Profile
+                </button>
+                @Html.ActionLink("Cancel", "MyProfile", "Patient", null, new { @class = "btn btn-lg btn-outline-secondary" })
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

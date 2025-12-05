@@ -1,32 +1,46 @@
-using Microsoft.AspNetCore.Mvc;
-using Shefa.PL.Models;
-using System.Diagnostics;
+﻿using System.Web.Mvc;
 
-namespace Shefa.PL.Controllers
+namespace SmartHealthcare.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
+        // GET: /Home/Index or just /
+        public ActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        // GET: /Home/About
+        public ActionResult About()
         {
+            ViewBag.Message = "Your comprehensive solution for modern patient and doctor management.";
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        // GET: /Home/Contact
+        public ActionResult Contact()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.Message = "Get in touch with our support team.";
+            return View();
+        }
+
+        // --- NEW PUBLIC PAGES ---
+
+        // GET: /Home/Feedback
+        // Allows users to submit general feedback or read reviews.
+        public ActionResult Reviews()
+        {
+            ViewBag.Title = "Reviews";
+            ViewBag.Message = "Tell us about your experience or read what others are saying.";
+            return View();
+        }
+
+        // GET: /Home/Help
+        // Displays the Help/FAQ section.
+        public ActionResult Help()
+        {
+            ViewBag.Title = "Help / FAQ";
+            return View();
         }
     }
 }

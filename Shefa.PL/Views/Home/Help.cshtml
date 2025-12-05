@@ -1,0 +1,171 @@
+﻿@{
+    ViewBag.Title = "Help / FAQ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">Need Help? We've Got You Covered.</h1>
+        <p class="lead text-muted">
+            Find answers to the most frequently asked questions about appointments, billing, and our services.
+        </p>
+        <div class="mt-4">
+            <button class="btn btn-outline-primary btn-lg me-3" onclick="window.location.href='@Url.Action("Contact", "Home")'">
+                <i class="bi bi-headset me-2"></i> Contact Support
+            </button>
+            <button class="btn btn-primary btn-lg" onclick="window.location.href='@Url.Action("Index", "Home")'">
+                <i class="bi bi-house-door me-2"></i> Go to Homepage
+            </button>
+        </div>
+    </div>
+
+    <!-- Search Bar (UX Enhancement) -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-8">
+            <div class="input-group shadow-sm">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" class="form-control form-control-lg border-start-0" id="faqSearch" placeholder="Type your question here to search the FAQs...">
+                <button class="btn btn-success" type="button">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Accordion Sections -->
+    <div class="row">
+        <!-- Column 1: Appointments and Services -->
+        <div class="col-md-6 mb-4">
+            <h3 class="mb-3 text-secondary"><i class="bi bi-calendar-check me-2"></i>Appointments & Access</h3>
+            <div class="accordion" id="accordionAppointments">
+
+                <div class="accordion-item shadow-sm rounded-3 mb-2">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            How do I book an appointment?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionAppointments">
+                        <div class="accordion-body bg-light">
+                            You can book appointments directly through our online portal after logging in to your patient account. Alternatively, you may call our scheduling office during business hours (Mon-Fri, 9am-5pm).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item shadow-sm rounded-3 mb-2">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            What should I bring to my first appointment?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionAppointments">
+                        <div class="accordion-body bg-light">
+                            Please bring a valid photo ID, your insurance card, a list of all current medications, and any relevant medical records or test results you may have.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item shadow-sm rounded-3 mb-2">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Can I access my medical records online?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionAppointments">
+                        <div class="accordion-body bg-light">
+                            Yes, all patients have secure access to their medical reports and test results through the dedicated Patient Panel once you log in.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Column 2: Billing and Insurance -->
+        <div class="col-md-6 mb-4">
+            <h3 class="mb-3 text-secondary"><i class="bi bi-credit-card me-2"></i>Billing & Insurance</h3>
+            <div class="accordion" id="accordionBilling">
+
+                <div class="accordion-item shadow-sm rounded-3 mb-2">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Which insurance plans do you accept?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionBilling">
+                        <div class="accordion-body bg-light">
+                            We accept most major insurance providers, including Blue Cross, Aetna, Cigna, and UnitedHealthcare. Please contact our billing department to confirm your specific plan is covered.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item shadow-sm rounded-3 mb-2">
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            How can I pay my bill online?
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionBilling">
+                        <div class="accordion-body bg-light">
+                            You can pay your bills quickly and securely by navigating to the Bill & Payment section in the Patient Panel after logging in. We accept all major credit cards.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item shadow-sm rounded-3 mb-2">
+                    <h2 class="accordion-header" id="headingSix">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                            What is your cancellation policy?
+                        </button>
+                    </h2>
+                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionBilling">
+                        <div class="accordion-body bg-light">
+                            We require at least 24 hours notice for appointment cancellations. Appointments cancelled with less notice may be subject to a cancellation fee.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Need More Help Card (UX Enhancement) -->
+    <div class="row justify-content-center mt-5">
+        <div class="col-lg-10">
+            <div class="card p-4 text-center bg-info-subtle border-0 shadow-lg">
+                <div class="card-body">
+                    <h4 class="card-title fw-bold text-info">Didn't find what you were looking for?</h4>
+                    <p class="card-text text-dark">
+                        Our dedicated support team is available to assist you.
+                    </p>
+                    <a href="@Url.Action("Contact", "Home")" class="btn btn-info btn-lg text-white mt-2">
+                        <i class="bi bi-envelope me-2"></i> Email or Call Us Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Simple JavaScript for basic search filtering (UX improvement)
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('faqSearch');
+        const accordionItems = document.querySelectorAll('.accordion-item');
+
+        searchInput.addEventListener('keyup', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+
+            accordionItems.forEach(item => {
+                const headerText = item.querySelector('.accordion-button').textContent.toLowerCase();
+                const bodyText = item.querySelector('.accordion-body').textContent.toLowerCase();
+
+                // Check if the search term is in the header or the body
+                if (headerText.includes(searchTerm) || bodyText.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,143 @@
+﻿@model SmartHealthcare.Models.Bill
+
+@{
+    ViewBag.Title = "Bill Details";
+    var statusColor = Model.PaymentStatus == "Paid" ? "success" :
+                      Model.PaymentStatus == "Pending" ? "warning" : "danger";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <div class="row align-items-center">
+                        <div class="col-6">
+                            <h4 class="mb-0"><i class="fas fa-file-invoice"></i> Bill Details</h4>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="badge bg-@statusColor fs-6">@Model.PaymentStatus</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Hospital/Clinic Header -->
+                    <div class="text-center mb-4">
+                        <h3 class="text-primary">Smart Healthcare System</h3>
+                        <p class="mb-0">123 Healthcare Avenue, Medical City</p>
+                        <p class="mb-0">Phone: +91-1234567890 | Email: info@smarthealthcare.com</p>
+                    </div>
+
+                    <hr />
+
+                    <!-- Bill Information -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Bill Number:</strong> #@Model.BillID</p>
+                            <p class="mb-1"><strong>Date Issued:</strong> @Model.DateIssued.ToString("dd MMMM yyyy")</p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <p class="mb-1"><strong>Appointment ID:</strong> #@Model.AppointmentID</p>
+                            <p class="mb-1"><strong>Payment Status:</strong> <span class="badge bg-@statusColor">@Model.PaymentStatus</span></p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <!-- Patient & Doctor Information -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-primary"><i class="fas fa-user"></i> Patient Information</h6>
+                            <p class="mb-1"><strong>Name:</strong> @Model.Appointment?.Patient?.FullName</p>
+                            <p class="mb-1"><strong>Email:</strong> @Model.Appointment?.Patient?.Email</p>
+                            <p class="mb-1"><strong>Phone:</strong> @Model.Appointment?.Patient?.Phone</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary"><i class="fas fa-user-md"></i> Doctor Information</h6>
+                            <p class="mb-1"><strong>Name:</strong> @Model.Appointment?.Doctor?.FullName</p>
+                            <p class="mb-1"><strong>Specialization:</strong> @Model.Appointment?.Doctor?.Specialization</p>
+                            <p class="mb-1"><strong>Qualification:</strong> @Model.Appointment?.Doctor?.Qualification</p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <!-- Bill Details -->
+                    <h6 class="text-primary mb-3"><i class="fas fa-receipt"></i> Bill Details</h6>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th class="text-end">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Doctor Consultation Fee</td>
+                                <td class="text-end">₹@Model.DoctorFee.ToString("N2")</td>
+                            </tr>
+                            <tr>
+                                <td>Medical Report Fee</td>
+                                <td class="text-end">₹@Model.ReportFee.ToString("N2")</td>
+                            </tr>
+                            <tr class="border-top">
+                                <td><strong>Subtotal</strong></td>
+                                <td class="text-end"><strong>₹@((Model.DoctorFee + Model.ReportFee).ToString("N2"))</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Tax (@((Model.TaxRate * 100).ToString("0.0"))%)</td>
+                                <td class="text-end">₹@(((Model.DoctorFee + Model.ReportFee) * Model.TaxRate).ToString("N2"))</td>
+                            </tr>
+                            <tr class="border-top">
+                                <td><h5 class="mb-0"><strong>Total Amount</strong></h5></td>
+                                <td class="text-end"><h5 class="mb-0 text-primary"><strong>₹@Model.TotalAmount.ToString("N2")</strong></h5></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <hr />
+
+                    <!-- Footer Note -->
+                    <div class="text-center text-muted">
+                        <p class="mb-0"><small>Thank you for choosing Smart Healthcare System</small></p>
+                        <p class="mb-0"><small>For any queries, please contact our billing department</small></p>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <div class="d-flex justify-content-between">
+                        <a href="@Url.Action("Index", "Bills")" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                        <div>
+                            <button onclick="window.print()" class="btn btn-info">
+                                <i class="fas fa-print"></i> Print Bill
+                            </button>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a href="@Url.Action("Edit", "Bills", new { id = Model.BillID })" class="btn btn-warning">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    media print {
+        btn: .card-footer {
+            display: none !important;
+        }
+        .card {
+            box-shadow: none !important;
+        }
+    }
+</style>

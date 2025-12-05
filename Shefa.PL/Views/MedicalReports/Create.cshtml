@@ -1,0 +1,113 @@
+﻿@model SmartHealthcare.Models.MedicalReport
+
+@{
+    ViewBag.Title = "Create Medical Report";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0"><i class="fas fa-file-medical"></i> Create New Medical Report</h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Create", "MedicalReports", FormMethod.Post, new { @class = "needs-validation" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-user-md"></i> Doctor *
+                                </label>
+                                @Html.DropDownList("DoctorID", null, "-- Select Doctor --", new { @class = "form-select", required = "required" })
+                                @Html.ValidationMessageFor(model => model.DoctorID, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-calendar-check"></i> Appointment *
+                                </label>
+                                @Html.DropDownList("AppointmentID", null, "-- Select Appointment --", new { @class = "form-select", required = "required" })
+                                @Html.ValidationMessageFor(model => model.AppointmentID, "", new { @class = "text-danger" })
+                                <small class="form-text text-muted">Only completed appointments are shown</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-stethoscope"></i> Diagnosis *
+                            </label>
+                            @Html.TextAreaFor(model => model.Diagnosis, new { @class = "form-control", rows = "3", required = "required", placeholder = "Enter diagnosis details..." })
+                            @Html.ValidationMessageFor(model => model.Diagnosis, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-pills"></i> Treatment *
+                            </label>
+                            @Html.TextAreaFor(model => model.Treatment, new { @class = "form-control", rows = "4", required = "required", placeholder = "Enter treatment plan and prescribed medications..." })
+                            @Html.ValidationMessageFor(model => model.Treatment, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-flask"></i> Lab Results
+                                </label>
+                                @Html.TextAreaFor(model => model.LabResults, new { @class = "form-control", rows = "3", placeholder = "Enter lab test results (optional)..." })
+                                @Html.ValidationMessageFor(model => model.LabResults, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-comment-medical"></i> Remarks
+                                </label>
+                                @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control", rows = "3", placeholder = "Additional remarks or observations (optional)..." })
+                                @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-calendar-plus"></i> Follow-up Date
+                            </label>
+                            @Html.TextBoxFor(model => model.FollowUpDate, new { @class = "form-control", placeholder = "e.g., After 1 week, 2025-01-15, etc." })
+                            @Html.ValidationMessageFor(model => model.FollowUpDate, "", new { @class = "text-danger" })
+                            <small class="form-text text-muted">Enter follow-up date or instructions</small>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> <strong>Note:</strong> Report date will be automatically set to current date and time.
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-info">
+                                <i class="fas fa-save"></i> Create Medical Report
+                            </button>
+                            <a href="@Url.Action("Index", "MedicalReports")" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    textarea.form-control {
+        resize: vertical;
+    }
+</style>

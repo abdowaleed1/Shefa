@@ -1,124 +1,436 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
 
-<main role="main">
+    /* Home Page Specific Styles (Aligned with Mint/Teal Theme) */
 
-    <section class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-7">
-                    <h1 class="hero-title">The <span class="text-primary-custom">Unified Platform</span> for Modern Healthcare.</h1>
-                    <p class="hero-subtitle">
-                        Shefa connects medical facilities, professionals, and patients with integrated tools for booking, diagnostics, and management.
-                    </p>
-                    <div class="mt-4 d-flex gap-3">
-                        <a href="#patient" class="btn btn-outline-dark rounded-pill px-4 fw-bold">Explore Features</a>
+    /* Hero Section */
+        .hero-section {
+                padding: 80px 0 100px 0;
+                background: linear-gradient(135deg, var(--background-color) 0%, #ffffff 100%);
+
+    }
+
+        .min-vh-75 {
+                min-height: 75vh;
+
+    }
+
+        .hero-title {
+                color: var(--primary-color);
+                font-weight: 700;
+                letter-spacing: -1px;
+
+    }
+
+        .hero-img-container {
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+
+    }
+
+
+    /* Feature Cards /
+    .features-section {
+        padding: 60px 0;
+        background-color: #ffffff; / Use white background for contrast */
+
+    }
+
+        .feature-card {
+                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+                border-radius: 15px;
+                border: 1px solid #f0f0f0;
+                overflow: hidden;
+
+    }
+
+            .feature-card:hover {
+                    transform: translateY(-8px);
+                    box-shadow: 0 12px 25px rgba(0, 168, 150, 0.15) !important;
+
+    }
+
+        .feature-icon {
+                width: 70px;
+                height: 70px;
+                border-radius: 50%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto;
+                font-size: 28px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+
+    }
+
+            .feature-icon.bg-primary {
+                    background-color: var(--primary-color) !important;
+
+    }
+
+            .feature-icon.bg-info {
+                    background-color: var(--secondary-color) !important;
+
+    }
+
+
+    /* How It Works */
+        .how-it-works-section {
+                padding: 60px 0;
+
+    }
+
+        .step-number {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 28px;
+                font-weight: 700;
+                margin: 0 auto;
+                background-color: var(--primary-color);
+                color: #fff;
+
+    }
+
+
+    /* CTA Section */
+        .cta-section {
+                background-color: var(--primary-color);
+                padding: 50px 0;
+                border-radius: 15px;
+                margin-top: 50px;
+                margin-bottom: 50px;
+                box-shadow: 0 10px 20px rgba(0, 168, 150, 0.2);
+
+    }
+
+
+    /* Infinite Logo Ticker (New Dynamic Content) */
+        .logo-ticker {
+                overflow: hidden;
+                padding: 30px 0;
+                background-color: #fff;
+                border-top: 1px solid #eee;
+                border-bottom: 1px solid #eee;
+                white-space: nowrap;
+
+    }
+
+        .logo-slide {
+                display: inline-block;
+                animation: slide-left 30s linear infinite;
+                padding-left: 100%; /* Start off-screen */
+
+    }
+
+            .logo-slide img {
+                    height: 70px; /* <<< INCREASED SIZE HERE /
+            margin: 0 60px; / <<< ADJUSTED MARGIN HERE */
+                    filter: grayscale(100%);
+                    opacity: 0.6;
+                    transition: opacity 0.3s;
+
+    }
+
+                .logo-slide img:hover {
+                        opacity: 1;
+                        filter: grayscale(0%);
+
+    }
+
+        @@keyframes slide-left {
+                0%
+
+    {
+                    transform: translateX(0);
+
+    }
+
+            100% {
+                    transform: translateX(-100%);
+
+    }
+
+
+    }
+
+
+    /* Testimonial Card */
+        .testimonial-card {
+                background-color: #fff;
+                border-radius: 15px;
+                padding: 30px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                border-top: 5px solid var(--primary-color);
+                height: 100%;
+                text-align: center;
+
+    }
+
+                .testimonial-card i {
+                        color: var(--secondary-color);
+                        font-size: 24px;
+                        margin-bottom: 15px;
+
+        }
+
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+                filter: invert(0.8);
+
+    }
+
+
+    /* Stats Section /
+    .stats-section {
+        padding: 80px 0;
+        background-color: #f4fcfb; / Very light background for contrast */
+            border-top: 1px solid #e9ecef;
+            border-bottom: 1px solid #e9ecef;
+
+    }
+</style>
+
+<!-- Hero Section -->
+
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <h1 class="display-3 hero-title mb-4">
+                    Innovating Health,Streamlining Care.
+                </h1>
+                <p class="lead text-muted mb-5">
+                    Your modern, secure, and comprehensive platform for patient records, doctor management, and seamless appointment booking. We connect healthcare, digitally.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-3">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin"))
+                        {
+                            <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-primary btn-lg">
+                                <i class="fas fa-tachometer-alt"></i> Admin Dashboard
+                            </a>
+                        }
+                        else if (User.IsInRole("Doctor"))
+                        {
+                            <a href="@Url.Action("Dashboard", "Doctor")" class="btn btn-primary btn-lg">
+                                <i class="fas fa-stethoscope"></i> Doctor Panel
+                            </a>
+                        }
+                        else if (User.IsInRole("Patient"))
+                        {
+                            <a href="@Url.Action("Dashboard", "Patient")" class="btn btn-primary btn-lg">
+                                <i class="fas fa-user-circle"></i> Patient Panel
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        @*<a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus"></i> Get Started Today
+                        </a>
+                        <a href="@Url.Action("Login", "Account")" class="btn btn-outline-secondary btn-lg" style="--bs-btn-color: var(--primary-color); --bs-btn-border-color: var(--primary-color); --bs-btn-hover-bg: var(--primary-color); --bs-btn-hover-color: #fff;">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </a>*@
+                    }
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-img-container">
+                    <img src="https://media.istockphoto.com/id/1225898954/vector/medical-clinic-building-simple-flat-illustration.jpg?s=612x612&w=0&k=20&c=JklgLCtm5NpwE5i6yN0JTIqp7vPlA7YB3RPYNIUHXlQ=" alt="Smart Healthcare System" class="img-fluid" loading="lazy" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 🔁 Infinite Logo Ticker -->
+
+<section class="logo-ticker">
+    <div class="logo-slide">
+        <img src="~/Content/Images/download.png" alt="Accredited" loading="lazy" />
+        <img src="~/Content/Images/hospital.png" alt="Partner Clinic" loading="lazy" />
+        <img src="~/Content/Images/secured.jpeg" alt="Secure Health" loading="lazy" />
+        <img src="~/Content/Images/best.jpeg" alt="Top Rated 2024" loading="lazy" />
+        <img src="~/Content/Images/google.jpeg" alt="Trusted Platform" loading="lazy" />
+        <img src="~/Content/Images/iso.jpeg" alt="Accredited" loading="lazy" />
+        <img src="~/Content/Images/jci.jpeg" alt="Partner Clinic" loading="lazy" />
+        <img src="~/Content/Images/net.jpeg" alt="Secure Health" loading="lazy" />
+        <img src="~/Content/Images/health.png" alt="Top Rated 2024" loading="lazy" />
+        <img src="~/Content/Images/trusted.jpg" alt="Trusted Platform" loading="lazy" />
+    </div>
+</section>
+
+<!-- Features Section -->
+
+<section class="features-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 font-weight-bold">Seamless Features, Better Outcomes</h2>
+            <p class="lead text-muted">A closer look at how our platform enhances your healthcare experience.</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100 text-center feature-card">
+                    <div class="card-body p-4">
+                        <div class="feature-icon bg-primary text-white mb-3">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h4 class="card-title text-dark">Instant Appointment Booking</h4>
+                        <p class="card-text text-muted">
+                            Find available specialists and book your visit instantly, with email and SMS reminders.
+                        </p>
                     </div>
                 </div>
-                <div class="col-lg-5 text-center d-none d-lg-block">
-
-
-                    [Image of a doctor and patient connecting digitally]
-
-                </div>
             </div>
-        </div>
-    </section>
-
-    <section id="patient" class="platform-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-5 mb-4 mb-lg-0">
-                    [Patient portal screen showing appointment and history]
-                </div>
-                <div class="col-lg-7 ps-lg-5">
-                    <div class="platform-icon-box bg-success">
-                        <i class="fas fa-user-injured"></i>
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100 text-center feature-card">
+                    <div class="card-body p-4">
+                        <div class="feature-icon bg-info text-white mb-3">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h4 class="card-title text-dark">Data Security & Privacy</h4>
+                        <p class="card-text text-muted">
+                            Your medical data is protected with industry-leading encryption and HIPAA compliance standards.
+                        </p>
                     </div>
-                    <h2 class="platform-title">Patient Portal: Simplified Care</h2>
-                    <p class="text-muted lead">Take control of your health journey with easy access to all your medical information.</p>
-                    <ul class="list-unstyled platform-list mt-4">
-                        <li><i class="fas fa-check-circle"></i> Instant Online Appointment Booking.</li>
-                        <li><i class="fas fa-check-circle"></i> Complete Medical History (Full History View).</li>
-                        <li><i class="fas fa-check-circle"></i> Securely Access Prescriptions & Lab Results.</li>
-                        <li><i class="fas fa-check-circle"></i> Manage and Edit Profile Details.</li>
-                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section id="doctor" class="platform-section bg-light-custom">
-        <div class="container">
-            <div class="row align-items-center flex-row-reverse">
-                <div class="col-lg-5 mb-4 mb-lg-0">
-                    [Doctor portal screen showing schedule and patient charts]
-                </div>
-                <div class="col-lg-7 pe-lg-5">
-                    <div class="platform-icon-box bg-primary-custom">
-                        <i class="fas fa-user-md"></i>
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100 text-center feature-card">
+                    <div class="card-body p-4">
+                        <div class="feature-icon bg-success text-white mb-3">
+                            <i class="fas fa-file-waveform"></i>
+                        </div>
+                        <h4 class="card-title text-dark">Digital Health Records</h4>
+                        <p class="card-text text-muted">
+                            Access your complete medical history, lab results, and prescriptions from one secure portal.
+                        </p>
                     </div>
-                    <h2 class="platform-title">Doctor Portal: Enhanced Efficiency</h2>
-                    <p class="text-muted lead">Streamline your daily practice with tools designed to give you more time with your patients.</p>
-                    <ul class="list-unstyled platform-list mt-4">
-                        <li><i class="fas fa-check-circle"></i> Quick Access to Patient Records & History.</li>
-                        <li><i class="fas fa-check-circle"></i> Digital Prescription and Note Management.</li>
-                        <li><i class="fas fa-check-circle"></i> Real-time Schedule and Appointment Overviews.</li>
-                        <li><i class="fas fa-check-circle"></i> Dedicated Profile Editing for Credentials.</li>
-                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section id="manager" class="platform-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-5 mb-4 mb-lg-0">
-                    [Clinic manager dashboard showing stats and doctor list]
-                </div>
-                <div class="col-lg-7 ps-lg-5">
-                    <div class="platform-icon-box bg-warning">
-                        <i class="fas fa-hospital-alt"></i>
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100 text-center feature-card">
+                    <div class="card-body p-4">
+                        <div class="feature-icon bg-warning text-white mb-3" style="background-color:#f39c12 !important;">
+                            <i class="fas fa-notes-medical"></i>
+                        </div>
+                        <h4 class="card-title text-dark">AI-Powered Insights</h4>
+                        <p class="card-text text-muted">
+                            Doctors receive predictive insights to assist with diagnosis and personalized treatment plans.
+                        </p>
                     </div>
-                    <h2 class="platform-title">Clinic Manager: Operational Control</h2>
-                    <p class="text-muted lead">Gain deep insights into performance, revenue, and staff management from a single view.</p>
-                    <ul class="list-unstyled platform-list mt-4">
-                        <li><i class="fas fa-check-circle"></i> Real-time Financial and Appointment Snapshots.</li>
-                        <li><i class="fas fa-check-circle"></i> Doctor Association and Performance Oversight.</li>
-                        <li><i class="fas fa-check-circle"></i> Simplified HR Tasks (Move/Remove Doctors).</li>
-                        <li><i class="fas fa-check-circle"></i> Data-driven Decisions without Clutter (No Full Report).</li>
-                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100 text-center feature-card">
+                    <div class="card-body p-4">
+                        <div class="feature-icon bg-danger text-white mb-3">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4 class="card-title text-dark">24/7 Support</h4>
+                        <p class="card-text text-muted">
+                            Dedicated support team available around the clock to assist patients and medical staff.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100 text-center feature-card">
+                    <div class="card-body p-4">
+                        <div class="feature-icon bg-secondary text-white mb-3">
+                            <i class="fas fa-money-check-alt"></i>
+                        </div>
+                        <h4 class="card-title text-dark">Integrated Billing</h4>
+                        <p class="card-text text-muted">
+                            View, manage, and pay your medical bills directly through the platform effortlessly.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="bg-primary-custom py-5">
-        <div class="container text-center text-white">
-            <div class="row mb-5">
-                <div class="col-md-4">
-                    <h2 class="fw-bold mb-0">120+</h2>
-                    <p class="small text-white-50">Active Doctors</p>
-                </div>
-                <div class="col-md-4">
-                    <h2 class="fw-bold mb-0">98%</h2>
-                    <p class="small text-white-50">Patient Satisfaction</p>
-                </div>
-                <div class="col-md-4">
-                    <h2 class="fw-bold mb-0">5K+</h2>
-                    <p class="small text-white-50">Appointments Booked</p>
-                </div>
+<!-- 📊 Statistics/Metrics Section (ADDED CONTENT) -->
+
+<section class="stats-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 font-weight-bold">Trusted Results, Proven Impact</h2>
+            <p class="lead text-muted">Our growing numbers reflect our commitment to excellence in healthcare technology.</p>
+        </div>
+        <div class="row text-center justify-content-around">
+            <div class="col-6 col-md-3 mb-4">
+                <h3 class="display-4 font-weight-bold" style="color: var(--primary-dark);">12+</h3>
+                <p class="lead text-muted">Years in Service</p>
             </div>
-
-            <div class="mt-4 pt-4 border-top border-white-50">
-                <h3 class="fw-bold mb-3">Ready to See Shefa in Action?</h3>
-                <p class="text-white-50 mb-4">Click below to enter the unified health platform and explore our specialized portals.</p>
-                <a href="Auth.html" class="btn btn-light rounded-pill px-5 fw-bold text-primary-custom btn-lg">Explore All Portals</a>
+            <div class="col-6 col-md-3 mb-4">
+                <h3 class="display-4 font-weight-bold" style="color: var(--secondary-color);">50K+</h3>
+                <p class="lead text-muted">Patients Served</p>
+            </div>
+            <div class="col-6 col-md-3 mb-4">
+                <h3 class="display-4 font-weight-bold" style="color: var(--primary-color);">800+</h3>
+                <p class="lead text-muted">Verified Doctors</p>
+            </div>
+            <div class="col-6 col-md-3 mb-4">
+                <h3 class="display-4 font-weight-bold" style="color: #27ae60;">99%</h3>
+                <p class="lead text-muted">Data Security Rating</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-</main>
+
+<!-- How It Works -->
+
+<section class="how-it-works-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 font-weight-bold">How It Works in 3 Steps</h2>
+            <p class="lead text-muted">A straightforward process designed for maximum convenience.</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-4 text-center">
+                <div class="step-number mb-3">1</div>
+                <h4 class="text-dark">Register & Verify</h4>
+                <p class="text-muted">Quickly create your secure patient or professional account.</p>
+            </div>
+            <div class="col-md-4 mb-4 text-center">
+                <div class="step-number mb-3" style="background-color: var(--secondary-color);">2</div>
+                <h4 class="text-dark">Connect & Schedule</h4>
+                <p class="text-muted">Find your doctor, check their availability, and book your visit.</p>
+            </div>
+            <div class="col-md-4 mb-4 text-center">
+                <div class="step-number mb-3" style="background-color: var(--primary-dark);">3</div>
+                <h4 class="text-dark">Manage & Review</h4>
+                <p class="text-muted">View your consultation summary, digital records, and prescriptions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+
+<section class="cta-section text-white">
+    <div class="container text-center">
+        <h2 class="display-5 mb-3">Your Journey to Smarter Healthcare Starts Now</h2>
+        <p class="lead mb-4">Don't wait. Experience the future of medical management today.</p>
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <a href="@Url.Action("Register", "Account")" class="btn btn-light btn-lg">
+                <i class="fas fa-heartbeat"></i> Join Shefa
+            </a>
+        }
+    </div>
+</section>
+
+<!-- End Content -->

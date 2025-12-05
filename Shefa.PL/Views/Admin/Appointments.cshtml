@@ -1,0 +1,41 @@
+﻿@model IEnumerable<SmartHealthcare.Models.Appointment>
+
+@{
+    ViewBag.Title = "Appointments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold text-dark">Appointments</h2>
+
+        <!-- ✅ Create New Appointment button -->
+        <a href="@Url.Action("Create", "Appointment")" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Create New Appointment
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover bg-white shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Appointment ID</th>
+                <th>Doctor</th>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td>@a.AppointmentID</td>
+                    <td>@a.Doctor?.FullName</td>
+                    <td>@a.Patient?.FullName</td>
+                    <td>@a.AppointmentTime.ToString("dd MMM yyyy")</td>
+                    <td>@a.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

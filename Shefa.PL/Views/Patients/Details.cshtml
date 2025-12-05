@@ -1,0 +1,20 @@
+﻿@model SmartHealthcare.Models.Patient
+@{
+    ViewBag.Title = "Patient Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="text-info mb-4"><i class="bi bi-person-lines-fill"></i> Patient Details</h2>
+
+    <div class="card shadow p-4">
+        <p><strong>Full Name:</strong> @Model.FullName</p>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Phone:</strong> @Model.ContactNumber</p>
+        <p><strong>Address:</strong> @Model.Address</p>
+        <p><strong>Registration Date:</strong> @Model.RegistrationDate.ToShortDateString()</p>
+
+        <a href="@Url.Action("Edit", new { id = Model.PatientID })" class="btn btn-warning"><i class="bi bi-pencil"></i> Edit</a>
+        <a href="@Url.Action("Index")" class="btn btn-secondary">Back</a>
+    </div>
+</div>

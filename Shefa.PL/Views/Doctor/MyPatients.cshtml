@@ -1,0 +1,90 @@
+﻿﻿@model IEnumerable<SmartHealthcare.Models.Patient>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "My Patients";
+}
+
+<div class="container mt-4 patient-table-container">
+    <h4 class="mb-3 text-primary fw-bold text-center">Patients Under Your Care</h4>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-hover table-bordered shadow-sm bg-white rounded">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>#</th>
+                    <th>Patient Name</th>
+                    <th>Age</th>
+                    <th>Contact</th>
+                    <th>Last Visit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int count = 1;
+                    foreach (var patient in Model)
+                    {
+                        <tr class="align-middle text-center">
+                            <td>@count</td>
+                            <td>@patient.PatientName</td>
+                            <td>@patient.Age</td>
+                            <td>@patient.ContactNumber</td>
+                            <td>
+                                @{
+                                    var lastVisit = patient.Appointments?
+                                        .OrderByDescending(a => a.AppointmentTime)
+                                        .FirstOrDefault()?.AppointmentTime;
+
+                                    if (lastVisit != null)
+                                    {
+                                        @lastVisit.Value.ToString("dd MMM yyyy")
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No Visits Yet</span>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info text-center mt-4 shadow-sm">
+            No patients found under your care yet.
+        </div>
+    }
+</div>
+<style>
+    .patient-table-container {
+        background-color: #f9f9f9;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .table {
+        border-radius: 10px !important;
+        overflow: hidden;
+    }
+
+        .table thead {
+            background: linear-gradient(90deg, #0d6efd, #007bff);
+            color: white;
+        }
+
+        .table tbody tr:hover {
+            background-color: #eef5ff;
+            transition: 0.3s ease;
+        }
+
+    h4 {
+        font-weight: 600;
+        color: #0d6efd;
+    }
+</style>

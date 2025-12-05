@@ -1,0 +1,257 @@
+﻿@{
+    ViewBag.Title = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-primary">
+                <i class="fas fa-tachometer-alt"></i> Admin Dashboard
+            </h2>
+            <p class="text-muted">System Overview & Management</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-gradient-primary text-white shadow">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="text-uppercase mb-1">Total Doctors</h6>
+                            <h2 class="mb-0">@ViewBag.TotalDoctors</h2>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user-md fa-3x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="@Url.Action("Doctors", "Admin")" class="text-white small">
+                        View Details <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-gradient-success text-white shadow">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="text-uppercase mb-1">Total Patients</h6>
+                            <h2 class="mb-0">@ViewBag.TotalPatients</h2>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-3x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="@Url.Action("Patients", "Admin")" class="text-white small">
+                        View Details <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-gradient-info text-white shadow">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="text-uppercase mb-1">Appointments</h6>
+                            <h2 class="mb-0">@ViewBag.TotalAppointments</h2>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar-check fa-3x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="@Url.Action("Appointments", "Admin")" class="text-white small">
+                        View Details <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-gradient-warning text-white shadow">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="text-uppercase mb-1">Total Reports</h6>
+                            <h2 class="mb-0">@ViewBag.TotalReports</h2>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-file-medical fa-3x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="@Url.Action("MedicalReports", "Admin")" class="text-white small">
+                        View Details <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Management Links -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-tasks"></i> Quick Management</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="@Url.Action("Index", "Doctors")" class="btn btn-outline-primary btn-block btn-lg">
+                                <i class="fas fa-user-md fa-2x mb-2"></i><br>
+                                Manage Doctors
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="@Url.Action("Index", "Patients")" class="btn btn-outline-success btn-block btn-lg">
+                                <i class="fas fa-users fa-2x mb-2"></i><br>
+                                Manage Patients
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="@Url.Action("Index", "Appointments")" class="btn btn-outline-info btn-block btn-lg">
+                                <i class="fas fa-calendar fa-2x mb-2"></i><br>
+                                Appointments
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="@Url.Action("Index", "Bills")" class="btn btn-outline-warning btn-block btn-lg">
+                                <i class="fas fa-file-invoice-dollar fa-2x mb-2"></i><br>
+                                Billing
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-3 mb-3">
+                            <a href="@Url.Action("Index", "MedicalReports")" class="btn btn-outline-danger btn-block btn-lg">
+                                <i class="fas fa-notes-medical fa-2x mb-2"></i><br>
+                                Medical Reports
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="@Url.Action("Index", "Prescriptions")" class="btn btn-outline-secondary btn-block btn-lg">
+                                <i class="fas fa-prescription fa-2x mb-2"></i><br>
+                                Prescriptions
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="@Url.Action("Index", "Schedules")" class="btn btn-outline-dark btn-block btn-lg">
+                                <i class="fas fa-clock fa-2x mb-2"></i><br>
+                                Schedules
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="@Url.Action("AddMedicalReport", "Admin")" class="btn btn-outline-primary btn-block btn-lg">
+                                <i class="fas fa-plus-circle fa-2x mb-2"></i><br>
+                                Add Report
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-chart-line text-info"></i> System Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td><i class="fas fa-circle text-primary"></i> Total Doctors</td>
+                                    <td class="text-right"><strong>@ViewBag.TotalDoctors</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-circle text-success"></i> Total Patients</td>
+                                    <td class="text-right"><strong>@ViewBag.TotalPatients</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-circle text-info"></i> Total Appointments</td>
+                                    <td class="text-right"><strong>@ViewBag.TotalAppointments</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-circle text-warning"></i> Medical Reports</td>
+                                    <td class="text-right"><strong>@ViewBag.TotalReports</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-circle text-danger"></i> Total Bills</td>
+                                    <td class="text-right"><strong>@ViewBag.TotalBills</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-info-circle text-primary"></i> System Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>System Status:</strong> <span class="badge badge-success">Active</span></p>
+                    <p><strong>Last Updated:</strong> @DateTime.Now.ToString("MMM dd, yyyy hh:mm tt")</p>
+                    <p><strong>Admin:</strong> System Administrator</p>
+                    <hr>
+                    <h6>Quick Links:</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="@Url.Action("Doctors", "Admin")"><i class="fas fa-angle-right"></i> View All Doctors</a></li>
+                        <li><a href="@Url.Action("Patients", "Admin")"><i class="fas fa-angle-right"></i> View All Patients</a></li>
+                        <li><a href="@Url.Action("Appointments", "Admin")"><i class="fas fa-angle-right"></i> View All Appointments</a></li>
+                        <li><a href="@Url.Action("Bills", "Admin")"><i class="fas fa-angle-right"></i> View All Bills</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .opacity-50 {
+        opacity: 0.5;
+    }
+
+    .bg-gradient-primary {
+        background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(87deg, #2dce89 0, #2dcecc 100%);
+    }
+
+    .bg-gradient-info {
+        background: linear-gradient(87deg, #11cdef 0, #1171ef 100%);
+    }
+
+    .bg-gradient-warning {
+        background: linear-gradient(87deg, #fb6340 0, #fbb140 100%);
+    }
+
+    .card {
+        border-radius: 10px;
+    }
+
+    .btn-lg {
+        padding: 20px;
+    }
+</style>

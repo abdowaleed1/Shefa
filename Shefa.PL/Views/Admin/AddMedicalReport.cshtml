@@ -1,0 +1,94 @@
+﻿@model SmartHealthcare.Models.MedicalReport
+
+@{
+    ViewBag.Title = "Add Medical Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h3 class="text-primary mb-3">🩺 Add New Medical Report</h3>
+    <hr />
+
+    @using (Html.BeginForm("AddMedicalReport", "Admin", FormMethod.Post))
+
+    {
+        @Html.AntiForgeryToken()
+
+        <!-- ✅ Appointment ID -->
+        <div class="form-group mb-3">
+            @Html.LabelFor(m => m.AppointmentID, "Appointment", new { @class = "form-label fw-semibold" })
+            @Html.DropDownList("AppointmentID", (SelectList)ViewBag.Appointments, "Select Appointment", new { @class = "form-select" })
+            @Html.ValidationMessageFor(m => m.AppointmentID, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- ✅ Doctor Name -->
+        <div class="form-group mb-3">
+            @Html.LabelFor(m => m.DoctorName, "Doctor Name", new { @class = "form-label fw-semibold" })
+            @Html.TextBoxFor(m => m.DoctorName, new { @class = "form-control", placeholder = "Enter Doctor's Name" })
+            @Html.ValidationMessageFor(m => m.DoctorName, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- ✅ Diagnosis -->
+        <div class="form-group mb-3">
+            @Html.LabelFor(m => m.Diagnosis, "Diagnosis", new { @class = "form-label fw-semibold" })
+            @Html.TextBoxFor(m => m.Diagnosis, new { @class = "form-control", placeholder = "Enter Diagnosis" })
+            @Html.ValidationMessageFor(m => m.Diagnosis, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- ✅ Doctor's Notes -->
+        <div class="form-group mb-3">
+            @Html.LabelFor(m => m.DoctorNotes, "Doctor's Notes", new { @class = "form-label fw-semibold" })
+            @Html.TextAreaFor(m => m.DoctorNotes, new { @class = "form-control", rows = 3, placeholder = "Write detailed notes..." })
+            @Html.ValidationMessageFor(m => m.DoctorNotes, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- ✅ Test Results -->
+        <div class="form-group mb-3">
+            @Html.LabelFor(m => m.TestResults, "Test Results", new { @class = "form-label fw-semibold" })
+            @Html.TextAreaFor(m => m.TestResults, new { @class = "form-control", rows = 3, placeholder = "Enter test results (if any)" })
+            @Html.ValidationMessageFor(m => m.TestResults, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- ✅ Report Date -->
+        <div class="form-group mb-3">
+            @Html.LabelFor(m => m.ReportDate, "Report Date", new { @class = "form-label fw-semibold" })
+            @Html.TextBoxFor(m => m.ReportDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(m => m.ReportDate, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- ✅ Buttons -->
+        <div class="mt-4">
+            <button type="submit" class="btn btn-success me-2">
+                <i class="bi bi-save"></i> Save Report
+            </button>
+            <a href="@Url.Action("MedicalReports", "Admin")" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Reports
+            </a>
+        </div>
+    }
+</div>
+
+<!-- ✅ Optional Styling -->
+<style>
+    .container {
+        background: #fff;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        max-width: 700px;
+    }
+
+    h3 {
+        font-weight: 600;
+        color: #0d6efd;
+    }
+
+    .form-label {
+        color: #2c3e50;
+    }
+
+    .btn {
+        font-weight: 500;
+        border-radius: 6px;
+    }
+</style>

@@ -1,0 +1,31 @@
+﻿@model IEnumerable<SmartHealthcare.Models.Patient>
+@{
+    ViewBag.Title = "Patients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<table class="table table-bordered table-striped shadow-sm bg-white">
+    <thead class="table-dark">
+        <tr>
+            <th>Patient ID</th>
+            <th>Full Name</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Contact</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.PatientID</td>
+                <td>@p.FullName</td>
+                <td>@p.Gender</td>
+                <td>@p.Age</td>
+                <td>@p.ContactNumber</td>
+                <td>@p.Address</td>
+            </tr>
+        }
+    </tbody>
+</table>

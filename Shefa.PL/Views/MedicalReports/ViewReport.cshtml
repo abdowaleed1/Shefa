@@ -1,0 +1,36 @@
+﻿@model SmartHealthcare.Models.MedicalReport
+@{
+    ViewBag.Title = "View Medical Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary fw-bold mb-4"><i class="bi bi-file-earmark-medical"></i> Medical Report Details</h2>
+
+    <div class="card shadow-sm p-4">
+        <dl class="row">
+            <dt class="col-sm-3">Appointment ID</dt>
+            <dd class="col-sm-9">@Model.AppointmentID</dd>
+
+            <dt class="col-sm-3">Doctor Name</dt>
+            <dd class="col-sm-9">@Model.DoctorName</dd>
+
+            <dt class="col-sm-3">Diagnosis</dt>
+            <dd class="col-sm-9">@Model.Diagnosis</dd>
+
+            <dt class="col-sm-3">Test Results</dt>
+            <dd class="col-sm-9">@Model.TestResults</dd>
+
+            <dt class="col-sm-3">Doctor Notes</dt>
+            <dd class="col-sm-9">@Model.DoctorNotes</dd>
+
+            <dt class="col-sm-3">Report Date</dt>
+            <dd class="col-sm-9">@Model.ReportDate.ToShortDateString()</dd>
+        </dl>
+    </div>
+
+    <div class="text-end mt-3">
+        <a href="@Url.Action("Edit", new { id = Model.MedicalReportID })" class="btn btn-warning"><i class="bi bi-pencil"></i> Edit</a>
+        <a href="@Url.Action("Index", "Report")" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+    </div>
+</div>
