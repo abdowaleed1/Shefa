@@ -1,0 +1,57 @@
+﻿﻿@model IEnumerable<SmartHealthcare.Models.Appointment>
+
+@{
+    ViewBag.Title = "My Appointments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center mb-4">My Appointments</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger text-center">@TempData["Error"]</div>
+}
+
+<table class="table table-bordered table-striped table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>Appointment Date & Time</th>
+            <th>Patient Name</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Doctor Fee</th>
+            <th>Report Fee</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.AppointmentTime.ToString("dd-MM-yyyy hh:mm tt")</td>
+                    <td>@(item.Patient != null ? item.Patient.PatientName : "N/A")</td>
+                    <td>@item.Reason</td>
+                    <td>@item.Status</td>
+                    <td>$@item.DoctorFee</td>
+                    <td>$@item.ReportFee</td>
+                    <td>
+                        @Html.ActionLink("Details", "Details", "Appointments", new { id = item.AppointmentID }, new { @class = "btn btn-sm btn-info" })
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center text-muted">No appointments found.</td>
+            </tr>
+        }
+    </tbody>
+</table>

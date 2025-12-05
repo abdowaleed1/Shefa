@@ -1,0 +1,223 @@
+﻿@model SmartHealthcare.Models.Appointment
+
+@{
+    ViewBag.Title = "Appointment Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="text-primary">
+                <i class="fas fa-calendar-alt"></i> Appointment Details
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Appointments")">Appointments</a></li>
+                    <li class="breadcrumb-item active">Details</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> Appointment Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Appointment ID</h6>
+                            <p class="font-weight-bold">#@Model.AppointmentID</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Status</h6>
+                            <p>
+                                @if (Model.Status == "Scheduled")
+                                {
+                                    <span class="badge badge-success badge-lg">@Model.Status</span>
+                                }
+                                else if (Model.Status == "Completed")
+                                {
+                                    <span class="badge badge-primary badge-lg">@Model.Status</span>
+                                }
+                                else if (Model.Status == "Cancelled")
+                                {
+                                    <span class="badge badge-danger badge-lg">@Model.Status</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-secondary badge-lg">@Model.Status</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="text-muted"><i class="far fa-calendar"></i> Date</h6>
+                            <p class="font-weight-bold">@Model.AppointmentTime.ToString("dddd, MMMM dd, yyyy")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted"><i class="far fa-clock"></i> Time</h6>
+                            <p class="font-weight-bold">@Model.AppointmentTime.ToString("hh:mm tt")</p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="mb-3">
+                        <h6 class="text-muted"><i class="fas fa-notes-medical"></i> Reason for Visit</h6>
+                        <p>@Model.Reason</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Information -->
+            @if (Model.Patient != null)
+            {
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-user"></i> Patient Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-muted">Full Name</h6>
+                                <p class="font-weight-bold">@Model.Patient.FullName</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-muted">Email</h6>
+                                <p>@Model.Patient.Email</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-muted">Contact Number</h6>
+                                <p>@Model.Patient.ContactNumber</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-muted">Blood Group</h6>
+                                <p>@Model.Patient.BloodGroup</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Doctor Information -->
+            @if (Model.Doctor != null)
+            {
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-user-md"></i> Doctor Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-muted">Doctor Name</h6>
+                                <p class="font-weight-bold">Dr. @Model.Doctor.FullName</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-muted">Specialization</h6>
+                                <p>@Model.Doctor.Specialization</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-muted">Email</h6>
+                                <p>@Model.Doctor.Email</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-muted">Contact Number</h6>
+                                <p>@Model.Doctor.ContactNumber</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-md-4">
+            <!-- Fee Details -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0"><i class="fas fa-rupee-sign"></i> Fee Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Doctor Fee:</span>
+                        <strong>$@Model.DoctorFee</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Report Fee:</span>
+                        <strong>$@Model.ReportFee</strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <strong>Total Amount:</strong>
+                        <strong class="text-success">$@(Model.DoctorFee + Model.ReportFee)</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fas fa-cog"></i> Actions</h5>
+                </div>
+                <div class="card-body">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="@Url.Action("Edit", "Appointments", new { id = Model.AppointmentID })"
+                           class="btn btn-warning btn-block mb-2">
+                            <i class="fas fa-edit"></i> Edit Appointment
+                        </a>
+                        <a href="@Url.Action("Delete", "Appointments", new { id = Model.AppointmentID })"
+                           class="btn btn-danger btn-block mb-2">
+                            <i class="fas fa-trash"></i> Delete Appointment
+                        </a>
+                    }
+
+                    @if (User.IsInRole("Doctor") && Model.Status == "Scheduled")
+                    {
+                        @*using (Html.BeginForm("UpdateStatus", "Appointments", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.AppointmentID" />
+                            <input type="hidden" name="status" value="Completed" />
+                            <button type="submit" class="btn btn-success btn-block mb-2">
+                                <i class="fas fa-check"></i> Mark as Completed
+                            </button>
+                        }*@
+                    }
+                    @if (User.IsInRole("Patient"))
+                    { 
+                        <a href="@Url.Action("MyAppointments", "Patient")" class="btn btn-secondary btn-block">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    }
+                    @if (User.IsInRole("Doctor"))
+                    {
+                        <a href="@Url.Action("MyAppointments", "Doctor")" class="btn btn-secondary btn-block">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .badge-lg {
+        font-size: 1rem;
+        padding: 0.5em 1em;
+    }
+
+    .card {
+        border-radius: 10px;
+    }
+</style>

@@ -1,0 +1,36 @@
+﻿@model SmartHealthcare.Models.Doctor
+
+@{
+    ViewBag.Title = "Doctor Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary">👨‍⚕️ Doctor Details</h2>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-3">Full Name</dt>
+        <dd class="col-sm-9">@Model.FullName</dd>
+
+        <dt class="col-sm-3">Specialization</dt>
+        <dd class="col-sm-9">@Model.Specialization</dd>
+
+        <dt class="col-sm-3">License Number</dt>
+        <dd class="col-sm-9">@Model.MedicalLicenseNumber</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Contact Number</dt>
+        <dd class="col-sm-9">@Model.ContactNumber</dd>
+
+        <dt class="col-sm-3">Hiring Date</dt>
+        <dd class="col-sm-9">@Model.HiringDate.ToString("dd-MMM-yyyy")</dd>
+    </dl>
+
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.DoctorID }, new { @class = "btn btn-warning" }) |
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+    </p>
+</div>

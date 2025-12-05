@@ -1,0 +1,90 @@
+﻿@model SmartHealthcare.Models.Appointment
+@{
+    ViewBag.Title = "Reschedule Appointment";
+}
+<h2 class="text-center mb-4">Reschedule Appointment</h2>
+
+<div id="statusMessageContainer">
+    @if (ViewBag.SuccessMessage != null)
+    {
+        <div class="alert alert-success text-center">
+            @ViewBag.SuccessMessage
+        </div>
+    }
+    @* Container for client-side JavaScript messages *@
+    <div id="clientErrorAlert" class="alert alert-danger text-center" style="display:none;"></div>
+</div>
+
+@using (Html.BeginForm("Edit", "Appointments", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @* CRITICAL: Must include the AppointmentID for the update action *@
+        @Html.HiddenFor(model => model.AppointmentID)
+        @Html.HiddenFor(model => model.PatientID)
+        @Html.HiddenFor(model => model.DoctorID)
+        @Html.HiddenFor(model => model.Reason)
+        @Html.HiddenFor(model => model.DoctorFee)
+        @Html.HiddenFor(model => model.ReportFee)
+
+        @* FIX: Added Status to the hidden fields to satisfy the [Required] attribute during POST validation. *@
+        @Html.HiddenFor(model => model.Status)
+
+        <!-- Display Only: Patient Name -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.PatientName, "Patient Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.PatientName, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <!-- Display Only: Doctor Name -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.DoctorName, "Doctor Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.DoctorName, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <!-- Display Only: Current Appointment Time -->
+        <div class="form-group">
+            @Html.Label("Current Time", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static">@Html.DisplayFor(model => model.AppointmentTime)</p>
+            </div>
+        </div>
+
+        <!-- EDITABLE: New Appointment Date & Time -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.AppointmentTime, "New Date & Time", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @* Ensure the DateTime format is correct for the datetime-local input type *@
+                @Html.TextBoxFor(model => model.AppointmentTime, "{0:yyyy-MM-ddTHH:mm}", new { type = "datetime-local", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AppointmentTime)
+            </div>
+        </div>
+
+        <!-- Display Only: Reason -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Reason, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group text-center mt-4">
+            <input type="submit" value="Reschedule Appointment" class="btn btn-warning" />
+        </div>
+    </div>
+}
+
+<div class="text-center mt-3">
+    @Html.ActionLink("Cancel and Back to List", "MyAppointments", "Patient", null, new { @class = "btn btn-secondary" })
+</div>
+
+@section Scripts {
+    @* We only need client-side validation, no custom jQuery/AJAX is required for rescheduling *@
+    @Scripts.Render("~/bundles/jqueryval")
+}

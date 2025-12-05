@@ -1,0 +1,123 @@
+﻿@model SmartHealthcare.Models.Appointment
+@{
+    ViewBag.Title = "Book Appointment";
+}
+<h2 class="text-center mb-4">Book New Appointment</h2>
+
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="alert alert-success text-center">
+        @ViewBag.SuccessMessage
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <!-- Patient Name (readonly) -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.PatientName, "Patient Name", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.PatientName, new { @class = "form-control", placeholder = "Enter your name" })
+            @Html.HiddenFor(model => model.PatientID, new { Value = ViewBag.CurrentPatientID })
+            @Html.ValidationMessageFor(model => model.PatientName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <!-- Doctor Dropdown -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.DoctorID, "Doctor Name", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("DoctorID", (SelectList)ViewBag.DoctorID, "Select Doctor", new { @class = "form-control", id = "doctorDropdown" })
+            @Html.ValidationMessageFor(model => model.DoctorID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <!-- Appointment Date & Time -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.AppointmentTime, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.AppointmentTime, "{0:yyyy-MM-ddTHH:mm}", new { type = "datetime-local", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.AppointmentTime)
+        </div>
+    </div>
+
+    <!-- Reason -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Reason, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Reason)
+        </div>
+    </div>
+
+    <!-- Doctor Fee (readonly, auto-filled) -->
+    <div class="form-group">
+        @Html.Label("Doctor Fee", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="text" id="doctorFeeDisplay" class="form-control" value="0" readonly />
+            @Html.Hidden("DoctorFee", 0, new { id = "doctorFeeHidden" })
+        </div>
+    </div>
+
+    <!-- Report Fee (readonly, auto-filled) -->
+    <div class="form-group">
+        @Html.Label("Report Fee", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="text" id="reportFeeDisplay" class="form-control" value="0" readonly />
+            @Html.Hidden("ReportFee", 0, new { id = "reportFeeHidden" })
+        </div>
+    </div>
+
+    <!-- Hidden Status -->
+    @Html.HiddenFor(model => model.Status, new { Value = "Scheduled" })
+
+    <div class="form-group text-center mt-3">
+        <input type="submit" value="Book Appointment" class="btn btn-primary" />
+    </div>
+</div>
+}
+
+<div class="text-center mt-3">
+    @Html.ActionLink("Back to Dashboard", "Dashboard", "Patient", null, new { @class = "btn btn-secondary" })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // When doctor is selected, fetch their fees
+            $('#doctorDropdown').change(function () {
+                var doctorId = $(this).val();
+
+                if (doctorId && doctorId !== "") {
+                    $.ajax({
+                        url: '@Url.Action("GetDoctorFees", "Appointments")',
+                        type: 'GET',
+                        data: { doctorId: doctorId },
+                        success: function (response) {
+                            if (response.success) {
+                                $('#doctorFeeDisplay').val(response.doctorFee);
+                                $('#reportFeeDisplay').val(response.reportFee);
+                                $('#doctorFeeHidden').val(response.doctorFee);
+                                $('#reportFeeHidden').val(response.reportFee);
+                            } else {
+                                alert('Unable to fetch doctor fees. Please try again.');
+                            }
+                        },
+                        error: function () {
+                            alert('Error fetching doctor fees. Please try again.');
+                        }
+                    });
+                } else {
+                    $('#doctorFeeDisplay').val('0');
+                    $('#reportFeeDisplay').val('0');
+                    $('#doctorFeeHidden').val('0');
+                    $('#reportFeeHidden').val('0');
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,199 @@
+﻿@{
+    ViewBag.Title = "Contact Us";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4"><i class="fas fa-envelope"></i> Contact Us</h1>
+        <p class="lead text-muted">@ViewBag.Message</p>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow text-center h-100">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-map-marker-alt fa-3x text-danger"></i>
+                    </div>
+                    <h5 class="card-title">Our Location</h5>
+                    <p class="card-text">
+                        El Shaheed Farid Nada St<br />
+                        El Mansheya<br />
+                        Banha, Kaliobeya<br />
+                        Egypt
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow text-center h-100">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-phone fa-3x text-success"></i>
+                    </div>
+                    <h5 class="card-title">Phone</h5>
+                    <p class="card-text">
+                        <strong>Main Line:</strong> 048 253 7061<br />
+                        <strong>Appointments:</strong> +201212405470 <br />
+                        <strong>Mon-Sat:</strong> 8:00 AM - 8:00 PM
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow text-center h-100">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-envelope fa-3x text-primary"></i>
+                    </div>
+                    <h5 class="card-title">Email</h5>
+                    <p class="card-text">
+                        <strong>General:</strong> info@Shefa.com<br />
+                        <strong>Support:</strong> support@Shefa.com<br />
+                        <strong>Appointments:</strong> appointments@Shefa.com<br />
+                        <strong>Response Time:</strong> 24-48 hours
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-paper-plane"></i> Send Us a Message</h4>
+                </div>
+                <div class="card-body">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name" class="font-weight-bold">Your Name *</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter your full name" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="font-weight-bold">Email Address *</label>
+                            <input type="email" class="form-control" id="email" placeholder="your.email@example.com" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone" class="font-weight-bold">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" placeholder="+91 98765 43210" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject" class="font-weight-bold">Subject *</label>
+                            <select class="form-control" id="subject" required>
+                                <option value="">-- Select Subject --</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="appointment">Appointment Query</option>
+                                <option value="billing">Billing Question</option>
+                                <option value="technical">Technical Support</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message" class="font-weight-bold">Message *</label>
+                            <textarea class="form-control" id="message" rows="5"
+                                      placeholder="Please describe your inquiry in detail..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0"><i class="fas fa-clock"></i> Operating Hours</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <td><strong>Monday - Friday</strong></td>
+                                <td>8:00 AM - 8:00 PM</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Saturday</strong></td>
+                                <td>9:00 AM - 6:00 PM</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sunday</strong></td>
+                                <td>10:00 AM - 4:00 PM</td>
+                            </tr>
+                            <tr class="table-warning">
+                                <td><strong>Emergency Services</strong></td>
+                                <td>24/7 Available</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <hr />
+
+                    <h5 class="mt-4"><i class="fas fa-info-circle"></i> Quick Information</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success"></i>
+                            Multilingual support available
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success"></i>
+                            Online appointment booking
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success"></i>
+                            Video consultation available
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success"></i>
+                            Insurance accepted
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success"></i>
+                            Free parking available
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success"></i>
+                            Wheelchair accessible
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#contactForm').on('submit', function(e) {
+                e.preventDefault();
+
+                // Basic form validation
+                var name = $('#name').val();
+                var email = $('#email').val();
+                var subject = $('#subject').val();
+                var message = $('#message').val();
+
+                if (name && email && subject && message) {
+                    alert('Thank you for contacting us! We will respond to your inquiry within 24-48 hours.');
+                    this.reset();
+                } else {
+                    alert('Please fill in all required fields.');
+                }
+            });
+        });
+    </script>
+}

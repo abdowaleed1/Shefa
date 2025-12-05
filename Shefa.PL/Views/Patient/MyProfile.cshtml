@@ -1,0 +1,99 @@
+﻿@model SmartHealthcare.Models.Patient
+@{
+    ViewBag.Title = "My Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // adjust if needed
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">👤 Patient Profile</h3>
+        </div>
+        <div class="card-body p-4">
+            @if (Model != null)
+            {
+                <div class="row mb-4">
+                    <div class="col-md-4 text-center">
+                        <h4 class="mt-3 text-primary">@Model.FullName</h4>
+                        <p class="text-muted">
+                            Age: @(Model.Age.HasValue ? Model.Age.Value.ToString() : "N/A")<br />
+                            Gender: @Model.Gender
+                        </p>
+                    </div>
+
+                    <div class="col-md-8">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>First Name</th>
+                                <td>@Model.FirstName</td>
+                            </tr>
+                            <tr>
+                                <th>Last Name</th>
+                                <td>@Model.LastName</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>@(String.IsNullOrEmpty(Model.Email) ? "Not Specified" : Model.Email)</td>
+                            </tr>
+                            <tr>
+                                <th>Contact Number</th>
+                                <td>@Model.ContactNumber</td>
+                            </tr>
+                            <tr>
+                                <th>Address</th>
+                                <td>@(String.IsNullOrEmpty(Model.Address) ? "Not Specified" : Model.Address)</td>
+                            </tr>
+                            <tr>
+                                <th>Emergency Contact</th>
+                                <td>@(String.IsNullOrEmpty(Model.EmergencyContact) ? "Not Specified" : Model.EmergencyContact)</td>
+                            </tr>
+                            <tr>
+                                <th>Blood Group</th>
+                                <td>@(String.IsNullOrEmpty(Model.BloodGroup) ? "Not Specified" : Model.BloodGroup)</td>
+                            </tr>
+                            <tr>
+                                <th>Allergies</th>
+                                <td>@(String.IsNullOrEmpty(Model.Allergies) ? "None" : Model.Allergies)</td>
+                            </tr>
+                            <tr>
+                                <th>Medical History</th>
+                                <td>@(String.IsNullOrEmpty(Model.MedicalHistory) ? "None" : Model.MedicalHistory)</td>
+                            </tr>
+                            <tr>
+                                <th>Registration Date</th>
+                                <td>@Model.RegistrationDate.ToString("dd MMM yyyy")</td>
+                            </tr>
+                        </table>
+
+                        <div class="mt-3 text-end">
+                            <a href="@Url.Action("EditProfile", "Patient")" class="btn btn-outline-primary me-2">
+                                ✏️ Edit Profile
+                            </a>
+                            <a href="@Url.Action("Dashboard", "Patient")" class="btn btn-secondary">
+                                ⬅ Back to Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning text-center">
+                    Profile not found. Please complete your profile.
+                    <a href="@Url.Action("CompleteProfile", "Patient")" class="btn btn-sm btn-warning ms-2">Complete Now</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 900px;
+    }
+
+    .table th {
+        width: 35%;
+        background: #f8f9fa;
+    }
+</style>

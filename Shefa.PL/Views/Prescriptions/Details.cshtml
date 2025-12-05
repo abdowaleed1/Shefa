@@ -1,0 +1,19 @@
+﻿@model SmartHealthcare.Models.Prescription
+
+@{
+    ViewBag.Title = "Prescription Details";
+}
+
+<h2>Prescription Details</h2>
+
+<div class="details-box">
+    <p><strong>Drug Name:</strong> @Model.DrugName</p>
+    <p><strong>Dosage:</strong> @Model.Dosage</p>
+    <p><strong>Instructions:</strong> @Model.Instructions</p>
+    <p><strong>Date Issued:</strong> @Model.DateIssued.ToShortDateString()</p>
+    <p><strong>Appointment Reason:</strong> @Model.Appointment?.Reason</p>
+</div>
+
+<p>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+</p>

@@ -1,0 +1,103 @@
+﻿@model IEnumerable<SmartHealthcare.Models.MedicalReport>
+
+@{
+    ViewBag.Title = "My Medical Reports";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2><i class="fas fa-file-medical"></i> My Medical Reports</h2>
+            <p class="text-muted">View all your medical reports and diagnoses</p>
+        </div>
+    </div>
+
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var report in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card report-card h-100 shadow">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-notes-medical"></i> Report #@report.MedicalReportID
+                            </h5>
+                            <small>@report.ReportDate.ToString("dd MMM yyyy, hh:mm tt")</small>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-2">
+                                <strong><i class="fas fa-user-md"></i> Doctor:</strong><br />
+                                @report.DoctorName
+                            </p>
+
+                            <p class="mb-2">
+                                <strong><i class="fas fa-stethoscope"></i> Diagnosis:</strong><br />
+                                <span class="text-danger">@report.Diagnosis</span>
+                            </p>
+
+                            @if (!string.IsNullOrEmpty(report.Treatment))
+                            {
+                                <p class="mb-2">
+                                    <strong><i class="fas fa-pills"></i> Treatment:</strong><br />
+                                    @report.Treatment
+                                </p>
+                            }
+
+                            @if (!string.IsNullOrEmpty(report.Remarks))
+                            {
+                                <p class="mb-2">
+                                    <strong><i class="fas fa-comment-medical"></i> Remarks:</strong><br />
+                                    <small class="text-muted">@report.Remarks</small>
+                                </p>
+                            }
+
+                            @* Fixed FollowUpDate *@
+                            @if (report.FollowUpDate.HasValue)
+                            {
+                                <p class="mb-0">
+                                    <strong><i class="fas fa-calendar-check"></i> Follow-up:</strong>
+                                    <span class="badge bg-warning text-dark">
+                                        @report.FollowUpDate.Value.ToString("dd MMM yyyy, hh:mm tt")
+                                    </span>
+                                </p>
+                            }
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a href="@Url.Action("Details", "MedicalReports", new { id = report.MedicalReportID })"
+                               class="btn btn-sm btn-info w-100">
+                                <i class="fas fa-eye"></i> View Full Report
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle fa-3x mb-3"></i>
+                    <h4>No Medical Reports Yet</h4>
+                    <p>You don't have any medical reports at the moment. Reports will appear here after your doctor consultations.</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .report-card {
+        border: none;
+        border-radius: 10px;
+        transition: transform 0.2s;
+    }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+    }
+</style>

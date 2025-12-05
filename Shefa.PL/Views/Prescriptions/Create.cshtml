@@ -1,0 +1,133 @@
+﻿@model SmartHealthcare.Models.Prescription
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Create Prescription";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="fas fa-prescription"></i> Create New Prescription</h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("CreatePrescription", "Doctor", FormMethod.Post, new { @class = "needs-validation" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+                        <div class="row g-3">
+                            <!-- Doctor Dropdown -->
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-user-md"></i> Doctor *</label>
+                                @Html.DropDownList("DoctorID", ViewBag.DoctorID as SelectList, "-- Select Doctor --", new { @class = "form-select", id = "doctorDropdown", required = "required" })
+                                @Html.ValidationMessageFor(model => model.DoctorID, "", new { @class = "text-danger" })
+                            </div>
+
+                            <!-- Appointment Dropdown -->
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-calendar-check"></i> Appointment *</label>
+                                @Html.DropDownList("AppointmentID", new List<SelectListItem>(), "-- Select Appointment --", new { @class = "form-select", id = "appointmentDropdown", required = "required" })
+                                @Html.ValidationMessageFor(model => model.AppointmentID, "", new { @class = "text-danger" })
+                                <small class="form-text text-muted">Only completed appointments are shown</small>
+                            </div>
+
+                            <!-- Medication -->
+                            <div class="col-12">
+                                <label class="form-label"><i class="fas fa-pills"></i> Medication *</label>
+                                @Html.TextAreaFor(model => model.Medication, new { @class = "form-control", rows = 4, required = "required", placeholder = "Enter prescribed medications (one per line)" })
+                                @Html.ValidationMessageFor(model => model.Medication, "", new { @class = "text-danger" })
+                            </div>
+
+                            <!-- Dosage Instructions -->
+                            <div class="col-12">
+                                <label class="form-label"><i class="fas fa-hourglass-half"></i> Dosage Instructions *</label>
+                                @Html.TextAreaFor(model => model.Dosage, new { @class = "form-control", rows = 3, required = "required", placeholder = "Enter dosage instructions" })
+                                @Html.ValidationMessageFor(model => model.Dosage, "", new { @class = "text-danger" })
+                            </div>
+
+                            <!-- Duration & Frequency -->
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-calendar-alt"></i> Duration *</label>
+                                @Html.TextBoxFor(model => model.Duration, new { @class = "form-control", required = "required", placeholder = "e.g., 7 days, 2 weeks" })
+                                @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-info-circle"></i> Frequency</label>
+                                @Html.TextBoxFor(model => model.Frequency, new { @class = "form-control", placeholder = "e.g., Daily, Twice daily" })
+                                @Html.ValidationMessageFor(model => model.Frequency, "", new { @class = "text-danger" })
+                            </div>
+
+                            <!-- Special Instructions -->
+                            <div class="col-12">
+                                <label class="form-label"><i class="fas fa-exclamation-triangle"></i> Special Instructions</label>
+                                @Html.TextAreaFor(model => model.Instructions, new { @class = "form-control", rows = 3, placeholder = "Any special instructions (optional)" })
+                                @Html.ValidationMessageFor(model => model.Instructions, "", new { @class = "text-danger" })
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="col-12 d-grid gap-2 mt-3">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save"></i> Create Prescription
+                                </button>
+                                <a href="@Url.Action("Prescriptions", "Doctor")" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Back to List
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Load appointments when doctor is selected
+            $('#doctorDropdown').change(function () {
+                var doctorId = $(this).val();
+
+                if (doctorId && doctorId !== "") {
+                    $.ajax({
+                        url: '@Url.Action("GetDoctorAppointments", "Doctor")',
+                        type: 'GET',
+                        data: { doctorId: doctorId },
+                        success: function (response) {
+                            var $appt = $('#appointmentDropdown');
+                            $appt.empty();
+                            $appt.append($('<option>', { value: '', text: '-- Select Appointment --' }));
+
+                            $.each(response, function (i, item) {
+                                $appt.append($('<option>', {
+                                    value: item.AppointmentID,
+                                    text: item.PatientName + " - " + new Date(item.AppointmentTime).toLocaleString()
+                                }));
+                            });
+                        },
+                        error: function () {
+                            alert('Error fetching appointments. Please try again.');
+                        }
+                    });
+                } else {
+                    $('#appointmentDropdown').empty().append($('<option>', { value: '', text: '-- Select Appointment --' }));
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    .card {
+        border-radius: 10px;
+        border: none;
+    }
+
+    textarea.form-control {
+        resize: vertical;
+    }
+</style>

@@ -1,0 +1,102 @@
+﻿@model IEnumerable<SmartHealthcare.Models.Bill>
+
+@{
+    ViewBag.Title = "Manage Bills";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-file-invoice-dollar"></i> All Bills</h2>
+        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle"></i> @TempData["Success"]
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    }
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Bill ID</th>
+                            <th>Patient Name</th>
+                            <th>Doctor Name</th>
+                            <th>Doctor Fee</th>
+                            <th>Report Fee</th>
+                            <th>Tax Rate</th>
+                            <th>Total Amount</th>
+                            <th>Payment Status</th>
+                            <th>Date Issued</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var bill in Model)
+                            {
+                                <tr>
+                                    <td>@bill.BillID</td>
+                                    <td>@bill.Appointment?.Patient?.FullName</td>
+                                    <td>@bill.Appointment?.Doctor?.FullName</td>
+                                    <td>₹@bill.DoctorFee.ToString("N2")</td>
+                                    <td>₹@bill.ReportFee.ToString("N2")</td>
+                                    <td>@((bill.TaxRate * 100).ToString("N1"))%</td>
+                                    <td><strong>₹@bill.TotalAmount.ToString("N2")</strong></td>
+                                    <td>
+                                        @if (bill.PaymentStatus == "Paid")
+                                        {
+                                            <span class="badge badge-success">Paid</span>
+                                        }
+                                        else if (bill.PaymentStatus == "Pending")
+                                        {
+                                            <span class="badge badge-warning">Pending</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-danger">@bill.PaymentStatus</span>
+                                        }
+                                    </td>
+                                    <td>@bill.DateIssued.ToString("dd MMM yyyy")</td>
+                                    <td>
+                                        <a href="@Url.Action("Details", "Bills", new { id = bill.BillID })"
+                                           class="btn btn-sm btn-info" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        @using (Html.BeginForm("UpdatePaymentStatus", "Bills", FormMethod.Post, new { style = "display:inline;" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@bill.BillID" />
+                                            <input type="hidden" name="status" value="@(bill.PaymentStatus == "Paid" ? "Pending" : "Paid")" />
+                                            <button type="submit" class="btn btn-sm btn-success" title="Toggle Payment Status">
+                                                <i class="fas fa-sync-alt"></i>
+                                            </button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10" class="text-center text-muted py-4">
+                                    <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                                    No bills found in the system.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

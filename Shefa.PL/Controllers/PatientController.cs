@@ -1,87 +1,271 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using System.Data.Entity;
+using Microsoft.AspNet.Identity;
+using SmartHealthcare.Data;
+using SmartHealthcare.Models;
 
-namespace Shefa.PL.Controllers
+namespace SmartHealthcare.Controllers
 {
+    [Authorize(Roles = "Patient")]
     public class PatientController : Controller
     {
-        // GET: PatientController
-        public ActionResult Index()
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
+
+        // ===============================
+        // Dashboard
+        // ===============================
+        public async Task<ActionResult> Dashboard()
         {
-            return View();
+            var userId = User.Identity.GetUserId();
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
+            {
+                TempData["Info"] = "Please complete your profile first.";
+                return RedirectToAction("CompleteProfile");
+            }
+
+            // Statistics
+            ViewBag.PatientName = patient.FirstName + " " + patient.LastName;
+            ViewBag.TotalAppointments = await _context.Appointments.CountAsync(a => a.PatientID == patient.PatientID);
+            ViewBag.UpcomingAppointments = await _context.Appointments.CountAsync(a => a.PatientID == patient.PatientID &&
+                a.AppointmentTime >= DateTime.Now && (a.Status == "Scheduled"|| a.Status == "Rescheduled"));
+            ViewBag.CompletedAppointments = await _context.Appointments.CountAsync(a => a.PatientID == patient.PatientID && a.Status == "Completed");
+            ViewBag.PendingBills = await _context.Bills.CountAsync(b => b.Appointment.PatientID == patient.PatientID && b.PaymentStatus == "Pending");
+
+            // Recent appointments
+            var recentAppointments = await _context.Appointments
+                .Where(a => a.PatientID == patient.PatientID)
+                .Include(a => a.Doctor)
+                .OrderByDescending(a => a.AppointmentTime)
+                .Take(5)
+                .ToListAsync();
+
+            ViewBag.RecentAppointments = recentAppointments;
+
+            return View(patient);
         }
 
-        // GET: PatientController/Details/5
-        public ActionResult Details(int id)
+        // ===============================
+        // My Profile
+        // ===============================
+        public async Task<ActionResult> MyProfile()
         {
-            return View();
-        }
-        public ActionResult PatientMedicalHistory(int id)
-        {
-            return View();
+            var userId = User.Identity.GetUserId();
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
+                return RedirectToAction("CompleteProfile");
+
+            return View(patient);
         }
 
-        // GET: PatientController/Create
-        public ActionResult Create()
+        // ===============================
+        // Complete Profile (GET)
+        // ===============================
+        [HttpGet]
+        public async Task<ActionResult> CompleteProfile()
         {
-            return View();
+            var userId = User.Identity.GetUserId();
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient != null)
+                return RedirectToAction("Dashboard");
+
+            return View(new Patient());
         }
 
-        // POST: PatientController/Create
+        // ===============================
+        // Complete / Edit Profile (POST)
+        // ===============================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> CompleteProfile(Patient model)
         {
-            try
+            var userId = User.Identity.GetUserId();
+
+            if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                TempData["Error"] = "Please fill all required fields correctly.";
+                return View(model);
             }
-            catch
+
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
             {
-                return View();
+                // New patient
+                model.UserId = userId;
+                model.RegistrationDate = DateTime.Now;
+                _context.Patients.Add(model);
             }
+            else
+            {
+                // Update existing patient
+                patient.FirstName = model.FirstName;
+                patient.LastName = model.LastName;
+                patient.Gender = model.Gender;
+                patient.DateOfBirth = model.DateOfBirth;
+                patient.ContactNumber = model.ContactNumber;
+                patient.Email = model.Email;
+                patient.Address = model.Address;
+                patient.BloodGroup = model.BloodGroup;
+                patient.Allergies = model.Allergies;
+                patient.MedicalHistory = model.MedicalHistory;
+            }
+
+            await _context.SaveChangesAsync();
+            TempData["Success"] = "Profile saved successfully!";
+            return RedirectToAction("MyProfile");
         }
 
-        // GET: PatientController/Edit/5
-        public ActionResult Edit(int id)
+        // ===============================
+        // Edit Profile (GET)
+        // ===============================
+        [HttpGet]
+        public async Task<ActionResult> EditProfile()
         {
-            return View();
+            var userId = User.Identity.GetUserId();
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
+                return RedirectToAction("CompleteProfile");
+
+            return View(patient);
         }
 
-        // POST: PatientController/Edit/5
+        // ===============================
+        // Edit Profile (POST)
+        // ===============================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> EditProfile(Patient model)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var patient = await _context.Patients.FindAsync(model.PatientID);
+            if (patient == null)
+                return HttpNotFound();
+
+            patient.FirstName = model.FirstName;
+            patient.LastName = model.LastName;
+            patient.Gender = model.Gender;
+            patient.DateOfBirth = model.DateOfBirth;
+            patient.ContactNumber = model.ContactNumber;
+            patient.Email = model.Email;
+            patient.Address = model.Address;
+            patient.BloodGroup = model.BloodGroup;
+            patient.Allergies = model.Allergies;
+            patient.MedicalHistory = model.MedicalHistory;
+
+            await _context.SaveChangesAsync();
+            TempData["Success"] = "Profile updated successfully!";
+            return RedirectToAction("MyProfile");
         }
 
-        // GET: PatientController/Delete/5
-        public ActionResult Delete(int id)
+        // ===============================
+        // Book Appointment
+        // ===============================
+        public ActionResult BookAppointment()
         {
-            return View();
+            return RedirectToAction("Create", "Appointments");
         }
 
-        // POST: PatientController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        // ===============================
+        // My Appointments
+        // ===============================
+        public async Task<ActionResult> MyAppointments()
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var userId = User.Identity.GetUserId();
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
+                return RedirectToAction("CompleteProfile");
+
+            var appointments = await _context.Appointments
+                .Where(a => a.PatientID == patient.PatientID)
+                .Include(a => a.Doctor)
+                .OrderByDescending(a => a.AppointmentTime)
+                .ToListAsync();
+
+            return View(appointments);
+        }
+
+        // ===============================
+        // My Bills
+        // ===============================
+        public async Task<ActionResult> MyBills()
+        {
+            var userId = User.Identity.GetUserId();
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
+                return RedirectToAction("CompleteProfile");
+
+            var bills = await _context.Bills
+                .Where(b => b.Appointment.PatientID == patient.PatientID)
+                .Include(b => b.Appointment)
+                .Include(b => b.Appointment.Doctor)
+                .OrderByDescending(b => b.DateIssued)
+                .ToListAsync();
+
+            return View(bills);
+        }
+
+        // ===============================
+        // My Reports
+        // ===============================
+        public async Task<ActionResult> MyReports()
+        {
+            var userId = User.Identity.GetUserId();
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
+                return RedirectToAction("CompleteProfile");
+
+            var reports = await _context.MedicalReports
+                .Where(r => r.Appointment.PatientID == patient.PatientID)
+                .Include(r => r.Appointment)
+                .Include(r => r.Appointment.Doctor)
+                .OrderByDescending(r => r.ReportDate)
+                .ToListAsync();
+
+            return View(reports);
+        }
+
+        // ===============================
+        // My Prescriptions
+        // ===============================
+        public async Task<ActionResult> MyPrescriptions()
+        {
+            var userId = User.Identity.GetUserId();
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == userId);
+
+            if (patient == null)
+                return RedirectToAction("CompleteProfile");
+
+            var prescriptions = await _context.Prescriptions
+                .Where(p => p.Appointment.PatientID == patient.PatientID)
+                .Include(p => p.Appointment)
+                .Include(p => p.Appointment.Doctor)
+                .OrderByDescending(p => p.DateIssued)
+                .ToListAsync();
+
+            return View(prescriptions);
+        }
+
+        // ===============================
+        // Dispose
+        // ===============================
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                _context.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

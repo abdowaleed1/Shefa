@@ -1,0 +1,76 @@
+﻿@model SmartHealthcare.Models.Schedule
+
+@{
+    ViewBag.Title = "Create Schedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-calendar-plus"></i> Create New Schedule</h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Create", "Schedules", FormMethod.Post, new { @class = "needs-validation" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.DoctorID, "Select Doctor", new { @class = "font-weight-bold" })
+                            @Html.DropDownList("DoctorID", null, "-- Select Doctor --", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.DoctorID, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.DayOfWeek, new { @class = "font-weight-bold" })
+                            @Html.DropDownListFor(m => m.DayOfWeek, new SelectList(new[] {
+                                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+                            }), "-- Select Day --", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.DayOfWeek, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.StartTime, new { @class = "font-weight-bold" })
+                                    @Html.EditorFor(m => m.StartTime, new { htmlAttributes = new { @class = "form-control", type = "time" } })
+                                    @Html.ValidationMessageFor(m => m.StartTime, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.EndTime, new { @class = "font-weight-bold" })
+                                    @Html.EditorFor(m => m.EndTime, new { htmlAttributes = new { @class = "form-control", type = "time" } })
+                                    @Html.ValidationMessageFor(m => m.EndTime, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                @Html.CheckBoxFor(m => m.IsAvailable, new { @class = "custom-control-input" })
+                                @Html.LabelFor(m => m.IsAvailable, "Is Available", new { @class = "custom-control-label" })
+                            </div>
+                        </div>
+
+                        <div class="form-group text-right">
+                            <a href="@Url.Action("MyAppointments","Doctor")" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Create Schedule
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,21 @@
+﻿@model SmartHealthcare.Models.Prescription
+
+@{
+    ViewBag.Title = "Delete Prescription";
+}
+
+<h2>Delete Prescription</h2>
+
+<div class="details-box">
+    <p><strong>Drug Name:</strong> @Model.DrugName</p>
+    <p><strong>Dosage:</strong> @Model.Dosage</p>
+    <p><strong>Instructions:</strong> @Model.Instructions</p>
+    <p><strong>Date Issued:</strong> @Model.DateIssued.ToShortDateString()</p>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-secondary" })
+}

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<SmartHealthcare.Models.MedicalReport>
+
+@{
+    ViewBag.Title = "MedicalReports";
+    ViewBag.Active = "Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-4">📋 Medical Reports</h2>
+
+<table class="table table-bordered table-striped align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Appointment ID</th>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Diagnosis</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.MedicalReportID</td>
+                    <td>@r.AppointmentID</td>
+                    <td>@r.DoctorName</td>
+                    <td>@r.ReportDate.ToString("yyyy-MM-dd")</td>
+                    <td>@r.Diagnosis</td>
+                    <td>@r.DoctorNotes</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center text-muted">No reports found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- ✅ Optional styling -->
+<style>
+    h2 {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    table {
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    th {
+        background-color: #212529 !important;
+        color: white;
+    }
+</style>

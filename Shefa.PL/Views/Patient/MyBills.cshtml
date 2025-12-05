@@ -1,0 +1,115 @@
+﻿@model IEnumerable<SmartHealthcare.Models.Bill>
+
+@{
+    ViewBag.Title = "My Bills";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2><i class="fas fa-file-invoice-dollar"></i> My Bills</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            @if (Model != null && Model.Any())
+            {
+                var totalPending = Model.Where(b => b.PaymentStatus == "Pending").Sum(b => b.TotalAmount);
+                var totalPaid = Model.Where(b => b.PaymentStatus == "Paid").Sum(b => b.TotalAmount);
+
+                <div class="text-end">
+                    <small class="d-block">Total Pending: <strong class="text-danger">₹@totalPending.ToString("N2")</strong></small>
+                    <small class="d-block">Total Paid: <strong class="text-success">₹@totalPaid.ToString("N2")</strong></small>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var bill in Model)
+            {
+                var statusColor = bill.PaymentStatus == "Paid" ? "success" :
+                                  bill.PaymentStatus == "Pending" ? "warning" : "danger";
+
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card bill-card h-100 shadow">
+                        <div class="card-header bg-@statusColor text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-receipt"></i> Bill #@bill.BillID
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-2">
+                                <strong><i class="fas fa-calendar"></i> Date Issued:</strong><br />
+                                @bill.DateIssued.ToString("dd MMM yyyy")
+                            </p>
+                            <p class="mb-2">
+                                <strong><i class="fas fa-user-md"></i> Doctor:</strong><br />
+                                @bill.Appointment?.Doctor?.FullName
+                            </p>
+
+                            <hr />
+
+                            <div class="row mb-2">
+                                <div class="col-8">Doctor Fee:</div>
+                                <div class="col-4 text-end">₹@bill.DoctorFee.ToString("N2")</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-8">Report Fee:</div>
+                                <div class="col-4 text-end">₹@bill.ReportFee.ToString("N2")</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-8">Tax (@((bill.TaxRate * 100).ToString("0.0"))%):</div>
+                                <div class="col-4 text-end">₹@((bill.DoctorFee + bill.ReportFee) * bill.TaxRate).ToString("N2")</div>
+                            </div>
+
+                            <hr />
+
+                            <div class="row mb-2">
+                                <div class="col-8"><strong>Total Amount:</strong></div>
+                                <div class="col-4 text-end"><strong class="text-primary">₹@bill.TotalAmount.ToString("N2")</strong></div>
+                            </div>
+
+                            <p class="mb-0 mt-3">
+                                <strong>Payment Status:</strong>
+                                <span class="badge bg-@statusColor">@bill.PaymentStatus</span>
+                            </p>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a href="@Url.Action("Details", "Bills", new { id = bill.BillID })"
+                               class="btn btn-sm btn-info w-100">
+                                <i class="fas fa-eye"></i> View Full Bill
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle fa-3x mb-3"></i>
+                    <h4>No Bills Yet</h4>
+                    <p>You don't have any bills at the moment.</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .bill-card {
+        border: none;
+        border-radius: 10px;
+        transition: transform 0.2s;
+    }
+
+        .bill-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+    }
+</style>

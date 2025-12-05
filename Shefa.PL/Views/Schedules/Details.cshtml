@@ -1,0 +1,64 @@
+﻿@model SmartHealthcare.Models.Schedule
+
+@{
+    ViewBag.Title = "Schedule Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0"><i class="fas fa-calendar-check"></i> Schedule Details</h4>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Doctor Name:</dt>
+                        <dd class="col-sm-8">@Model.Doctor?.FullName</dd>
+
+                        <dt class="col-sm-4">Specialization:</dt>
+                        <dd class="col-sm-8">@Model.Doctor?.Specialization</dd>
+
+                        <dt class="col-sm-4">Day of Week:</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge badge-primary badge-lg">@Model.DayOfWeek</span>
+                        </dd>
+
+                        <dt class="col-sm-4">Start Time:</dt>
+                        <dd class="col-sm-8">@Model.StartTime.ToString(@"hh\:mm tt")</dd>
+
+                        <dt class="col-sm-4">End Time:</dt>
+                        <dd class="col-sm-8">@Model.EndTime.ToString(@"hh\:mm tt")</dd>
+
+                        <dt class="col-sm-4">Availability:</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.IsAvailable)
+                            {
+                                <span class="badge badge-success">Available</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-secondary">Not Available</span>
+                            }
+                        </dd>
+                    </dl>
+
+                    <hr />
+
+                    <div class="text-right">
+                        <a href="@Url.Action("Index")" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
+                        {
+                            <a href="@Url.Action("Edit", new { id = Model.ScheduleID })" class="btn btn-warning">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
